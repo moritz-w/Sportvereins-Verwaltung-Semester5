@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'mvn -f Sportvereinsverwaltung/pom.xml'
                 sh 'mvn clean -DskipTest -U package'
             }
         }

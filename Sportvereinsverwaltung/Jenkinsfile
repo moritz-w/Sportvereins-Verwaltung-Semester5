@@ -6,8 +6,7 @@ pipeline {
             steps {
                 sh 'mvn -f Sportvereinsverwaltung/pom.xml'
                 sh 'mvn clean -DskipTest -U package'
-                sh 'mvn compiler:compile'
-                sh 'mvn install:install'
+                sh 'mvn install'
             }
         }
         stage('Test'){

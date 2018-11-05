@@ -9,12 +9,12 @@ pipeline {
         }
         stage('Test'){
             steps {
-                sh 'mvn -f Sportvereinsverwaltung/pom.xml test pmd:pmd'
+                sh 'mvn test pmd:pmd'
             }
         }
         stage('Deploy') {
             steps {
-                sh 'mvn -DskipDeploy deploy'
+                sh 'mvn -f Sportvereinsverwaltung/pom.xml -DskipDeploy deploy'
             }
         }
     }

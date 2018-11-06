@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="persist-beans.xml"/>
+
+    <bean class="org.dozer.DozerBeanMapper" id="dozerBeanMapper">
+        <constructor-arg>
+            <list>
+                <value type="java.lang.String">dozerJdk8Converters.xml</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>
+    <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator" />
+
+</beans>

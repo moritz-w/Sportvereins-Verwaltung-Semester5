@@ -31,13 +31,13 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
     public ResponseMessageDTO saveOrUpdate(DTO dto) {
         ResponseMessageDTO responseMessageDTO = validateDto(dto);
         if (!responseMessageDTO.isValidated()) {
-            return  responseMessageDTO;
+            return responseMessageDTO;
         }
         try {
             E updatedEntity = repository.saveOrUpdate(internalMap(dto));
-            responseMessageDTO.setMetaId(getId(updatedEntity));
-        } catch (Exception e){      // TODO handle right exception
-            responseMessageDTO.setInfoMessage("");
+            responseMessageDTO.setContextId(getId(updatedEntity));
+        } catch (Exception e) {      // TODO handle right exception
+            responseMessageDTO.setInfoMessage(e.getMessage());
             return responseMessageDTO;
         }
         responseMessageDTO.setSuccess(true);

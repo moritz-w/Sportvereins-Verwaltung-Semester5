@@ -3,9 +3,10 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://dozer.sourceforge.net
       http://dozer.sourceforge.net/schema/beanmapping.xsd">
-    <mapping map-id="PersonMappingFull">
+
+    <mapping map-id="PersonDTOMappingFull">
         <class-a>at.fhv.sportsclub.entity.person.PersonEntity</class-a>
         <class-b>at.fhv.sportsclub.model.person.PersonDTO</class-b>
-
     </mapping>
+
 </mappings>

@@ -1,5 +1,7 @@
 package factory;
 
+import remoteobjects.controllerinterfaces.ICreateMemberController;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -9,6 +11,6 @@ import java.rmi.RemoteException;
 
 public interface IControllerFactory extends Remote {
 
-    Remote getCreateMemberController() throws RemoteException;
+    ICreateMemberController getCreateMemberController() throws RemoteException;
 
 }

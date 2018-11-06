@@ -9,8 +9,9 @@ import remoteobjects.controllerinterfaces.ICreateMemberController;
 
 public class CreateMemberController implements ICreateMemberController {
 
-    public void createMember() {
+    public boolean createMember() {
         new PersonDTO();
+        return false;
     }
 
 }

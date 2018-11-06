@@ -1,8 +1,8 @@
 package factory;
 
 import remoteobjects.CreateMemberController;
+import remoteobjects.controllerinterfaces.ICreateMemberController;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -13,8 +13,12 @@ import java.rmi.server.UnicastRemoteObject;
 public class IControllerFactoryImpl implements IControllerFactory {
 
 
+
+
     @Override
-    public Remote getCreateMemberController() throws RemoteException {
-        return UnicastRemoteObject.exportObject(new CreateMemberController(),0);
+    public ICreateMemberController getCreateMemberController() throws RemoteException {
+        ICreateMemberController controller = new CreateMemberController();
+        ICreateMemberController stub = (ICreateMemberController) UnicastRemoteObject.exportObject(controller, 0);
+        return stub;
     }
 }

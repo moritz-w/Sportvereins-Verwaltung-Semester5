@@ -12,4 +12,6 @@ public @Data class AddressEntity {
     private String street;
     private String zipCode;
     private String city;
+
+    public AddressEntity() { }
 }

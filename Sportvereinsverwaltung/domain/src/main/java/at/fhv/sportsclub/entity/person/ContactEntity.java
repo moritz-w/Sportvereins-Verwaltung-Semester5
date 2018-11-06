@@ -12,4 +12,6 @@ public @Data class ContactEntity {
 
     private String phoneNumber;
     private String emailAddress;
+
+    public ContactEntity() {}
 }

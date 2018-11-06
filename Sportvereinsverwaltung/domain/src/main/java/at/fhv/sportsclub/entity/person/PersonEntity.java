@@ -18,4 +18,6 @@ public @Data class PersonEntity {
     private LocalDate dateOfBirth;
     private AddressEntity address;
     private ContactEntity contact;
+
+    public PersonEntity() { }
 }

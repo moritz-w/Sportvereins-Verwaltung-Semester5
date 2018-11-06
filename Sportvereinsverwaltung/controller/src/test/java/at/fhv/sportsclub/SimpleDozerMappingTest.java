@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:controller-beans-test.xml"})
-public class BasicPersonDTOMappingTestTest {
+public class SimpleDozerMappingTest {
 
     @Autowired
     private DozerBeanMapper dozerBeanMapper;
@@ -32,7 +32,7 @@ public class BasicPersonDTOMappingTestTest {
     private PersonEntity person = new PersonEntity(null, "Lukas", "Stadel", date, address, contact);
 
 
-    public BasicPersonDTOMappingTestTest() {
+    public SimpleDozerMappingTest() {
     }
 
     /*
@@ -54,11 +54,6 @@ public class BasicPersonDTOMappingTestTest {
 
     @Test
     public void testDifferentMappingXMLFiles() {
-        List myMappingFiles = new ArrayList();
-        myMappingFiles.add("PersonMappingLight.xml");
-        myMappingFiles.add("PersonMappingFull.xml");
-        myMappingFiles.add("dozerJdk8Converters.xml");
-        this.dozerBeanMapper.setMappingFiles(myMappingFiles);
 
         /*
             Light Mapping - To check if only the 2 selected attributes
@@ -67,7 +62,7 @@ public class BasicPersonDTOMappingTestTest {
          */
         PersonDTO mappedPerson = mappingToDTOWithSpecifiedMappingId("PersonMappingLight");
         assertEquals(mappedPerson.getFirstName(), person.getFirstName());
-        assertEquals(mappedPerson.getAddress(), null);
+        assertNull(mappedPerson.getAddress());
 
         /*
             Full Mapping - This checks whether all attributes are mapped.
@@ -78,7 +73,7 @@ public class BasicPersonDTOMappingTestTest {
         PersonDTO mappedPersonFull = mappingToDTOWithSpecifiedMappingId("PersonMappingFull");
         assertEquals(mappedPersonFull.getFirstName(), person.getFirstName());
         assertEquals(mappedPersonFull.getAddress().getId(),  person.getAddress().getId());
-        assertEquals(mappedPerson.getId(), null);
+        assertNull(mappedPerson.getId());
     }
 
     public void setDozerBeanMapper(DozerBeanMapper dozerBeanMapper) {

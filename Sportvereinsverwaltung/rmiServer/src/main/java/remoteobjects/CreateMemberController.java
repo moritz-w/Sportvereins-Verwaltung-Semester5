@@ -11,7 +11,7 @@ public class CreateMemberController implements ICreateMemberController {
 
     public boolean createMember() {
         new PersonDTO();
-        return false;
+        return true;
     }
 
 }

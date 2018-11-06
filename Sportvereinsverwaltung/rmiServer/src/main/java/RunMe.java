@@ -1,8 +1,7 @@
 import factory.IControllerFactory;
 import factory.IControllerFactoryImpl;
-import remoteobjects.controllerinterfaces.ICreateMemberController;
 
-import java.rmi.NotBoundException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,6 +14,9 @@ import java.rmi.server.UnicastRemoteObject;
 public class RunMe {
 
     public static void main(String[] args) throws RemoteException {
+        RMISecurityManager rmiSecurityManager = new RMISecurityManager();
+        System.setSecurityManager(rmiSecurityManager);
+
         IControllerFactory server = new IControllerFactoryImpl();
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(server,0);
 

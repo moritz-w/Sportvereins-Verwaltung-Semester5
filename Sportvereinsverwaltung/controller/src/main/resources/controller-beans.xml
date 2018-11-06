@@ -9,6 +9,8 @@
         <constructor-arg>
             <list>
                 <value type="java.lang.String">dozerJdk8Converters.xml</value>
+                <value>PersonMappingLight.xml</value>
+                <value>PersonMappingFull.xml</value>
             </list>
         </constructor-arg>
     </bean>

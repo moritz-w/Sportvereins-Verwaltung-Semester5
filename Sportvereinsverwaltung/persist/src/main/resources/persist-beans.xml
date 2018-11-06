@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="at.fhv.sportsclub"/>
+    <context:property-placeholder location="classpath:mongo.properties"/>
+
+    <mongo:repositories
+            base-package="at.fhv.sportsclub.repository"
+            base-class="at.fhv.sportsclub.repository.CommonRepositoryImpl">
+    </mongo:repositories>
+
+    <bean id="mongoClient" class="com.mongodb.MongoClient">
+           <constructor-arg>
+               <value type="java.lang.String">${mongo.host}</value>
+           </constructor-arg>
+           <constructor-arg>
+                <value type="java.lang.Integer">${mongo.port}</value>
+           </constructor-arg>
+    </bean>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoClient"/>
+        <constructor-arg value="${mongo.dbname}"/>
+    </bean>
+
+</beans>

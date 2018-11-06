@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 public @Data class DepartmentDTO implements Serializable {
@@ -17,5 +18,5 @@ public @Data class DepartmentDTO implements Serializable {
     private String deptName;
     private String deptLeade;
     @NotNull
-    private SportDTO[] sports;
+    private List<SportDTO> sports;
 }

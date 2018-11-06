@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 public @Data class SportDTO implements Serializable {
@@ -14,5 +15,5 @@ public @Data class SportDTO implements Serializable {
     private String id;
     private String name;
     @NotNull
-    private LeagueDTO[] leagues;
+    private List<LeagueDTO> leagues;
 }

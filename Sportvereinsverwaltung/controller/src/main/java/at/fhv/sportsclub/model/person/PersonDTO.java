@@ -17,9 +17,9 @@ public @Data class PersonDTO implements Serializable {
     public PersonDTO() {}
 
     private String id;
-    @Pattern(regexp = "")
+    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Im Vornamen dürfen keine Zahlen oder Sonderzeichen vorkommen.")
     private String firstName;
-    @Pattern(regexp = "")
+    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Im Nachnamen dürfen keine Zahlen oder Sonderzeichen vorkommen.")
     private String lastName;
 
     private LocalDate dateOfBirth;

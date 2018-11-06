@@ -12,8 +12,9 @@ public @Data class ContactDTO implements Serializable {
     public ContactDTO() {}
 
     private String id;
-    @Pattern(regexp = "", message = "")
+    @Pattern(regexp = "^\\+?[0-9\\s]*$",
+            message = "Die Telefonnummer darf lediglich aus einem + gefolgt von Zahlen und Leerzeichen bestehen.")
     private String phoneNumber;
-    @Email(message = "")
+    @Email(message = "Die eingegeben E-Mail ist nicht korrekt.")
     private String emailAddress;
 }

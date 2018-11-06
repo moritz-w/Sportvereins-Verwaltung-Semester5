@@ -1,40 +1,19 @@
 package at.fhv.sportsclub.model.person;
 
-public class ContactDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    private String id, phoneNumber, emailAddress;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-    public ContactDTO() {};
+@AllArgsConstructor
+public @Data class ContactDTO implements Serializable {
+    public ContactDTO() {}
 
-    public ContactDTO(String id, String phoneNumber, String emailAddress) {
-        this.id = id;
-        this.phoneNumber = phoneNumber;
-        this.emailAddress = emailAddress;
-    }
-
-    //<editor-fold desc="Getter and Setter">
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-    //</editor-fold>
+    private String id;
+    @Pattern(regexp = "", message = "")
+    private String phoneNumber;
+    @Email(message = "")
+    private String emailAddress;
 }

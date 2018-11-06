@@ -1,49 +1,18 @@
 package at.fhv.sportsclub.model.person;
 
-public class AddressDTO {
+import lombok.Data;
 
-    private String id, street, zipCode, city;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
-    public AddressDTO() {};
+public @Data class AddressDTO implements Serializable {
 
-    public AddressDTO(String id, String street, String zipCode, String city) {
-        this.id = id;
-        this.street = street;
-        this.zipCode = zipCode;
-        this.city = city;
-    }
-
-    //<editor-fold desc="Getter and Setter">
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-    //</editor-fold>
+    private String id;
+    @Pattern(regexp = "", message = "")
+    private String street;
+    @Pattern(regexp = "", message = "")
+    private String zipCode;
+    // optional TODO: implement custom validator to geo lookup city names
+    @Pattern(regexp = "", message = "")
+    private String city;
 }

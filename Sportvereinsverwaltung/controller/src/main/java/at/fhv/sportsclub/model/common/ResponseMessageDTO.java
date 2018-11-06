@@ -14,7 +14,7 @@ public @Data class ResponseMessageDTO {
     @NonNull private boolean validated;
 
     private boolean success = false;
-    private String metaId = "";
+    private String contextId = "";
     private String infoMessage = "";
 
     //public ResponseMessageDTO() {};

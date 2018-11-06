@@ -14,9 +14,6 @@ import java.rmi.server.UnicastRemoteObject;
 public class RunMe {
 
     public static void main(String[] args) throws RemoteException {
-        RMISecurityManager rmiSecurityManager = new RMISecurityManager();
-        System.setSecurityManager(rmiSecurityManager);
-
         IControllerFactory server = new IControllerFactoryImpl();
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(server,0);
 

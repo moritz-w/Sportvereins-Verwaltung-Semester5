@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -f Sportvereinsverwaltung/pom.xml clean -DskipTest -U package'
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'mvn -f Sportvereinsverwaltung/pom.xml test pmd:pmd'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'mvn -f Sportvereinsverwaltung/pom.xml -DskipDeploy deploy'
+            }
+        }
+    }
+}

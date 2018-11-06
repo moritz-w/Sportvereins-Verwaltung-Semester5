@@ -28,6 +28,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 
     @Override
     public <S extends T> S saveOrUpdate(S entity) {
-        return null;
+        mongoOperations.save(entity);
+        return entity;
     }
 }

@@ -23,7 +23,9 @@ import java.util.Optional;
 @NoRepositoryBean
 public interface CommonRepository<T, ID extends Serializable> extends Repository<T, ID> {
 
-    Iterable<T> findAll();
+    List<T> findAll();
+
+    List<T> findAll(Sort var1);
 
     Optional<T> findById(ID id);
 

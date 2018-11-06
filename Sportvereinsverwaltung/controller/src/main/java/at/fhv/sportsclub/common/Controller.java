@@ -2,9 +2,9 @@ package at.fhv.sportsclub.common;
 
 import java.util.List;
 
-public interface Controller<T> {
+public interface Controller<T, R> {
 
     List<T> getAll();
 
-    boolean saveOrUpdate(T dto);
+    R saveOrUpdate(T dto);
 }

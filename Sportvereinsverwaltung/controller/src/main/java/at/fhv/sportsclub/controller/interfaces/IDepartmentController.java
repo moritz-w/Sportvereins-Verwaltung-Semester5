@@ -5,14 +5,16 @@ import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 
 import java.rmi.Remote;
-import java.util.List;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public interface IDepartmentController extends Remote {
 
-    List<DepartmentDTO> getAllEntries();
+    ArrayList<DepartmentDTO> getAllEntries() throws RemoteException;
 
-    ResponseMessageDTO saveOrUpdateEntry(DepartmentDTO departmentDTO);
+    ResponseMessageDTO saveOrUpdateEntry(DepartmentDTO departmentDTO) throws RemoteException;
 
-    List<SportDTO> getAllSportEntries();
+    ArrayList<SportDTO> getAllSportEntries() throws RemoteException;
+
 }
 

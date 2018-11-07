@@ -2,18 +2,24 @@ package at.fhv.sportsclub.controller;
 
 
 import at.fhv.sportsclub.controller.common.CommonController;
+import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.entity.dept.DepartmentEntity;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.repository.dept.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 
+
 @Service
-public class DepartmentController extends CommonController<DepartmentDTO, DepartmentEntity, DepartmentRepository> {
+@Scope("prototype")
+public class DepartmentController extends CommonController<DepartmentDTO, DepartmentEntity, DepartmentRepository>
+        implements IDepartmentController {
 
     private DepartmentRepository departmentRepository;
 
@@ -22,7 +28,6 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         super(repository, DepartmentDTO.class, DepartmentEntity.class);
         this.departmentRepository = repository;
     }
-
     @Override
     protected String getId(DepartmentEntity entity) {
         return entity.getId();
@@ -37,4 +42,21 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         }
         return allSports;
     }
+
+    //region RMI wrapper methods
+    @Override
+    public List<DepartmentDTO> getAllEntries() {
+        return this.getAll();
+    }
+
+    @Override
+    public ResponseMessageDTO saveOrUpdateEntry(DepartmentDTO departmentDTO) {
+        return this.saveOrUpdate(departmentDTO);
+    }
+
+    @Override
+    public List<SportDTO> getAllSportEntries() {
+        return this.getAllSports();
+    }
+    //endregion
 }

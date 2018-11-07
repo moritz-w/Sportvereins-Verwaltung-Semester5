@@ -71,7 +71,7 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
             if(this.getMappingIdByConvention().isEmpty()){
                 return mapAnyCollection(entityList, this.dtoClass);
             }
-            return mapAnyCollection(entityList, this.dtoClass, this.getMappingIdByConvention());
+            return mapAnyCollection(entityList, this.dtoClass); // TODO: , this.getMappingIdByConvention()
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();

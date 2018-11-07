@@ -9,13 +9,15 @@ import org.springframework.stereotype.Component;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Alex on 06.11.2018.
  */
 
 @Component
-public class IControllerFactoryImpl implements IControllerFactory {
+public class ControllerFactoryImpl implements IControllerFactory {
 
     @Lookup
     public PersonController createPersonController() {
@@ -35,4 +37,5 @@ public class IControllerFactoryImpl implements IControllerFactory {
     public IDepartmentController getDepartmentController() throws RemoteException {
         return (IDepartmentController) UnicastRemoteObject.exportObject(createDepartmentController(), 0);
     }
+
 }

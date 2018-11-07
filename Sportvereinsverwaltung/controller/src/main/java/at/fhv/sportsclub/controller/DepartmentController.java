@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,8 +46,8 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
 
     //region RMI wrapper methods
     @Override
-    public List<DepartmentDTO> getAllEntries() {
-        return this.getAll();
+    public ArrayList<DepartmentDTO> getAllEntries() {
+        return new ArrayList<>(this.getAll());
     }
 
     @Override
@@ -55,8 +56,8 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     }
 
     @Override
-    public List<SportDTO> getAllSportEntries() {
-        return this.getAllSports();
+    public ArrayList<SportDTO> getAllSportEntries() {
+        return new ArrayList<>(this.getAllSports());
     }
     //endregion
 }

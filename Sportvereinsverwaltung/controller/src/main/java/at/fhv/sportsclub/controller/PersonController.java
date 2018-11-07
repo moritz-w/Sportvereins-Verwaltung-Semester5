@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @Scope("prototype")
@@ -31,8 +31,8 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
 
     //region RMI wrapper methods
     @Override
-    public List<PersonDTO> getAllEntries() {
-        return this.getAll();
+    public ArrayList<PersonDTO> getAllEntries() {
+        return new ArrayList<>(this.getAll());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.dept;
 
+import at.fhv.sportsclub.model.person.PersonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public @Data class DepartmentDTO implements Serializable {
     private String id;
 
     private String deptName;
-    private String deptLeade;
+    private PersonDTO deptLeader;
     @NotNull
     private List<SportDTO> sports;
 }

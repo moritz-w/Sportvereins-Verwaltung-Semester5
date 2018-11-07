@@ -1,5 +1,5 @@
+import at.fhv.sportsclub.factory.ControllerFactoryImpl;
 import at.fhv.sportsclub.factory.IControllerFactory;
-import at.fhv.sportsclub.factory.IControllerFactoryImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -16,8 +16,8 @@ public class ServerRunMe {
 
     public static void main(String[] args) throws RemoteException {
         ApplicationContext appContext = new ClassPathXmlApplicationContext("rmi-beans.xml");
+        IControllerFactory controllerFactory = appContext.getBean(ControllerFactoryImpl.class);
 
-        IControllerFactory controllerFactory = new IControllerFactoryImpl();
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(controllerFactory,0);
 
         Registry registry = LocateRegistry.createRegistry(1099);

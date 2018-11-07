@@ -2,15 +2,15 @@ package at.fhv.sportsclub.factory;
 
 import at.fhv.sportsclub.controller.DepartmentController;
 import at.fhv.sportsclub.controller.PersonController;
+import at.fhv.sportsclub.controller.TeamController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
+import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Alex on 06.11.2018.
@@ -27,6 +27,10 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public DepartmentController createDepartmentController() {
         return null;
     }
+    @Lookup
+    public TeamController createTeamController() {
+        return null;
+    }
 
     @Override
     public IPersonController getPersonController() throws RemoteException {
@@ -37,5 +41,11 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public IDepartmentController getDepartmentController() throws RemoteException {
         return (IDepartmentController) UnicastRemoteObject.exportObject(createDepartmentController(), 0);
     }
+
+    @Override
+    public ITeamController getTeamController() throws RemoteException {
+        return (ITeamController) UnicastRemoteObject.exportObject(createTeamController(), 0);
+    }
+
 
 }

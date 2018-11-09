@@ -182,7 +182,8 @@ function generateRandomizedPerson(){
         contact: {
             phoneNumber: phoneNumbers[getRandomNumber(0, phoneNumbers.length)],
             emailAddress: emailAddresses[getRandomNumber(0, emailAddresses.length)]
-        }
+        },
+        sports: [sportsIdPool[getRandomNumber(0, sportsIdPool.length)]]
     };
 }
 
@@ -277,14 +278,15 @@ function generateRandomizedTournament(encounters, participants){
 
 
 function insertRandomizedData(){
-    for (var index = 0; index < personDataEntries; index++) {
-        db.Person.insertOne(generateRandomizedPerson());
-    }
+
     var embeddedLeagueArray = [];
     for (var index = 0; index < leagueDataEntries; index++) {
         embeddedLeagueArray.push(generateRandomizedLeague());        
     }
     var embeddedSportArray = generateSports(embeddedLeagueArray);
+    for (var index = 0; index < personDataEntries; index++) {
+        db.Person.insertOne(generateRandomizedPerson());
+    }
     db.Department.insertMany(generateDepartments(embeddedSportArray));
     for (var index = 0; index < teamDataEntries; index++) {
         db.Team.insertOne(generateRandomizedTeam());
@@ -329,7 +331,8 @@ function main(){
                 contact: {
                     phoneNumber: "+43 11111 1111",
                     emailAddress: "snoop@do.gg"
-                }
+                },
+                sports: []
             }
     );
 

@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.dept;
 
+import at.fhv.sportsclub.model.person.PersonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

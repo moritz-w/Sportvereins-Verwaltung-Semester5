@@ -7,8 +7,8 @@
         <constructor-arg>
             <list>
                 <value type="java.lang.String">dozerJdk8Converters.xml</value>
-                <value type="java.lang.String">PersonMappingLight.xml</value>
-                <value type="java.lang.String">PersonMappingFull.xml</value>
+                <value type="java.lang.String">PersonDTOMappingLight.xml</value>
+                <value type="java.lang.String">PersonDTOMappingFull.xml</value>
             </list>
         </constructor-arg>
     </bean>

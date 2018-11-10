@@ -30,11 +30,6 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
         this.teamRepository = repository;
     }
 
-    @Override
-    protected String getId(TeamEntity entity) {
-        return entity.getId();
-    }
-
     //region RMI wrapper methods
     @Override
     public ArrayList<TeamDTO> getAllEntries() {

@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.controller.common;
 
+import at.fhv.sportsclub.entity.CommonEntity;
 import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
@@ -15,16 +16,21 @@ import java.util.List;
 import java.util.Set;
 
 /*
-    Common Controller implementation to reduce controller code for methods
-    that are required in every controller (e.g. saveOrUpdate, getAll and so on).
+    Created: 05.11.2018
+    Author: Moritz W.
+    Co-Authors:
+*/
 
-    The following generics are used:
-        DTO: destination DTO class. Refers to a POJO that is returned to the consumer
-        E: Entity to use for repository communication. Usually refers to the domain/entity class
-        R: Repository type, that is used for persistence communication
-
+/**
+ * Common Controller implementation to reduce controller code for methods
+ * that are required in every controller (e.g. saveOrUpdate, getAll and so on).
+ *
+ * @param <DTO> destination DTO class. Refers to a POJO that is returned to the consumer
+ * @param <E> Entity to use for repository communication. Usually refers to the domain/entity class
+ * @param <R> Repository type, that is used for persistence communication
  */
-public abstract class CommonController<DTO, E, R extends CommonRepository<E, String>>
+
+public abstract class CommonController<DTO, E extends CommonEntity, R extends CommonRepository<E, String>>
         implements Controller<DTO, ResponseMessageDTO> {
 
     private final Class<DTO> dtoClass;
@@ -45,8 +51,12 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         this.entityClass = entityClass;
     }
 
-    protected abstract String getId(E entity);
-
+    /**
+     * Save or update (if id already exists) the database for the given DTO.
+     * @param dto DTO (Pojo) containing the data that should be changed or inserted
+     * @return ResponseMessageDTO, which holds information, whether the validation was successful
+     * and the contextId, which refers to ID of a newly created or updated Entity.
+     */
     @Override
     public ResponseMessageDTO saveOrUpdate(DTO dto) {
         ResponseMessageDTO responseMessageDTO = validateDto(dto);
@@ -55,7 +65,7 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         }
         try {
             E updatedEntity = this.repository.saveOrUpdate(this.map(dto, this.entityClass));
-            responseMessageDTO.setContextId(getId(updatedEntity));
+            responseMessageDTO.setContextId(updatedEntity.getId());
         } catch (Exception e) {      // TODO handle right exception
             responseMessageDTO.setInfoMessage(e.getMessage());
             return responseMessageDTO;
@@ -64,6 +74,13 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         return responseMessageDTO;
     }
 
+    /**
+     * Returns a list of light DTOs containing all database entry for the given entity class in the generic.
+     * Light means, that a dozer mapping id (context based mapping) is used for mapping. The corresponding
+     * XML file defining that id, contains the fields that should be mapped. By this, you can reduce the overall
+     * traffic, when requesting a long list of heavy DTOs.
+     * @return A list of light mapped DTOs.
+     */
     @Override
     public List<DTO> getAll() {
         try {
@@ -71,13 +88,18 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
             if(this.getMappingIdByConvention().isEmpty()){
                 return mapAnyCollection(entityList, this.dtoClass);
             }
-            return mapAnyCollection(entityList, this.dtoClass); // TODO: , this.getMappingIdByConvention()
+            return mapAnyCollection(entityList, this.dtoClass, this.getMappingIdByConvention()); // TODO: , this.getMappingIdByConvention()
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
+    /**
+     * Simple validation method for validating the javax.validation annotations, used in the DTOs.
+     * @param dto DTO to validate
+     * @return ResponseMessageDTO with validated set to true or false and a list of validationMessages (if any exist)
+     */
     protected ResponseMessageDTO validateDto(DTO dto) {
         List<String> violationMessages = new LinkedList<>();
         Set<ConstraintViolation<DTO>> constraintViolations = this.validator.validate(dto);
@@ -102,6 +124,8 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         return "";
     }
 
+    // Note: this method checks if a mapping id exist. Dozer doesn't offer a method for that,
+    // so that's a very basic (and ugly) solution
     private boolean checkMapId(String mapId){
         try {
             this.mapper.map(new PersonDTO(), PersonEntity.class, mapId);
@@ -111,6 +135,16 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         }
     }
 
+    /**
+     * Simple generic method for mapping. It might seem to be a unnecessary method,
+     * since mapping could be done with the mapper directly, but the subclass extending
+     * this class, should only have a subset of mapping functions available.
+     * @param source Source entity
+     * @param dest Destination entity class
+     * @param <S> Source entity type
+     * @param <D> Destination entity type
+     * @return new instance of destination entity class with values mapped
+     */
     protected <S, D> D map(S source, Class<D> dest){
         return mapper.map(source, dest);
     }
@@ -119,13 +153,19 @@ public abstract class CommonController<DTO, E, R extends CommonRepository<E, Str
         return mapper.map(source, dest, mapId);
     }
 
+
     private interface InternalMapper<S, D> {
         D map(S sourceElement);
     }
 
-    /*
-        Generic helper function to map collections from Source (S) to Destination (D).
-        Make sure that the destination class offers an empty constructor.
+    /**
+     *  Generic helper function to map collections from Source (S) to Destination (D).
+     *  Make sure that the destination class offers an empty constructor.
+     * @param source Source list containing entities to map
+     * @param mapper Mapping interface with a map method, that is executed on every entity instance of the source list
+     * @param <S> Source type
+     * @param <D> Destination type
+     * @return List of destination entities
      */
     protected <S, D> List<D> mapAnyCollection(List<S> source, InternalMapper<S, D> mapper){
         final List<D> destinationCollection = new LinkedList<>();

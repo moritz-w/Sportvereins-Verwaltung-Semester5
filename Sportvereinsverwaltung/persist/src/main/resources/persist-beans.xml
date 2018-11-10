@@ -14,18 +14,25 @@
             base-class="at.fhv.sportsclub.repository.CommonRepositoryImpl">
     </mongo:repositories>
 
+    <mongo:mapping-converter id="mongoConverter">
+        <mongo:custom-converters base-package="at.fhv.sportsclub.repository.converters"/>
+    </mongo:mapping-converter>
+
     <bean id="mongoClient" class="com.mongodb.MongoClient">
-           <constructor-arg>
-               <value type="java.lang.String">${mongo.host}</value>
-           </constructor-arg>
-           <constructor-arg>
-                <value type="java.lang.Integer">${mongo.port}</value>
-           </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.String">${mongo.host}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value type="java.lang.Integer">${mongo.port}</value>
+        </constructor-arg>
     </bean>
 
+    <mongo:db-factory id="mongoDbFactory" dbname="${mongo.dbname}" mongo-ref="mongoClient" />
+
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="mongoClient"/>
-        <constructor-arg value="${mongo.dbname}"/>
+        <constructor-arg ref="mongoDbFactory"/>
+        <constructor-arg ref="mongoConverter"/>
     </bean>
+
 
 </beans>

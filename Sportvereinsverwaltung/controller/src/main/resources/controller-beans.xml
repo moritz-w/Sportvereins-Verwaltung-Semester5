@@ -5,13 +5,24 @@
 
     <import resource="persist-beans.xml"/>
 
+    <!--
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+
+            <property name="converters" >
+                <list>
+                    <bean class="at.fhv.sportsclub.controller.common.ClasspathURLConverter"/>
+                </list>
+            </property>
+    </bean>
+    -->
+
     <bean class="org.dozer.DozerBeanMapper" id="dozerBeanMapper">
         <constructor-arg>
             <list>
-                <value type="java.lang.String">dozerJdk8Converters.xml</value>
-                <value type="java.lang.String">PersonMappingLight.xml</value>
-                <value type="java.lang.String">PersonMappingFull.xml</value>
-                <value type="java.lang.String">SportEntityMapping.xml</value>
+                <value>dozerJdk8Converters.xml</value>
+                <value>PersonDTOMappingLight.xml</value>
+                <value>PersonDTOMappingFull.xml</value>
+                <value>./customMappings/SportEntityMapping.xml</value>
             </list>
         </constructor-arg>
     </bean>

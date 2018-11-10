@@ -24,11 +24,6 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
         this.personRepository = repository;
     }
 
-    @Override
-    protected String getId(PersonEntity entity) {
-        return entity.getId();
-    }
-
     //region RMI wrapper methods
     @Override
     public ArrayList<PersonDTO> getAllEntries() {

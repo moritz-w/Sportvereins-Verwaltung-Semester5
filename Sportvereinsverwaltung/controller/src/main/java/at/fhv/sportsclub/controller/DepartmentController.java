@@ -1,6 +1,5 @@
 package at.fhv.sportsclub.controller;
 
-
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.entity.dept.DepartmentEntity;
@@ -28,10 +27,6 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     public DepartmentController(DepartmentRepository repository) {
         super(repository, DepartmentDTO.class, DepartmentEntity.class);
         this.departmentRepository = repository;
-    }
-    @Override
-    protected String getId(DepartmentEntity entity) {
-        return entity.getId();
     }
 
     public List<SportDTO> getAllSports() {

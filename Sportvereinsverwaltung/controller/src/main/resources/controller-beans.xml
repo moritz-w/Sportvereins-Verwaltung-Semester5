@@ -22,6 +22,8 @@
                 <value>dozerJdk8Converters.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
+                <value>TeamDTOMappingLight.xml</value>
+                <value>TeamDTOMappingFull.xml</value>
                 <value>./customMappings/SportEntityMapping.xml</value>
             </list>
         </constructor-arg>

@@ -3,9 +3,11 @@ package at.fhv.sportsclub.factory;
 import at.fhv.sportsclub.controller.DepartmentController;
 import at.fhv.sportsclub.controller.PersonController;
 import at.fhv.sportsclub.controller.TeamController;
+import at.fhv.sportsclub.controller.TournamentController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
+import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,10 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public TeamController createTeamController() {
         return null;
     }
+    @Lookup
+    public TournamentController createTournamentController(){
+        return null;
+    }
 
     @Override
     public IPersonController getPersonController() throws RemoteException {
@@ -45,6 +51,11 @@ public class ControllerFactoryImpl implements IControllerFactory {
     @Override
     public ITeamController getTeamController() throws RemoteException {
         return (ITeamController) UnicastRemoteObject.exportObject(createTeamController(), 0);
+    }
+
+    @Override
+    public ITournamentController getTournamentController() throws RemoteException {
+        return (ITournamentController) UnicastRemoteObject.exportObject(createTournamentController(), 0);
     }
 
 

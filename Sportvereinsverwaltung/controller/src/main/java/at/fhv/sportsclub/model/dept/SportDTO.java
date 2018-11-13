@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.model.dept;
 
+import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
-public @Data class SportDTO implements Serializable {
+public @Data class SportDTO implements Serializable, IDTO {
 
     public SportDTO() {}
 
@@ -16,4 +18,5 @@ public @Data class SportDTO implements Serializable {
     private String name;
     @NotNull
     private List<LeagueDTO> leagues;
+    private ResponseMessageDTO response;
 }

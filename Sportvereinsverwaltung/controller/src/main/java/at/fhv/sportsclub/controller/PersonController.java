@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 @Service
@@ -34,5 +35,11 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
     public ResponseMessageDTO saveOrUpdateEntry(PersonDTO personDTO) {
         return this.saveOrUpdate(personDTO);
     }
+
+    @Override
+    public PersonDTO getEntryDetails(String id) throws RemoteException {
+        return this.getDetails(id);
+    }
+
     //endregion
 }

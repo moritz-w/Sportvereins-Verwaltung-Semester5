@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 @AllArgsConstructor
 public @Data class AddressDTO implements Serializable, IDTO {
 
+    private static final long serialVersionUID = 1111685098267757690L;
+
     private String id;
     @Pattern(regexp = "^[a-zA-Z0-9äöüÄÖÜ\\s-]*$",
             message = "Der Straßenname darf lediglich aus Buchstaben, Zahlen, Leerzeichen und \"-\" bestehen.")

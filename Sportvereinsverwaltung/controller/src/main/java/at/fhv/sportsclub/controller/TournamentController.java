@@ -7,10 +7,14 @@ import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.sportsclub.repository.tournament.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+@Service
+@Scope("prototype")
 public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, TournamentRepository> implements ITournamentController {
 
     private TournamentRepository tournamentReposetory;

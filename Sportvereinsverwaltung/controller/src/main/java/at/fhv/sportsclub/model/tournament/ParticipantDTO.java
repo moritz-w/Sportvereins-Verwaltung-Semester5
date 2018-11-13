@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.model.tournament;
 
+import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -11,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
-public @Data class ParticipantDTO implements Serializable {
+public @Data class ParticipantDTO implements Serializable, IDTO {
 
     public ParticipantDTO() { }
 
@@ -20,4 +22,5 @@ public @Data class ParticipantDTO implements Serializable {
     private TeamDTO team;
     private String teamName;
     private List<PersonDTO> participants;
+    private ResponseMessageDTO response;
 }

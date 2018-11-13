@@ -19,9 +19,6 @@ public @Data class TournamentEntity implements CommonEntity {
     @DBRef
     private LeagueEntity league;
 
-    @DBRef
     private List<EncounterEntity> encounters;
-
-    @DBRef
     private List<ParticipantEntity> teams;
 }

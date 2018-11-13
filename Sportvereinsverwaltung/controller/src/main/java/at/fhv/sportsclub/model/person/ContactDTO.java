@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.model.person;
 
+import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @AllArgsConstructor
-public @Data class ContactDTO implements Serializable {
+public @Data class ContactDTO implements Serializable, IDTO {
     public ContactDTO() {}
 
     private String id;
@@ -17,4 +19,5 @@ public @Data class ContactDTO implements Serializable {
     private String phoneNumber;
     @Email(message = "Die eingegeben E-Mail ist nicht korrekt.")
     private String emailAddress;
+    private ResponseMessageDTO response;
 }

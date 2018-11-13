@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="persist-beans.xml"/>
+    <context:component-scan base-package="at.fhv.sportsclub"/>
+
+    <!--
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+
+            <property name="converters" >
+                <list>
+                    <bean class="at.fhv.sportsclub.controller.common.ClasspathURLConverter"/>
+                </list>
+            </property>
+    </bean>
+    -->
 
     <bean class="org.dozer.DozerBeanMapper" id="dozerBeanMapper">
         <constructor-arg>
             <list>
-                <value type="java.lang.String">dozerJdk8Converters.xml</value>
-                <value>PersonMappingLight.xml</value>
-                <value>PersonMappingFull.xml</value>
+                <value>dozerJdk8Converters.xml</value>
+                <value>PersonDTOMappingLight.xml</value>
+                <value>PersonDTOMappingFull.xml</value>
+                <value>TeamDTOMappingLight.xml</value>
+                <value>TeamDTOMappingFull.xml</value>
+                <value>./customMappings/SportEntityMapping.xml</value>
             </list>
         </constructor-arg>
     </bean>

@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:controller-beans-test.xml"})
-public class BasicPersonDTOMappingTestTest {
+public class SimpleDozerMappingTest {
 
     @Autowired
     private DozerBeanMapper dozerBeanMapper;
@@ -29,10 +29,10 @@ public class BasicPersonDTOMappingTestTest {
 
     private AddressEntity address = new AddressEntity("1", "Hof", "6900", "Alberschwende");
     private ContactEntity contact = new ContactEntity("1", "06601709365", "test22@gmail.com");
-    private PersonEntity person = new PersonEntity(null, "Lukas", "Stadel", date, address, contact);
+    private PersonEntity person = new PersonEntity(null, "Lukas", "Stadel", date, address, contact, null);
 
 
-    public BasicPersonDTOMappingTestTest() {
+    public SimpleDozerMappingTest() {
     }
 
     /*
@@ -44,7 +44,7 @@ public class BasicPersonDTOMappingTestTest {
 
         AddressEntity address = new AddressEntity("1", "Hof", "6900", "Alberschwende");
         ContactEntity contact = new ContactEntity("1", "06601709365", "test22@gmail.com");
-        PersonEntity person = new PersonEntity("1", "Lukas", "Stadel", date, address, contact);
+        PersonEntity person = new PersonEntity("1", "Lukas", "Stadel", date, address, contact, null);
 
         PersonDTO mappedPerson = this.dozerBeanMapper.map(person, PersonDTO.class);
 
@@ -54,31 +54,26 @@ public class BasicPersonDTOMappingTestTest {
 
     @Test
     public void testDifferentMappingXMLFiles() {
-        List myMappingFiles = new ArrayList();
-        myMappingFiles.add("PersonMappingLight.xml");
-        myMappingFiles.add("PersonMappingFull.xml");
-        myMappingFiles.add("dozerJdk8Converters.xml");
-        this.dozerBeanMapper.setMappingFiles(myMappingFiles);
 
         /*
             Light Mapping - To check if only the 2 selected attributes
             (firstName and lastName) are mapped. All other attributes
             are not mapped --> null.
          */
-        PersonDTO mappedPerson = mappingToDTOWithSpecifiedMappingId("PersonMappingLight");
+        PersonDTO mappedPerson = mappingToDTOWithSpecifiedMappingId("PersonDTOMappingLight");
         assertEquals(mappedPerson.getFirstName(), person.getFirstName());
-        assertEquals(mappedPerson.getAddress(), null);
+        assertNull(mappedPerson.getAddress());
 
         /*
             Full Mapping - This checks whether all attributes are mapped.
-            The mapping file "PersonMappingFull.xml" is used. No specific
+            The mapping file "PersonDTOMappingFull.xml" is used. No specific
             attributes are specified, but by default everything is mapped
             if the attribute names match.
          */
-        PersonDTO mappedPersonFull = mappingToDTOWithSpecifiedMappingId("PersonMappingFull");
+        PersonDTO mappedPersonFull = mappingToDTOWithSpecifiedMappingId("PersonDTOMappingFull");
         assertEquals(mappedPersonFull.getFirstName(), person.getFirstName());
         assertEquals(mappedPersonFull.getAddress().getId(),  person.getAddress().getId());
-        assertEquals(mappedPerson.getId(), null);
+        assertNull(mappedPerson.getId());
     }
 
     public void setDozerBeanMapper(DozerBeanMapper dozerBeanMapper) {

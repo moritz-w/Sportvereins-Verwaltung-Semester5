@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.common;
+package at.fhv.sportsclub.controller.common;
 
 import java.util.List;
 

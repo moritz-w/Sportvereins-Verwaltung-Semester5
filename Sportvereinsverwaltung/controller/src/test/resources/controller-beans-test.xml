@@ -7,8 +7,13 @@
         <constructor-arg>
             <list>
                 <value type="java.lang.String">dozerJdk8Converters.xml</value>
+                <value type="java.lang.String">PersonDTOMappingLight.xml</value>
+                <value type="java.lang.String">PersonDTOMappingFull.xml</value>
             </list>
         </constructor-arg>
     </bean>
+
+    <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>
+    <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator" />
 
 </beans>

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
     SimpleMongoRepository, that contains the CRUD functionality. But since
     not all methods should be exposed to the controller layer (e.g deleteAll)
     a CommonRepository is used, which limits the available methods to the
-    required functionality. All the methods defined in the in the Common Repository
+    required functionality. All the methods defined in the Common Repository
     interface are routed to the corresponding data store specific implementation.
 
     With the CustomPersonRepository, domain specific methods (or queries) can be added.

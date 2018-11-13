@@ -5,29 +5,29 @@ import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.sportsclub.repository.tournament.ITournamentReposetory;
+import at.fhv.sportsclub.repository.tournament.ITournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, ITournamentReposetory> implements ITournamentController {
+public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, ITournamentRepository> implements ITournamentController {
 
-    private ITournamentReposetory tournamentReposetory;
+    private ITournamentRepository tournamentReposetory;
 
     @Autowired
-    public TournamentController(ITournamentReposetory repository) {
+    public TournamentController(ITournamentRepository repository) {
         super(repository, TournamentDTO.class, TournamentEntity.class);
         this.tournamentReposetory = repository;
     }
 
     @Override
     public ArrayList<TournamentDTO> getAllEntries() throws RemoteException {
-        return null;
+        return new ArrayList<>(this.getAll());
     }
 
     @Override
     public ResponseMessageDTO saveOrUpdateEntry(TournamentDTO tournamentDTO) throws RemoteException {
-        return null;
+        return this.saveOrUpdate(tournamentDTO);
     }
 }

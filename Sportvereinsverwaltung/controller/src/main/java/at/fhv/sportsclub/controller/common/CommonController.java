@@ -2,6 +2,7 @@ package at.fhv.sportsclub.controller.common;
 
 import at.fhv.sportsclub.entity.CommonEntity;
 import at.fhv.sportsclub.entity.person.PersonEntity;
+import at.fhv.sportsclub.model.common.IDTO;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.repository.CommonRepository;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /*
     Created: 05.11.2018
@@ -30,7 +28,7 @@ import java.util.Set;
  * @param <R> Repository type, that is used for persistence communication
  */
 
-public abstract class CommonController<DTO, E extends CommonEntity, R extends CommonRepository<E, String>>
+public abstract class CommonController<DTO extends IDTO, E extends CommonEntity, R extends CommonRepository<E, String>>
         implements Controller<DTO, ResponseMessageDTO> {
 
     private final Class<DTO> dtoClass;
@@ -91,7 +89,9 @@ public abstract class CommonController<DTO, E extends CommonEntity, R extends Co
             return mapAnyCollection(entityList, this.dtoClass, this.getMappingIdByConvention()); // TODO: , this.getMappingIdByConvention()
         } catch (Exception e) {
             e.printStackTrace();
-            return Collections.emptyList();
+            return new ArrayList<DTO>(){{
+                add(rejectRequest(""));
+            }};
         }
     }
 
@@ -181,6 +181,26 @@ public abstract class CommonController<DTO, E extends CommonEntity, R extends Co
 
     protected <S, D> List<D> mapAnyCollection(List<S> source, Class<D> destinationClass, String mapId){
         return this.mapAnyCollection(source, sourceElement -> this.map(sourceElement, destinationClass, mapId));
+    }
+
+
+    /*
+        Util methods
+     */
+    protected DTO rejectRequest(String infoMessage){
+        DTO dto;
+        try {
+            dto = dtoClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+        ResponseMessageDTO responseMessageDTO = new ResponseMessageDTO(new LinkedList<>(), false);
+        responseMessageDTO.setInfoMessage(infoMessage);
+        responseMessageDTO.setContextId("null");
+        responseMessageDTO.setSuccess(false);
+        dto.setResponse(responseMessageDTO);
+        return dto;
     }
 
     /*

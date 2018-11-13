@@ -23,7 +23,6 @@ public class SportsResolverConverter implements Converter<ObjectId, SportEntity>
 
     @Override
     public SportEntity convert(ObjectId objectId) {
-        System.out.println(objectId.toHexString());
         SportEntity sportEntity;
         DepartmentRepository repository = departmentProxy.getDepartmentRepository();
         try {

@@ -19,6 +19,10 @@
             <a>lastName</a>
             <b>lastName</b>
         </field>
+        <field map-id="SportEntityMapping">
+            <a>sports</a>
+            <b>sports</b>
+        </field>
     </mapping>
 
 </mappings>

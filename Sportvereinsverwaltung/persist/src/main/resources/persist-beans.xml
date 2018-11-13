@@ -6,11 +6,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="at.fhv.sportsclub"/>
+    <context:component-scan base-package="at.fhv.sportsclub.repository"/>
     <context:property-placeholder location="classpath:mongo.properties"/>
 
     <mongo:repositories
-            base-package="at.fhv.sportsclub.repository"
+            base-package="at.fhv.sportsclub"
             base-class="at.fhv.sportsclub.repository.CommonRepositoryImpl">
     </mongo:repositories>
 

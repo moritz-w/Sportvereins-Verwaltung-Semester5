@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.model.person;
 
+import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +10,7 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 
 @AllArgsConstructor
-public @Data class AddressDTO implements Serializable {
+public @Data class AddressDTO implements Serializable, IDTO {
 
     private String id;
     @Pattern(regexp = "^[a-zA-Z0-9äöüÄÖÜ\\s-]*$",
@@ -20,6 +22,8 @@ public @Data class AddressDTO implements Serializable {
     // optional TODO: implement custom validator to geo lookup city names
     @Pattern(regexp = "", message = "")
     private String city;
+
+    private ResponseMessageDTO response;
 
     public AddressDTO() { }
 }

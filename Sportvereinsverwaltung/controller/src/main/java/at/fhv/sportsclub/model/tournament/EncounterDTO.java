@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.model.tournament;
 
+import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +13,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @AllArgsConstructor
-public @Data class EncounterDTO implements Serializable {
+public @Data class EncounterDTO implements Serializable, IDTO {
 
     public EncounterDTO() { }
 
@@ -23,4 +25,5 @@ public @Data class EncounterDTO implements Serializable {
     private ResultDTO homeTeam;
     @NotNull
     private ResultDTO guestTeam;
+    private ResponseMessageDTO response;
 }

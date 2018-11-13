@@ -5,5 +5,8 @@ import at.fhv.sportsclub.repository.CommonRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DepartmentRepository extends CommonRepository<DepartmentEntity, String> {
+public interface DepartmentRepository extends CommonRepository<DepartmentEntity, String>,
+                                              CustomDepartmentRepository
+{
+
 }

@@ -5,18 +5,18 @@ import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
-import at.fhv.sportsclub.repository.tournament.ITournamentRepository;
+import at.fhv.sportsclub.repository.tournament.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, ITournamentRepository> implements ITournamentController {
+public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, TournamentRepository> implements ITournamentController {
 
-    private ITournamentRepository tournamentReposetory;
+    private TournamentRepository tournamentReposetory;
 
     @Autowired
-    public TournamentController(ITournamentRepository repository) {
+    public TournamentController(TournamentRepository repository) {
         super(repository, TournamentDTO.class, TournamentEntity.class);
         this.tournamentReposetory = repository;
     }

@@ -19,6 +19,8 @@ public @Data class PersonDTO implements Serializable, IDTO {
 
     public PersonDTO() {}
 
+    private static final long serialVersionUID = 5529685098267757690L;
+
     private String id;
     @Pattern(regexp = "^[a-zA-ZäöüÄÖÜ\\s]*$", message = "Im Vornamen dürfen keine Zahlen oder Sonderzeichen vorkommen.")
     private String firstName;

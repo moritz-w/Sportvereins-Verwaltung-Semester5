@@ -16,6 +16,8 @@ public @Data class DepartmentDTO implements Serializable, IDTO {
 
     public DepartmentDTO() { }
 
+    private static final long serialVersionUID = 1009685098267757690L;
+
     private String id;
 
     private String deptName;

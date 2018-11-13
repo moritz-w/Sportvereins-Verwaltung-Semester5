@@ -17,6 +17,8 @@ public @Data class TeamDTO implements Serializable, IDTO {
 
     public TeamDTO() { }
 
+    private static final long serialVersionUID = 1111115098267757690L;
+
     private String id;
 
     private String name;

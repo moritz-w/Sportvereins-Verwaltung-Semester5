@@ -23,6 +23,10 @@
             <a>sports</a>
             <b>sports</b>
         </field>
+        <field map-id="AddressEntityMapping">
+            <a>address</a>
+            <b>address</b>
+        </field>
     </mapping>
 
 </mappings>

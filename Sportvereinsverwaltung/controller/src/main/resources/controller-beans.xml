@@ -5,6 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="persist-beans.xml"/>
+    <import resource="security-beans.xml"/>
     <context:component-scan base-package="at.fhv.sportsclub"/>
 
     <!--
@@ -21,12 +22,13 @@
     <bean class="org.dozer.DozerBeanMapper" id="dozerBeanMapper">
         <constructor-arg>
             <list>
+                <value>./customMappings/AddressEntityMapping.xml</value>
+                <value>./customMappings/SportEntityMapping.xml</value>
                 <value>dozerJdk8Converters.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
                 <value>TeamDTOMappingLight.xml</value>
                 <value>TeamDTOMappingFull.xml</value>
-                <value>./customMappings/SportEntityMapping.xml</value>
             </list>
         </constructor-arg>
     </bean>

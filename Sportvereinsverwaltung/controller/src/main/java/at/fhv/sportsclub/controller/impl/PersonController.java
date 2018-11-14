@@ -1,9 +1,10 @@
-package at.fhv.sportsclub.controller;
+package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.repository.person.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
 
     //region RMI wrapper methods
     @Override
-    public ArrayList<PersonDTO> getAllEntries() {
+    public ArrayList<PersonDTO> getAllEntries(SessionDTO session) {
         return new ArrayList<>(this.getAll());
     }
 

@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.controller.interfaces;
 
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 
 import java.rmi.Remote;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public interface IPersonController extends Remote {
 
-    ArrayList<PersonDTO> getAllEntries() throws RemoteException;
+    ArrayList<PersonDTO> getAllEntries(SessionDTO session) throws RemoteException;
 
     PersonDTO getEntryDetails(String id) throws RemoteException;
 

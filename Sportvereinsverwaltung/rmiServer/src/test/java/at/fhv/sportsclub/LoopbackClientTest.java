@@ -1,6 +1,11 @@
 package at.fhv.sportsclub;
 
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.person.AddressDTO;
+import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,6 +17,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /*
@@ -36,10 +42,23 @@ public class LoopbackClientTest {
     public void testRMIConnectionAndLookupFactory() throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(port);
         IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
-        IPersonController personController = controllerFactory.getPersonController();
-        ArrayList<PersonDTO> allEntries = personController.getAllEntries();
-        PersonDTO snoopDogg = personController.getEntryDetails(allEntries.get(0).getId());
-        System.out.println(snoopDogg.toString());
+        IAuthenticationController authenticationController = controllerFactory.getAuthenticationController();
+        SessionDTO session = authenticationController.authenticate("mwi4339@students.fhv.at", "");
+/*        IPersonController personController = controllerFactory.getPersonController();
+        IDepartmentController departmentController = controllerFactory.getDepartmentController();
+        SportDTO randomSport = departmentController.getAllSportEntries().get(0);
+        AddressDTO address = new AddressDTO(null, "Memory lane", "000", "Compton", null);
+        ContactDTO contact = new ContactDTO(null, "0009", "mw@gmail.com", null);
+        ArrayList<SportDTO> sports = new ArrayList<>();
+        sports.add(randomSport);
+        ResponseMessageDTO responseMessageDTO = personController.saveOrUpdateEntry(
+                new PersonDTO(null, "Test", "Test", LocalDate.now(), address, contact, sports, null)
+        );
+        PersonDTO entryDetails = personController.getEntryDetails(responseMessageDTO.getContextId());*/
+
+        //ArrayList<PersonDTO> allEntries = personController.getAllEntries(null);
+        //PersonDTO snoopDogg = personController.getEntryDetails(allEntries.get(0).getId());
+       // System.out.println(snoopDogg.toString());
     }
 
 }

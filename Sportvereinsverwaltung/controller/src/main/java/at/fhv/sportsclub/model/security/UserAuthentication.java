@@ -11,5 +11,11 @@ import lombok.Data;
 @AllArgsConstructor
 public @Data class UserAuthentication {
     private String id;
-    private String credentials;
+    private char[] credentials;
+
+    public void clearCredentials(){
+        for (int i = 0; i < credentials.length; i++) {
+            credentials[i] = '*';
+        }
+    }
 }

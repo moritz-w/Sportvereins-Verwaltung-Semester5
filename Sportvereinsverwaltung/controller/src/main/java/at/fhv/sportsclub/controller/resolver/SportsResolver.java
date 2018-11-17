@@ -8,7 +8,6 @@ import at.fhv.sportsclub.repository.dept.DepartmentRepository;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.dozer.CustomConverter;
-import org.dozer.DozerConverter;
 import org.dozer.Mapper;
 import org.dozer.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +100,7 @@ public class SportsResolver implements CustomConverter {
             try {
                 sportDTO = resolverMapper.map(sportEntity, SportDTO.class, "SportEntityMappingLight");
             } catch (MappingException e){
-                logger.fatal("Mapping from entitity to domain failed", e);
+                logger.fatal("Mapping from entity to domain failed", e);
             }
         } catch (InvalidInputDataException e) {
             logger.error("Invalid ID input given: ", e);

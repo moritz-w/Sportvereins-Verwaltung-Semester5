@@ -9,6 +9,7 @@ import at.fhv.sportsclub.repository.CommonRepository;
 import org.dozer.DozerBeanMapper;
 import org.dozer.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessResourceFailureException;
 
 import javax.validation.ConstraintViolation;
@@ -40,7 +41,8 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     private static final String defaultMappingPostFixFull = "MappingFull";
 
     @Autowired
-    private DozerBeanMapper mapper;
+    @Qualifier("generalMapper") private DozerBeanMapper mapper;
+
     @Autowired
     private Validator validator;
 
@@ -65,11 +67,15 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             return responseMessageDTO;
         }
         try {
-            E updatedEntity = this.repository.saveOrUpdate(this.map(dto, this.entityClass));
+            E updatedEntity = this.repository.saveOrUpdate(
+                    this.map(dto, this.entityClass, this.getMappingIdByConvention(defaultMappingPostFixFull))
+            );
             responseMessageDTO.setContextId(updatedEntity.getId());
         } catch (DataAccessResourceFailureException e) {
-            responseMessageDTO.setInfoMessage(e.getMessage());
-            return responseMessageDTO;
+            e.printStackTrace();
+            return createErrorMessage("Failed to access the data source");
+        } catch (MappingException e){
+            return createErrorMessage("Internal server error");
         }
         responseMessageDTO.setSuccess(true);
         return responseMessageDTO;
@@ -86,14 +92,21 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     public List<DTO> getAll() {
         try {
             List<E> entityList = repository.findAll();
-            if(this.getMappingIdByConvention(defaultMappingPostFixLight).isEmpty()){
+            String mappingId = this.getMappingIdByConvention(defaultMappingPostFixLight);
+            if(mappingId.isEmpty()){
                 return mapAnyCollection(entityList, this.dtoClass);
             }
-            return mapAnyCollection(entityList, this.dtoClass, this.getMappingIdByConvention(defaultMappingPostFixLight));
+            List<DTO> dtos = mapAnyCollection(entityList, this.dtoClass, mappingId);
+            return dtos;
         } catch (DataAccessResourceFailureException e) {
             e.printStackTrace();
             return new ArrayList<DTO>(){{
-                add(rejectRequest("Error: failed to access the data source"));
+                add(rejectRequest("Failed to access the data source"));
+            }};
+        } catch (MappingException e){
+            e.printStackTrace();
+            return new ArrayList<DTO>(){{
+                add(rejectRequest("Internal server error"));
             }};
         }
     }
@@ -116,8 +129,8 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             e.printStackTrace();
             return rejectRequest("Error: failed to access the data source");
         }
-        String mapId = this.getMappingIdByConvention(defaultMappingPostFixFull);
         try {
+            String mapId = this.getMappingIdByConvention(defaultMappingPostFixFull);
             if(mapId.isEmpty()){
                 return this.map(entityById, this.dtoClass);
             }
@@ -146,26 +159,7 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     }
 
     private String getMappingIdByConvention(String postFix){
-        String byDtoName = dtoClass.getSimpleName() + postFix;
-        String byEntityName = entityClass.getSimpleName() + postFix;
-        if (checkMapId(byDtoName)){
-            return byDtoName;
-        }
-        if (checkMapId(byEntityName)) {
-            return byEntityName;
-        }
-        return "";
-    }
-
-    // Note: this method checks if a mapping id exist. Dozer doesn't offer a method for that,
-    // so that's a very basic (and ugly) solution
-    private boolean checkMapId(String mapId){
-        try {
-            this.mapper.map(this.dtoClass.newInstance(), this.entityClass, mapId);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
+        return dtoClass.getSimpleName() + postFix;
     }
 
     /**
@@ -227,12 +221,15 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             e.printStackTrace();
             return null;
         }
-        ResponseMessageDTO responseMessageDTO = new ResponseMessageDTO(new LinkedList<>(), false);
-        responseMessageDTO.setInfoMessage(infoMessage);
-        responseMessageDTO.setContextId("null");
-        responseMessageDTO.setSuccess(false);
-        dto.setResponse(responseMessageDTO);
+        dto.setResponse(createErrorMessage(infoMessage));
         return dto;
+    }
+
+    protected ResponseMessageDTO createErrorMessage(String infoMessage){
+        ResponseMessageDTO response = new ResponseMessageDTO(new LinkedList<>(), false);
+        response.setInfoMessage(infoMessage);
+        response.setSuccess(false);
+        return response;
     }
 
     /*

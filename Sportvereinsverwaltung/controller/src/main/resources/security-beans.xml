@@ -21,13 +21,15 @@
         </constructor-arg>
     </bean>
 
+
     <bean class="at.fhv.sportsclub.security.authentication.AuthenticationController">
         <constructor-arg>
             <list>
-                 <bean class="at.fhv.sportsclub.security.authentication.LdapAuthenticationProvider"/>
-                 <bean class="at.fhv.sportsclub.security.authentication.InMemoryAuthenticationProvider"/>
+                <bean class="at.fhv.sportsclub.security.authentication.InMemoryAuthenticationProvider"/>
+                <bean class="at.fhv.sportsclub.security.authentication.LdapAuthenticationProvider"/>
             </list>
         </constructor-arg>
+        <constructor-arg ref="dataRepositoryDetailsProvider"/>
         <constructor-arg ref="sessionManager"/>
     </bean>
 

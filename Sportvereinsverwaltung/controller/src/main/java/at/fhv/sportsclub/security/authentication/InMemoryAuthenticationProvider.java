@@ -2,6 +2,8 @@ package at.fhv.sportsclub.security.authentication;
 
 import at.fhv.sportsclub.model.security.UserAuthentication;
 
+import java.util.Arrays;
+
 /*
       Created: 14.11.2018
       Author: Moritz W.
@@ -10,6 +12,6 @@ import at.fhv.sportsclub.model.security.UserAuthentication;
 public class InMemoryAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean authenticate(UserAuthentication authentication) {
-        return false;
+        return Arrays.equals(authentication.getId().toCharArray(), authentication.getCredentials());
     }
 }

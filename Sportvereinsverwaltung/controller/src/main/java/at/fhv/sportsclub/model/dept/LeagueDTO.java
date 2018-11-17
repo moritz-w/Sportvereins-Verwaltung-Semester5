@@ -4,7 +4,7 @@ import at.fhv.sportsclub.model.common.IDTO;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import javax.validation.constraints.Pattern;
+
 import java.io.Serializable;
 
 

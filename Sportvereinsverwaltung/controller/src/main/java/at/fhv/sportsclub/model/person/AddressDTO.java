@@ -7,7 +7,6 @@ import lombok.Data;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.ResourceBundle;
 
 @AllArgsConstructor
 public @Data class AddressDTO implements Serializable, IDTO {

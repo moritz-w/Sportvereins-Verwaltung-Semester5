@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.model.security;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.io.Serializable;
       Author: Moritz W.
       Co-Authors: 
 */
+@AllArgsConstructor
 public @Data class SessionDTO<T> implements Serializable {
     private T sessionId;
     private Long expires;

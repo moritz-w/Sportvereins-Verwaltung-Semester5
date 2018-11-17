@@ -19,7 +19,7 @@
             <a>lastName</a>
             <b>lastName</b>
         </field>
-        <field map-id="SportEntityMapping">
+        <field custom-converter-id="sportsResolver">
             <a>sports</a>
             <b>sports</b>
         </field>

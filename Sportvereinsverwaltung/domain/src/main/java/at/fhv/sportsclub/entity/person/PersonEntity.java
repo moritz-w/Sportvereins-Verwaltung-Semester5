@@ -1,9 +1,9 @@
 package at.fhv.sportsclub.entity.person;
 
 import at.fhv.sportsclub.entity.CommonEntity;
-import at.fhv.sportsclub.entity.dept.SportEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,8 +22,7 @@ public @Data class PersonEntity implements CommonEntity {
     private LocalDate dateOfBirth;
     private AddressEntity address;
     private ContactEntity contact;
-    @DBRef
-    private List<SportEntity> sports;
+    private List<ObjectId> sports;
 
     public PersonEntity() { }
 }

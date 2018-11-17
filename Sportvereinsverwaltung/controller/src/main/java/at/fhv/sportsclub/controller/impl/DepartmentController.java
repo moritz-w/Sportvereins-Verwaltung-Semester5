@@ -36,7 +36,7 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         List<DepartmentEntity> allDepartments = departmentRepository.findAll();
 
         for (DepartmentEntity department : allDepartments) {
-            allSports.addAll(mapAnyCollection(department.getSports(), SportDTO.class, "SportEntityMapping"));
+            allSports.addAll(mapAnyCollection(department.getSports(), SportDTO.class, "SportEntityMappingLight"));
         }
         return allSports;
     }

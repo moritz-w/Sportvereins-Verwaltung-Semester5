@@ -9,13 +9,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:controller-beans-test.xml"})

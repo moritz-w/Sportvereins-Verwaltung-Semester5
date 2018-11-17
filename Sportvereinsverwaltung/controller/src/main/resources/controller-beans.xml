@@ -34,6 +34,7 @@
         <property name="customConvertersWithId">
             <map>
                 <entry key="sportsResolver" value-ref="sportsResolver"/>
+                <entry key="leagueResolver" value-ref="leagueResolver"/>
             </map>
         </property>
     </bean>

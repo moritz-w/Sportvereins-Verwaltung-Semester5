@@ -3,6 +3,7 @@ package at.fhv.sportsclub.security.authentication;
 import at.fhv.sportsclub.controller.interfaces.IAuthenticationController;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.security.UserAuthentication;
+import at.fhv.sportsclub.model.security.UserDetails;
 import at.fhv.sportsclub.security.session.SessionManager;
 
 import java.util.Iterator;
@@ -16,22 +17,31 @@ import java.util.List;
 
 public class AuthenticationController implements IAuthenticationController {
 
+    private final UserDetailsProvider userDetailsProvider;
     private SessionManager sessionManager;
     private List<AuthenticationProvider> authenticationProviderList;
 
-    public AuthenticationController(List<AuthenticationProvider> authenticationProviderList, SessionManager sessionManager){
+    public AuthenticationController(List<AuthenticationProvider> authenticationProviderList,
+                                    UserDetailsProvider userDetailsProvider, SessionManager sessionManager){
         this.authenticationProviderList = authenticationProviderList;
         this.sessionManager = sessionManager;
+        this.userDetailsProvider = userDetailsProvider;
     }
 
-    public SessionDTO tryAuthentication(UserAuthentication authentication){
+    /**
+     * Use the given authentication providers to authenticate a user by his/her credentials
+     * @param authentication User authentication including the credentials and user identification
+     * @return null, if the authentication failed. Otherwise a validate Session object is returned
+     */
+    private SessionDTO tryAuthentication(UserAuthentication authentication){
         Iterator<AuthenticationProvider> providerIterator = authenticationProviderList.iterator();
         boolean authenticated;
-        SessionDTO session = new SessionDTO();
+        SessionDTO session = null;
         while(providerIterator.hasNext()){
             authenticated = providerIterator.next().authenticate(authentication);
             if (authenticated){
-                session = sessionManager.createNewSession();
+                UserDetails userDetails = userDetailsProvider.getUserDetails(authentication.getId());
+                session = sessionManager.createNewSession(userDetails);
             }
         }
         afterAuthCleanup(authentication);
@@ -39,12 +49,12 @@ public class AuthenticationController implements IAuthenticationController {
     }
 
     protected void afterAuthCleanup(UserAuthentication authentication){
-        authentication.setCredentials("######");
-        authentication.setId("######");
+        authentication.clearCredentials();
+        authentication.setId("");
     }
 
     @Override
-    public SessionDTO authenticate(String userId, String password) {
+    public SessionDTO authenticate(String userId, char[] password) {
         return tryAuthentication(new UserAuthentication(userId, password));
     }
 }

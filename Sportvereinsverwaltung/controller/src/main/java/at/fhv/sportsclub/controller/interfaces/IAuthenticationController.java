@@ -11,5 +11,5 @@ import java.rmi.RemoteException;
       Co-Authors: 
 */
 public interface IAuthenticationController extends Remote {
-    SessionDTO authenticate(String userId, String password) throws RemoteException;
+    SessionDTO authenticate(String userId, char[] password) throws RemoteException;
 }

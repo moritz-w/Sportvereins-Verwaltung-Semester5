@@ -12,8 +12,8 @@
             <b>id</b>
         </field>
         <field>
-            <a>street</a>
-            <b>street</b>
+            <a>city</a>
+            <b>city</b>
         </field>
         <field>
             <a>zipCode</a>

@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.security.authentication;
 
 import at.fhv.sportsclub.model.security.UserAuthentication;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.naming.AuthenticationException;
@@ -17,10 +18,12 @@ import java.util.Hashtable;
 @Component
 public class LdapAuthenticationProvider implements AuthenticationProvider{
 
+    private static final Logger logger = Logger.getRootLogger();
+
     @Override
     public boolean authenticate(UserAuthentication authentication) {
         String username = authentication.getId();
-        String password = authentication.getCredentials();
+        char[] password = authentication.getCredentials();
         String url = "ldaps://dc01.ad.uclv.net:636";
         String base = "ou=fhusers,dc=ad,dc=uclv,dc=net";
 
@@ -30,22 +33,21 @@ public class LdapAuthenticationProvider implements AuthenticationProvider{
         ldapParams.put(Context.SECURITY_AUTHENTICATION, "simple");
         ldapParams.put(Context.SECURITY_PRINCIPAL, username);
         ldapParams.put(Context.SECURITY_CREDENTIALS, password);
+        ldapParams.put("com.sun.jndi.ldap.read.timeout", "1000");
 
         // Specify SSL
         ldapParams.put(Context.SECURITY_PROTOCOL, "ssl");
         ldapParams.put(Context.SECURITY_PROTOCOL, "ssl");
 
-        InitialDirContext ldapCtx = null;
+        InitialDirContext ldapCtx;
         try {
             ldapCtx = new InitialDirContext(ldapParams);
-            if (ldapCtx != null) {
-                return true;
-            }
+            return true;
         } catch (AuthenticationException e) {
             return false;
         } catch (NamingException e){
+            logger.error("Failed to connect to LDAP server on " + url, e);
             return false;
         }
-        return false;
     }
 }

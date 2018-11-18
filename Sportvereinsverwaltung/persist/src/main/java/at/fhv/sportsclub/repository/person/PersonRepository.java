@@ -4,6 +4,8 @@ import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.repository.CommonRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 /*
     The Person Repository interface is an actual usable interface, that
@@ -27,5 +29,5 @@ public interface PersonRepository extends
                                         CommonRepository<PersonEntity, String>,
                                         CustomPersonRepository
 {
-
+    Optional<PersonEntity> findPersonEntityByContact_EmailAddress(String emailAddress);
 }

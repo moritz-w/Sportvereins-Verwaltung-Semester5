@@ -7,11 +7,18 @@
 
     <context:component-scan base-package="at.fhv.sportsclub.security"/>
 
+    <!--
+       A cglib class proxy is used even though it is not recommended, but since the Lookup Proxy, needs to
+       access the AOP proxy, it is required to have an instance of the corresponding controller class.
+       Otherwise with method injection the
+    -->
     <aop:config proxy-target-class="true">
         <aop:aspect id="aspects" ref="authorizationController">
             <aop:pointcut id="authorizeBeforeControllerRequest"
-                          expression="execution(public * at.fhv.sportsclub.controller.interfaces.*.* (..)) and args(session) "/>
-            <aop:before method="checkPermissions" pointcut-ref="authorizeBeforeControllerRequest" />
+                          expression="execution(public * at.fhv.sportsclub.controller.interfaces.*.* (..))
+                          and args(session, ..) and @annotation(at.fhv.sportsclub.controller.common.RequiredPrivileges)"
+            />
+            <aop:around method="checkPermissions" pointcut-ref="authorizeBeforeControllerRequest" />
         </aop:aspect>
     </aop:config>
 

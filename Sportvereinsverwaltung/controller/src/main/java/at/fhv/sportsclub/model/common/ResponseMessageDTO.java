@@ -18,6 +18,6 @@ public @Data class ResponseMessageDTO implements Serializable {
     private String contextId = "";
     private String infoMessage = "";
 
-    //public ResponseMessageDTO() {};
+    public ResponseMessageDTO() {}
 
 }

@@ -24,7 +24,7 @@ public class SimpleValidationTestTest {
     private Validator validator;
 
     private PersonDTO invalidNameDTO =
-            new PersonDTO(null, "Invalid1", "Invalid2", LocalDate.now(), null, null, null, null);
+            new PersonDTO(null, "Invalid1", "Invalid2", LocalDate.now(), null, null, null, null, null);
 
     public SimpleValidationTestTest() {
     }

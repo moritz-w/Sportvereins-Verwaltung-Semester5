@@ -27,7 +27,7 @@ public class SimpleDozerMappingTest {
 
     private AddressEntity address = new AddressEntity("1", "Hof", "6900", "Alberschwende");
     private ContactEntity contact = new ContactEntity("1", "06601709365", "test22@gmail.com");
-    private PersonEntity person = new PersonEntity(null, "Lukas", "Stadel", date, address, contact, null);
+    private PersonEntity person = new PersonEntity(null, "Lukas", "Stadel", date, address, contact, null, null);
 
 
     public SimpleDozerMappingTest() {
@@ -42,7 +42,7 @@ public class SimpleDozerMappingTest {
 
         AddressEntity address = new AddressEntity("1", "Hof", "6900", "Alberschwende");
         ContactEntity contact = new ContactEntity("1", "06601709365", "test22@gmail.com");
-        PersonEntity person = new PersonEntity("1", "Lukas", "Stadel", date, address, contact, null);
+        PersonEntity person = new PersonEntity("1", "Lukas", "Stadel", date, address, contact, null, null);
 
         PersonDTO mappedPerson = this.dozerBeanMapper.map(person, PersonDTO.class);
 

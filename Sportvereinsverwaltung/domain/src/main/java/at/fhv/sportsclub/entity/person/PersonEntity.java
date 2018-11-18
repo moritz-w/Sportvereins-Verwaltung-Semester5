@@ -23,6 +23,8 @@ public @Data class PersonEntity implements CommonEntity {
     private AddressEntity address;
     private ContactEntity contact;
     private List<ObjectId> sports;
+    @DBRef
+    private List<RoleEntity> roles;
 
     public PersonEntity() { }
 }

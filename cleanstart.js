@@ -165,6 +165,34 @@ var sportsIdPool = [];
 var teamIdPool = [];
 var participatingTeamsIndex = [];
 
+var exampleRoleId = new ObjectId();
+
+function transformIdArrayToDbRef(ids, ref){
+    dbRefs = []
+    ids.forEach(function(id, index, theArray){
+        dbRefs.push({
+            "$ref": ref,
+            "$id": id
+        })
+    });
+    return dbRefs;
+}
+
+function generateExampleRole(){
+    return {
+        _id: exampleRoleId,
+        name: "Member",
+        privileges: [
+            {
+                domain: "Person",
+                accessLevels: [
+                    "read"
+                ]
+            }
+        ]
+    };
+}
+
 function generateRandomizedPerson(){
     var uid = new ObjectId();
     personIdPool.push(uid);
@@ -183,7 +211,13 @@ function generateRandomizedPerson(){
             phoneNumber: phoneNumbers[getRandomNumber(0, phoneNumbers.length)],
             emailAddress: emailAddresses[getRandomNumber(0, emailAddresses.length)]
         },
-        sports: [sportsIdPool[getRandomNumber(0, sportsIdPool.length)]]
+        sports: [sportsIdPool[getRandomNumber(0, sportsIdPool.length)]],
+        roles: [
+            {
+                "$ref": "Role",
+                "$id": exampleRoleId
+            }
+        ]
     };
 }
 
@@ -221,7 +255,10 @@ function generateDepartments(sportArray){
         departments.push(
             {
                 deptName: deptname,
-                deptLeader: personIdPool[getRandomNumber(0, personIdPool.length)],
+                deptLeader: {
+                    "$ref": "Person", 
+                    "$id": personIdPool[getRandomNumber(0, personIdPool.length)]
+                },
                 sports: sportArray.slice(i, i + sliceSize)
             }
         );
@@ -237,8 +274,13 @@ function generateRandomizedTeam(){
     return {
         _id: uid,
         name: composeTeamName(),
-        members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),
-        trainers: personIdPool[getRandomNumber(0, personIdPool.length)],
+        members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+        trainers: [
+            {
+                "$ref": "Person",
+                "$id" : personIdPool[getRandomNumber(0, personIdPool.length)]
+            }
+        ],
         league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
     };
 }
@@ -283,6 +325,7 @@ function insertRandomizedData(){
     for (var index = 0; index < leagueDataEntries; index++) {
         embeddedLeagueArray.push(generateRandomizedLeague());        
     }
+    db.Role.insertOne(generateExampleRole());
     var embeddedSportArray = generateSports(embeddedLeagueArray);
     for (var index = 0; index < personDataEntries; index++) {
         db.Person.insertOne(generateRandomizedPerson());
@@ -332,7 +375,13 @@ function main(){
                     phoneNumber: "+43 11111 1111",
                     emailAddress: "snoop@do.gg"
                 },
-                sports: []
+                sports: [],
+                roles: [
+                    {
+                        "$ref": "Role",
+                        "$id": exampleRoleId
+                    }
+                ]
             }
     );
 

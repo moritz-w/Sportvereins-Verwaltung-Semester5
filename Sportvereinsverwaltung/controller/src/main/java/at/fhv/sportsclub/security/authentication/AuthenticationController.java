@@ -37,7 +37,7 @@ public class AuthenticationController implements IAuthenticationController {
         Iterator<AuthenticationProvider> providerIterator = authenticationProviderList.iterator();
         boolean authenticated;
         SessionDTO session = null;
-        while(providerIterator.hasNext()){
+        while(providerIterator.hasNext() && session == null){
             authenticated = providerIterator.next().authenticate(authentication);
             if (authenticated){
                 UserDetails userDetails = userDetailsProvider.getUserDetails(authentication.getId());
@@ -53,8 +53,10 @@ public class AuthenticationController implements IAuthenticationController {
         authentication.setId("");
     }
 
+    //region RMI wrapper methods
     @Override
     public SessionDTO authenticate(String userId, char[] password) {
         return tryAuthentication(new UserAuthentication(userId, password));
     }
+    //endregion
 }

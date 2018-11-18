@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /*
       Created: 14.11.2018
@@ -25,7 +26,8 @@ public class SimpleSessionIdService implements SessionIdService<String> {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             String val = userDetails.getUserId() + userDetails.getNonce() + secret;
             byte[] hashBytes = messageDigest.digest(val.getBytes(StandardCharsets.UTF_8));
-            return new String(hashBytes, StandardCharsets.UTF_8);
+            Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+            return encoder.encodeToString(hashBytes);
         } catch (NoSuchAlgorithmException e) {
             logger.error("Could not generate session ", e);
             throw new RuntimeException("Fatal error: could not obtain encoder for given digest type");

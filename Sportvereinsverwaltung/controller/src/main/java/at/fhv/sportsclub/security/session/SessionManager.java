@@ -1,12 +1,15 @@
 package at.fhv.sportsclub.security.session;
 
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.security.UserDetails;
 import at.fhv.sportsclub.security.exception.SessionInvalidException;
 
+import java.beans.Encoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,14 +33,14 @@ public abstract class SessionManager<T> {
 
     public SessionDTO<T> createNewSession(UserDetails userDetails){
         if(userDetails == null){
-            // TODO message
+            return rejectRequest("No user was found for the given ID");
         }
         userDetails.setNonce(getNonce());
         T generatedSessionId = sessionIdService.generateSessionId(userDetails);
 
         Long expirationTime = System.currentTimeMillis() / 1000L + sessionTime;
         sessionStore.put(generatedSessionId, new Session(userDetails, expirationTime));
-        return new SessionDTO<>(generatedSessionId, expirationTime);
+        return new SessionDTO<>(generatedSessionId, expirationTime, userDetails.getRoles(), null);
     }
 
     public SessionDTO<T> refreshSession(SessionDTO<T> session){
@@ -80,6 +83,14 @@ public abstract class SessionManager<T> {
         SecureRandom sec = new SecureRandom();
         byte[] values = new byte[20];
         sec.nextBytes(values);
-        return new String(values, StandardCharsets.UTF_8);
+        Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+        return encoder.encodeToString(values);
+    }
+
+    private SessionDTO<T> rejectRequest(String message){
+        ResponseMessageDTO responseMessage = new ResponseMessageDTO(new LinkedList<>(), false);
+        responseMessage.setSuccess(false);
+        responseMessage.setInfoMessage(message);
+        return new SessionDTO<T>(null, 0L, null, responseMessage);
     }
 }

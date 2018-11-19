@@ -4,12 +4,16 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
       http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
-    <mapping map-id="TeamDTOMappingFull">
-        <class-a>at.fhv.sportsclub.entity.team.TeamEntity</class-a>
-        <class-b>at.fhv.sportsclub.model.team.TeamDTO</class-b>
+    <mapping map-id="TournamentDTOMappingFull">
+        <class-a>at.fhv.sportsclub.entity.tournament.TournamentEntity</class-a>
+        <class-b>at.fhv.sportsclub.model.tournament.TournamentDTO</class-b>
         <field custom-converter-id="leagueResolver">
             <a>league</a>
             <b>league</b>
+        </field>
+        <field custom-converter="tournamentNameResolver">
+            <a>name</a>
+            <b>leagueName + ", " + sportsName</b>
         </field>
     </mapping>
 

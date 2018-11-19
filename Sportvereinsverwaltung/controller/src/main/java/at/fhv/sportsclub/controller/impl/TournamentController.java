@@ -2,8 +2,10 @@ package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.entity.team.TeamEntity;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.sportsclub.repository.tournament.TournamentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +36,20 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     public ResponseMessageDTO saveOrUpdateEntry(TournamentDTO tournamentDTO) throws RemoteException {
         return this.saveOrUpdate(tournamentDTO);
     }
+
+    @Override
+    public ResponseMessageDTO addTeamToTurnament(TournamentDTO tournamentDTO, TeamDTO teamDTO) throws RemoteException {
+
+
+
+        TournamentEntity tournament = this.map(tournamentDTO, TournamentEntity.class, "");
+        TeamEntity team = this.map(teamDTO, TeamEntity.class, "TeamDTOMappingFull");
+
+        this.tournamentReposetory.addTeamToTournament(tournament, team);
+        return new ResponseMessageDTO(/*Iwie muss das ding initialisiert werden*/);
+    }
+
+
+
+
 }

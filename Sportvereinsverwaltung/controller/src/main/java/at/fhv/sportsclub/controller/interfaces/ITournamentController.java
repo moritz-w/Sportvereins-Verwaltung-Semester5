@@ -10,8 +10,10 @@ import java.util.ArrayList;
 
 public interface ITournamentController extends Remote {
 
-    ArrayList<TournamentDTO> getAllEntries() throws RemoteException;
 
+    ArrayList<TournamentDTO> getAllEntries() throws RemoteException;
     ResponseMessageDTO saveOrUpdateEntry(TournamentDTO tournamentDTO) throws RemoteException;
+
+    ResponseMessageDTO addTeamToTurnament(TournamentDTO tournament, TeamDTO team) throws RemoteException;
 
 }

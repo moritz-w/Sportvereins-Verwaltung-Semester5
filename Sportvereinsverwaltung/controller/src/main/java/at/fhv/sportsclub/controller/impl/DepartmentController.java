@@ -3,8 +3,6 @@ package at.fhv.sportsclub.controller.impl;
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.entity.dept.DepartmentEntity;
-import at.fhv.sportsclub.entity.dept.SportEntity;
-import at.fhv.sportsclub.exception.InvalidInputDataException;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;

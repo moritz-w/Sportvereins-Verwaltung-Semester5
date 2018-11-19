@@ -1,13 +1,11 @@
 package at.fhv.sportsclub.factory;
 
-import at.fhv.sportsclub.controller.DepartmentController;
-import at.fhv.sportsclub.controller.PersonController;
-import at.fhv.sportsclub.controller.TeamController;
-import at.fhv.sportsclub.controller.TournamentController;
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.controller.impl.DepartmentController;
+import at.fhv.sportsclub.controller.impl.PersonController;
+import at.fhv.sportsclub.controller.impl.TeamController;
+import at.fhv.sportsclub.controller.impl.TournamentController;
+import at.fhv.sportsclub.controller.interfaces.*;
+import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +35,10 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public TournamentController createTournamentController(){
         return null;
     }
+    @Lookup
+    public AuthenticationController createAuthenticationController() {
+        return null;
+    }
 
     @Override
     public IPersonController getPersonController() throws RemoteException {
@@ -58,5 +60,8 @@ public class ControllerFactoryImpl implements IControllerFactory {
         return (ITournamentController) UnicastRemoteObject.exportObject(createTournamentController(), 0);
     }
 
-
+    @Override
+    public IAuthenticationController getAuthenticationController() throws RemoteException {
+        return (IAuthenticationController) UnicastRemoteObject.exportObject(createAuthenticationController(), 0);
+    }
 }

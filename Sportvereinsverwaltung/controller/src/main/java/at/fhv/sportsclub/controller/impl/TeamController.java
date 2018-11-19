@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.controller;
+package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;

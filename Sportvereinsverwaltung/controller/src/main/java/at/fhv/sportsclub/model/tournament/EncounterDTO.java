@@ -17,6 +17,8 @@ public @Data class EncounterDTO implements Serializable, IDTO {
 
     public EncounterDTO() { }
 
+    private static final long serialVersionUID = 1111111098267757690L;
+
     private String id;
 
     private LocalDate date;

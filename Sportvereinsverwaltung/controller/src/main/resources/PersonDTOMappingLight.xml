@@ -19,6 +19,14 @@
             <a>lastName</a>
             <b>lastName</b>
         </field>
+        <field custom-converter-id="sportsResolver">
+            <a>sports</a>
+            <b>sports</b>
+        </field>
+        <field map-id="AddressEntityMapping">
+            <a>address</a>
+            <b>address</b>
+        </field>
     </mapping>
 
 </mappings>

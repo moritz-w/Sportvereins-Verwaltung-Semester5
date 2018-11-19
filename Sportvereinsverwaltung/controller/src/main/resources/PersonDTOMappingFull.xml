@@ -7,6 +7,14 @@
     <mapping map-id="PersonDTOMappingFull">
         <class-a>at.fhv.sportsclub.entity.person.PersonEntity</class-a>
         <class-b>at.fhv.sportsclub.model.person.PersonDTO</class-b>
+        <field custom-converter-id="sportsResolver">
+            <a>sports</a>
+            <b>sports</b>
+        </field>
+        <field-exclude>
+            <a>roles</a>
+            <b>roles</b>
+        </field-exclude>
     </mapping>
 
 </mappings>

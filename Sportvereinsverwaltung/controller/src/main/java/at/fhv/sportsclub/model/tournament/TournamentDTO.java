@@ -16,6 +16,8 @@ public @Data class TournamentDTO implements Serializable, IDTO {
 
     public TournamentDTO() { }
 
+    private static final long serialVersionUID = 111111111267757690L;
+
     private String id;
 
     private String name;

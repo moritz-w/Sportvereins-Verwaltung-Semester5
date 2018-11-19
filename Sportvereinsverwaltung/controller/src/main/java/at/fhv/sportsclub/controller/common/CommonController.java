@@ -7,7 +7,10 @@ import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.repository.CommonRepository;
 import org.dozer.DozerBeanMapper;
+import org.dozer.MappingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessResourceFailureException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -35,9 +38,11 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     private final Class<E> entityClass;
 
     private static final String defaultMappingPostFixLight = "MappingLight";
+    private static final String defaultMappingPostFixFull = "MappingFull";
 
     @Autowired
-    private DozerBeanMapper mapper;
+    @Qualifier("generalMapper") private DozerBeanMapper mapper;
+
     @Autowired
     private Validator validator;
 
@@ -62,11 +67,15 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             return responseMessageDTO;
         }
         try {
-            E updatedEntity = this.repository.saveOrUpdate(this.map(dto, this.entityClass));
+            E updatedEntity = this.repository.saveOrUpdate(
+                    this.map(dto, this.entityClass, this.getMappingIdByConvention(defaultMappingPostFixFull))
+            );
             responseMessageDTO.setContextId(updatedEntity.getId());
-        } catch (Exception e) {      // TODO handle right exception
-            responseMessageDTO.setInfoMessage(e.getMessage());
-            return responseMessageDTO;
+        } catch (DataAccessResourceFailureException e) {
+            e.printStackTrace();
+            return createErrorMessage("Failed to access the data source");
+        } catch (MappingException e){
+            return createErrorMessage("Internal server error");
         }
         responseMessageDTO.setSuccess(true);
         return responseMessageDTO;
@@ -83,15 +92,52 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     public List<DTO> getAll() {
         try {
             List<E> entityList = repository.findAll();
-            if(this.getMappingIdByConvention().isEmpty()){
+            String mappingId = this.getMappingIdByConvention(defaultMappingPostFixLight);
+            if(mappingId.isEmpty()){
                 return mapAnyCollection(entityList, this.dtoClass);
             }
-            return mapAnyCollection(entityList, this.dtoClass, this.getMappingIdByConvention()); // TODO: , this.getMappingIdByConvention()
-        } catch (Exception e) {
+            List<DTO> dtos = mapAnyCollection(entityList, this.dtoClass, mappingId);
+            return dtos;
+        } catch (DataAccessResourceFailureException e) {
             e.printStackTrace();
             return new ArrayList<DTO>(){{
-                add(rejectRequest(""));
+                add(rejectRequest("Failed to access the data source"));
             }};
+        } catch (MappingException e){
+            e.printStackTrace();
+            return new ArrayList<DTO>(){{
+                add(rejectRequest("Internal server error"));
+            }};
+        }
+    }
+
+    /**
+     * Get details of an Entity by the given id
+     * @param id ID to lookup
+     * @return DTO for given ID with details
+     */
+    @Override
+    public DTO getDetails(String id) {
+        E entityById;
+        try {
+            Optional<E> entityOptional = repository.findById(id);
+            if(!entityOptional.isPresent()) {
+                return rejectRequest("Nothing found for the given ID");
+            }
+            entityById = entityOptional.get();
+        } catch (DataAccessResourceFailureException e){
+            e.printStackTrace();
+            return rejectRequest("Error: failed to access the data source");
+        }
+        try {
+            String mapId = this.getMappingIdByConvention(defaultMappingPostFixFull);
+            if(mapId.isEmpty()){
+                return this.map(entityById, this.dtoClass);
+            }
+            return this.map(entityById, this.dtoClass, mapId);
+        } catch (MappingException e) {
+            e.printStackTrace();
+            return rejectRequest("Internal server error");
         }
     }
 
@@ -112,27 +158,8 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
         return new ResponseMessageDTO(violationMessages, false);
     }
 
-    private String getMappingIdByConvention(){
-        String byDtoName = dtoClass.getSimpleName() + defaultMappingPostFixLight;
-        String byEntityName = entityClass.getSimpleName() + defaultMappingPostFixLight;
-        if (checkMapId(byDtoName)){
-            return byDtoName;
-        }
-        if (checkMapId(byEntityName)) {
-            return byEntityName;
-        }
-        return "";
-    }
-
-    // Note: this method checks if a mapping id exist. Dozer doesn't offer a method for that,
-    // so that's a very basic (and ugly) solution
-    private boolean checkMapId(String mapId){
-        try {
-            this.mapper.map(new PersonDTO(), PersonEntity.class, mapId);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
+    private String getMappingIdByConvention(String postFix){
+        return dtoClass.getSimpleName() + postFix;
     }
 
     /**
@@ -183,7 +210,6 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
         return this.mapAnyCollection(source, sourceElement -> this.map(sourceElement, destinationClass, mapId));
     }
 
-
     /*
         Util methods
      */
@@ -195,12 +221,15 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             e.printStackTrace();
             return null;
         }
-        ResponseMessageDTO responseMessageDTO = new ResponseMessageDTO(new LinkedList<>(), false);
-        responseMessageDTO.setInfoMessage(infoMessage);
-        responseMessageDTO.setContextId("null");
-        responseMessageDTO.setSuccess(false);
-        dto.setResponse(responseMessageDTO);
+        dto.setResponse(createErrorMessage(infoMessage));
         return dto;
+    }
+
+    protected ResponseMessageDTO createErrorMessage(String infoMessage){
+        ResponseMessageDTO response = new ResponseMessageDTO(new LinkedList<>(), false);
+        response.setInfoMessage(infoMessage);
+        response.setSuccess(false);
+        return response;
     }
 
     /*

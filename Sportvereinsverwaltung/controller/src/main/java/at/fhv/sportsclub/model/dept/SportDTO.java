@@ -14,6 +14,8 @@ public @Data class SportDTO implements Serializable, IDTO {
 
     public SportDTO() {}
 
+    private static final long serialVersionUID = 1119685098267757690L;
+
     private String id;
     private String name;
     @NotNull

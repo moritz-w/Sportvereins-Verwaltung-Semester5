@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.controller;
+package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
@@ -31,12 +31,12 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         this.departmentRepository = repository;
     }
 
-    public List<SportDTO> getAllSports() {
+    private List<SportDTO> getAllSports() {
         List<SportDTO> allSports = new LinkedList<>();
         List<DepartmentEntity> allDepartments = departmentRepository.findAll();
 
         for (DepartmentEntity department : allDepartments) {
-            allSports.addAll(mapAnyCollection(department.getSports(), SportDTO.class, "SportEntityMapping"));
+            allSports.addAll(mapAnyCollection(department.getSports(), SportDTO.class, "SportEntityMappingLight"));
         }
         return allSports;
     }

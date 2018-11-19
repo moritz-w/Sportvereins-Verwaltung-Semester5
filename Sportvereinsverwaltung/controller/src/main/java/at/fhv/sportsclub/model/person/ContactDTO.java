@@ -13,6 +13,8 @@ import java.io.Serializable;
 public @Data class ContactDTO implements Serializable, IDTO {
     public ContactDTO() {}
 
+    private static final long serialVersionUID = 1111185098267757690L;
+
     private String id;
     @Pattern(regexp = "^\\+?[0-9\\s]*$",
             message = "Die Telefonnummer darf lediglich aus einem + gefolgt von Zahlen und Leerzeichen bestehen.")

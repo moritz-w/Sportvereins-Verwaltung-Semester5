@@ -5,6 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="persist-beans.xml"/>
+    <import resource="security-beans.xml"/>
     <context:component-scan base-package="at.fhv.sportsclub"/>
 
     <!--
@@ -18,17 +19,36 @@
     </bean>
     -->
 
-    <bean class="org.dozer.DozerBeanMapper" id="dozerBeanMapper">
-        <constructor-arg>
+    <bean class="org.dozer.DozerBeanMapper" id="generalMapper">
+        <property name="mappingFiles">
             <list>
                 <value>dozerJdk8Converters.xml</value>
+                <value>./customMappings/AddressEntityMapping.xml</value>
+                <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/PrivilegeMapping.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
                 <value>TeamDTOMappingLight.xml</value>
                 <value>TeamDTOMappingFull.xml</value>
-                <value>./customMappings/SportEntityMapping.xml</value>
+                <value>RoleDTOMapping.xml</value>
             </list>
-        </constructor-arg>
+        </property>
+        <property name="customConvertersWithId">
+            <map>
+                <entry key="sportsResolver" value-ref="sportsResolver"/>
+                <entry key="leagueResolver" value-ref="leagueResolver"/>
+                <entry key="accessLevelResolver" value-ref="accessLevelResolver"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean class="org.dozer.DozerBeanMapper" id="resolverMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>dozerJdk8Converters.xml</value>
+                <value>./customMappings/SportEntityMappingLight.xml</value>
+            </list>
+        </property>
     </bean>
 
     <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>

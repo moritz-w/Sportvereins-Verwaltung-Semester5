@@ -16,6 +16,8 @@ public @Data class ResultDTO implements Serializable, IDTO {
 
     public ResultDTO() { }
 
+    private static final long serialVersionUID = 111111118267757690L;
+
     private String id;
 
     private TeamDTO team;

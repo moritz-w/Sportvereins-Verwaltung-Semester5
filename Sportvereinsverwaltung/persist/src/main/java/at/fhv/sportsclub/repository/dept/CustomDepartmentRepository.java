@@ -12,5 +12,5 @@ import at.fhv.sportsclub.exception.InvalidInputDataException;
 */
 public interface CustomDepartmentRepository {
     SportEntity getSportById(String id) throws InvalidInputDataException, DataAccessException;
-    LeagueEntity getLeagueById(String id);
+    LeagueEntity getLeagueById(String id) throws InvalidInputDataException, DataAccessException;
 }

@@ -40,6 +40,9 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     public ResponseMessageDTO saveOrUpdateEntry(TeamDTO teamDTO) {
         return this.saveOrUpdate(teamDTO);
     }
+
+    @Override
+    public TeamDTO getByLeague(String leagueId) { return null; }
     //endregion
 
 }

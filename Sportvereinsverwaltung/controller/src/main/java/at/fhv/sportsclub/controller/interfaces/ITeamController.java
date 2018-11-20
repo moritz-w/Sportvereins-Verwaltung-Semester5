@@ -14,8 +14,7 @@ import java.util.ArrayList;
  * 07.11.2018 sge
  */
 public interface ITeamController extends Remote {
-
     ArrayList<TeamDTO> getAllEntries() throws RemoteException;
-
     ResponseMessageDTO saveOrUpdateEntry(TeamDTO teamDTO) throws RemoteException;
+    TeamDTO getByLeague(String leagueId) throws RemoteException;
 }

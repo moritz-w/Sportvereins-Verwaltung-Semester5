@@ -3,6 +3,7 @@ package at.fhv.sportsclub.controller.impl;
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.entity.dept.DepartmentEntity;
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
@@ -54,5 +55,8 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     public ArrayList<SportDTO> getAllSportEntries() {
         return new ArrayList<>(this.getAllSports());
     }
+
+    @Override
+    public ListWrapper<SportDTO> getAllSportEntriesExtended(){return null;}
     //endregion
 }

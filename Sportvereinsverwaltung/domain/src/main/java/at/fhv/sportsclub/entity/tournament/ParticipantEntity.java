@@ -4,6 +4,7 @@ import at.fhv.sportsclub.entity.CommonEntity;
 import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.entity.team.TeamEntity;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -13,8 +14,7 @@ public @Data class ParticipantEntity implements CommonEntity {
 
     @Id
     private String id;
-    @DBRef
-    private TeamEntity team;
+    private ObjectId team;
     private String teamName;
     @DBRef
     private List<PersonEntity> participants;

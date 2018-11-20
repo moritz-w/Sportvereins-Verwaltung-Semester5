@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
@@ -15,6 +16,8 @@ public interface IDepartmentController extends Remote {
     ResponseMessageDTO saveOrUpdateEntry(DepartmentDTO departmentDTO) throws RemoteException;
 
     ArrayList<SportDTO> getAllSportEntries() throws RemoteException;
+
+    public ListWrapper<SportDTO> getAllSportEntriesExtended() throws RemoteException;
 
 }
 

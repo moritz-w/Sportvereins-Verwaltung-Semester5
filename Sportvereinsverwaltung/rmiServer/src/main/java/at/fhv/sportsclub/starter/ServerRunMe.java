@@ -1,7 +1,9 @@
 package at.fhv.sportsclub.starter;
 
+import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import at.fhv.sportsclub.factory.ControllerFactoryImpl;
 import at.fhv.sportsclub.factory.IControllerFactory;
+import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,10 +24,15 @@ public class ServerRunMe {
     public static void createRMIRegistry(int port) throws RemoteException{
         ApplicationContext appContext = new ClassPathXmlApplicationContext("rmi-beans.xml");
         IControllerFactory controllerFactory = appContext.getBean(ControllerFactoryImpl.class);
+        IAuthenticationController authenticationController = appContext.getBean(AuthenticationController.class);
 
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(controllerFactory,0);
+        IAuthenticationController authStub =
+                (IAuthenticationController) UnicastRemoteObject.exportObject(authenticationController, 0);
 
         Registry registry = LocateRegistry.createRegistry(port <= 1 ? 1099 : port);
+        // Auth Controller is exported as own object in the registry
+        registry.rebind("AuthenticationService", authStub);
         registry.rebind("ControllerFactory", stub);
 
         rootLogger.info("RMI registry started");

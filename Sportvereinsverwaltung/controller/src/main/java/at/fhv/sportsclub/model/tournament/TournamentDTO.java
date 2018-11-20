@@ -14,15 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 public @Data class TournamentDTO implements Serializable, IDTO {
 
-    public TournamentDTO() { }
+    public TournamentDTO() {}
 
-    private static final long serialVersionUID = 111111111267757690L;
+    private static final long serialVersionUID = 111111111267757691L; // changed 20.11.2018
 
     private String id;
 
     private String name;
-    private String leagueName;
-    private String sportsName;
     private LeagueDTO league;
     @NotNull
     private List<EncounterDTO> encounters;

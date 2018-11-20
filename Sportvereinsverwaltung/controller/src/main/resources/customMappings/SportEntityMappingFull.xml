@@ -4,9 +4,9 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
       http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
-    <mapping wildcard="false" map-id="TeamDTOMappingLight">
-        <class-a>at.fhv.sportsclub.entity.team.TeamEntity</class-a>
-        <class-b>at.fhv.sportsclub.model.team.TeamDTO</class-b>
+    <mapping wildcard="false" map-id="SportEntityMappingFull">
+        <class-a>at.fhv.sportsclub.entity.dept.SportEntity</class-a>
+        <class-b>at.fhv.sportsclub.model.dept.SportDTO</class-b>
         <field>
             <a>id</a>
             <b>id</b>
@@ -16,8 +16,8 @@
             <b>name</b>
         </field>
         <field>
-            <a>type</a>
-            <b>type</b>
+            <a>leagues</a>
+            <b>leagues</b>
         </field>
     </mapping>
 

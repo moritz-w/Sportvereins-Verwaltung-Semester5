@@ -13,6 +13,5 @@ public @Data class SportEntity implements CommonEntity {
     private String id;
 
     private String name;
-    @DBRef
     private List<LeagueEntity> leagues;
 }

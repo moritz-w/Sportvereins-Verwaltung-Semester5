@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,8 +21,11 @@ public @Data class TournamentDTO implements Serializable, IDTO {
 
     private String id;
 
+    @Pattern(regexp = "^[-\\w\\s]+$", message = "A tournament may only contain word characters including whitespaces, dashes and underscores")
     private String name;
-    private LeagueDTO league;
+    private String league;  // object id
+    private String leagueName;
+    private String sportsName;
     @NotNull
     private List<EncounterDTO> encounters;
     @NotNull

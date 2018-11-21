@@ -188,6 +188,12 @@ function generateExampleRole(){
                 accessLevels: [
                     "read"
                 ]
+            },
+            {
+                domain: "Tournament",
+                accessLevels: [
+                    "read"
+                ]
             }
         ]
     };
@@ -287,7 +293,7 @@ function generateRandomizedTeam(){
 
 function generateRandomizedEncounter(){
     return {
-        date: Date(),
+        date: new Date("2018-01-01"),
         time: getRandomNumber(0, 1439),
         homeTeam: participatingTeamsIndex[getRandomNumber(Math.floor(participatingTeamsIndex.length / 2), participatingTeamsIndex.length)],
         guestTeam: participatingTeamsIndex[getRandomNumber(0, Math.floor(participatingTeamsIndex.length / 2))],

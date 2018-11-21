@@ -96,6 +96,41 @@ public class CustomDepartmentRepositoryImpl implements CustomDepartmentRepositor
     }
 
     //region Mongo Query
+    /*
+     * db.Department.find({"sports.leagues._id": ObjectId("id")}, {"sports.$": 1})
+     * Alternative:
+     * db.Department.findOne(
+     * {
+     *      "sports.leagues._id": ObjectId("5bf3462197710c31da9f30df")
+     * },
+     * {
+     *          "sports": {$elemMatch: {"leagues._id": ObjectId("5bf3462197710c31da9f30df")}}
+     * })
+     */
+    //endregion
+    @Override
+    public SportEntity getSportByLeagueId(String id) throws InvalidInputDataException, DataAccessException {
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e){
+            throw new InvalidInputDataException("Invalid ID type for given string '" + id + "', a hex string is required");
+        }
+
+        Query q = new Query();
+        q.addCriteria(
+                where("sports.leagues._id").is(objectId)
+        ).fields().elemMatch("sports", where("leagues._id").is(objectId));
+
+        DepartmentEntity departmentEntity = mongoOperations.findOne(q, DepartmentEntity.class);
+
+        if(departmentEntity.getSports() == null || departmentEntity.getSports().isEmpty()){
+            throw new DataAccessException("No sports could be obtained for the given league id '" + id +"'");
+        }
+        return departmentEntity.getSports().get(0);
+    }
+
+    //region Mongo Query
     /* Aggregate Query: db.Collection.aggregate([])
      * Mongo query for resolving leagues by id with different filters:
      * [

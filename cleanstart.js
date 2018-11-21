@@ -1,7 +1,7 @@
 /* DB connection config */
 var dbname = "sportsclub";
 var connection = "localhost:32768";     // default port: 27017
-var collections = ["Person", "Team", "Department", "Match"];
+var collections = ["Person", "Team", "Department", "Tournament"];
 
 /* Random data config */
 var personDataEntries = 50;
@@ -188,6 +188,12 @@ function generateExampleRole(){
                 accessLevels: [
                     "read"
                 ]
+            },
+            {
+                domain: "Tournament",
+                accessLevels: [
+                    "read"
+                ]
             }
         ]
     };
@@ -287,23 +293,21 @@ function generateRandomizedTeam(){
 
 function generateRandomizedEncounter(){
     return {
-        date: Date(),
+        date: new Date("2018-01-01"),
         time: getRandomNumber(0, 1439),
-        homeTeam: {
-            team: teamIdPool[participatingTeamsIndex[getRandomNumber(Math.floor(participatingTeamsIndex.length / 2), participatingTeamsIndex.length)]],
-            points: getRandomNumber(0, 20)
-        },
-        guestTeam: {
-            team: teamIdPool[participatingTeamsIndex[getRandomNumber(0, Math.floor(participatingTeamsIndex.length / 2))]],
-            points: getRandomNumber(0, 20)
-        }
+        homeTeam: participatingTeamsIndex[getRandomNumber(Math.floor(participatingTeamsIndex.length / 2), participatingTeamsIndex.length)],
+        guestTeam: participatingTeamsIndex[getRandomNumber(0, Math.floor(participatingTeamsIndex.length / 2))],
+        guestTeamPoints: 0,
+        homeTeamPoints: 0
     }
 }
 
 function generateRandomizedParticipant(){
     var teamIdIndex = getRandomNumber(0, teamIdPool.length);
-    participatingTeamsIndex.push(teamIdIndex)
+    participantId = new ObjectId();
+    participatingTeamsIndex.push(participantId)
     return {
+        _id: participantId,
         team: teamIdPool[teamIdIndex],
         participants: []
     }

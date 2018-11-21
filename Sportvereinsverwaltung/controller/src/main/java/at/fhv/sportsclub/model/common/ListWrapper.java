@@ -15,4 +15,6 @@ import java.util.ArrayList;
 public @Data class ListWrapper<E> implements Serializable, IDTO {
     private ArrayList<E> contents;
     private ResponseMessageDTO response;
+
+    public ListWrapper() {}
 }

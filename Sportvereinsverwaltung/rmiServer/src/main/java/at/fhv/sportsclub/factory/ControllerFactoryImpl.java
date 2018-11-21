@@ -6,6 +6,7 @@ import at.fhv.sportsclub.controller.impl.TeamController;
 import at.fhv.sportsclub.controller.impl.TournamentController;
 import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
+import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Component;
 
@@ -35,10 +36,6 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public TournamentController createTournamentController(){
         return null;
     }
-    @Lookup
-    public AuthenticationController createAuthenticationController() {
-        return null;
-    }
 
     @Override
     public IPersonController getPersonController() throws RemoteException {
@@ -58,10 +55,5 @@ public class ControllerFactoryImpl implements IControllerFactory {
     @Override
     public ITournamentController getTournamentController() throws RemoteException {
         return (ITournamentController) UnicastRemoteObject.exportObject(createTournamentController(), 0);
-    }
-
-    @Override
-    public IAuthenticationController getAuthenticationController() throws RemoteException {
-        return (IAuthenticationController) UnicastRemoteObject.exportObject(createAuthenticationController(), 0);
     }
 }

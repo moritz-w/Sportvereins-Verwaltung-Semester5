@@ -45,7 +45,7 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
     @Override
     @RequiredPrivileges(category = "Person", accessLevel = {AccessLevel.READ})
     public PersonDTO getEntryDetails(SessionDTO session, String id) throws RemoteException {
-        return this.getDetails(id);
+        return this.getDetails(id, true);
     }
 
     //endregion

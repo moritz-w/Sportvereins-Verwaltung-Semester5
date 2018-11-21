@@ -8,5 +8,5 @@ public interface Controller<T, R> {
 
     R saveOrUpdate(T dto);
 
-    T getDetails(String id);
+    T getDetails(String id, boolean full);
 }

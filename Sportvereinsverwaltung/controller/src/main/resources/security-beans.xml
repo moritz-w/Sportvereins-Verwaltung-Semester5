@@ -8,7 +8,7 @@
     <context:component-scan base-package="at.fhv.sportsclub.security"/>
 
     <!--
-       A cglib class proxy is used even though it is not recommended, but since the Lookup Proxy, needs to
+       A cglib class proxy is used, even though it is not recommended, but since the Lookup Proxy, needs to
        access the AOP proxy, it is required to have an instance of the corresponding controller class.
        Otherwise with method injection the
     -->

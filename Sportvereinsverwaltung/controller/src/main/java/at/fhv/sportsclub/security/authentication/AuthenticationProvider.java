@@ -7,6 +7,7 @@ import at.fhv.sportsclub.model.security.UserAuthentication;
       Author: Moritz W.
       Co-Authors: 
 */
+
 public interface AuthenticationProvider {
     boolean authenticate(UserAuthentication authentication);
 }

@@ -1,11 +1,11 @@
 package at.fhv.sportsclub.security.authentication;
 
-import at.fhv.sportsclub.controller.interfaces.IAuthenticationController;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.security.UserAuthentication;
 import at.fhv.sportsclub.model.security.UserDetails;
 import at.fhv.sportsclub.security.session.SessionManager;
 
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,8 +55,13 @@ public class AuthenticationController implements IAuthenticationController {
 
     //region RMI wrapper methods
     @Override
-    public SessionDTO authenticate(String userId, char[] password) {
+    public SessionDTO authenticate(String userId, char[] password) throws RemoteException {
         return tryAuthentication(new UserAuthentication(userId, password));
+    }
+
+    @Override
+    public void logout(SessionDTO session) throws RemoteException {
+        sessionManager.invalidate(session);
     }
     //endregion
 }

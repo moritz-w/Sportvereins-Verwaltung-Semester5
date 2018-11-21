@@ -114,10 +114,11 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
     /**
      * Get details of an Entity by the given id
      * @param id ID to lookup
+     * @param full whether to use light or full mapping
      * @return DTO for given ID with details
      */
     @Override
-    public DTO getDetails(String id) {
+    public DTO getDetails(String id, boolean full) {
         E entityById;
         try {
             Optional<E> entityOptional = repository.findById(id);
@@ -130,7 +131,7 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
             return rejectRequest("Error: failed to access the data source");
         }
         try {
-            String mapId = this.getMappingIdByConvention(defaultMappingPostFixFull);
+            String mapId = this.getMappingIdByConvention(full ? defaultMappingPostFixFull : defaultMappingPostFixLight);
             if(mapId.isEmpty()){
                 return this.map(entityById, this.dtoClass);
             }

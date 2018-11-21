@@ -42,7 +42,7 @@ public class LoopbackClientTest {
             e.printStackTrace();
         }
     }
-
+/*
     @Test
     public void testRMIConnectionAndLookupFactory() throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(port);
@@ -68,6 +68,6 @@ public class LoopbackClientTest {
         //PersonDTO snoopDogg = personController.getEntryDetails(allEntries.get(0).getId());
        // System.out.println(snoopDogg.toString());
     }
-
+*/
 
 }

@@ -1,4 +1,4 @@
-package at.fhv.sportsclub.controller.resolver;
+package at.fhv.sportsclub.controller.converter;
 
 import at.fhv.sportsclub.model.security.AccessLevel;
 import org.dozer.CustomConverter;
@@ -11,8 +11,8 @@ import java.util.*;
       Author: Moritz W.
       Co-Authors: 
 */
-@Component("accessLevelResolver")
-public class AccessLevelResolver implements CustomConverter {
+@Component("accessLevelConverter")
+public class AccessLevelConverter implements CustomConverter {
 
     @Override
     public Object convert(Object dest, Object source, Class<?> aClass, Class<?> aClass1) {

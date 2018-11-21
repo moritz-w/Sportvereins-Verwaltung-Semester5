@@ -8,6 +8,5 @@ public @Data class LeagueEntity implements CommonEntity {
 
     @Id
     private String id;
-
     private String name;
 }

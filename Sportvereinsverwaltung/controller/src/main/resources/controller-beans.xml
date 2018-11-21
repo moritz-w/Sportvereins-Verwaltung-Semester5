@@ -25,19 +25,22 @@
                 <value>dozerJdk8Converters.xml</value>
                 <value>./customMappings/AddressEntityMapping.xml</value>
                 <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/SportEntityMappingFull.xml</value>
                 <value>./customMappings/PrivilegeMapping.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
                 <value>TeamDTOMappingLight.xml</value>
                 <value>TeamDTOMappingFull.xml</value>
                 <value>RoleDTOMapping.xml</value>
+                <value>TournamentDTOMappingFull.xml</value>
+                <value>TournamentDTOMappingLight.xml</value>
             </list>
         </property>
         <property name="customConvertersWithId">
             <map>
-                <entry key="sportsResolver" value-ref="sportsResolver"/>
-                <entry key="leagueResolver" value-ref="leagueResolver"/>
-                <entry key="accessLevelResolver" value-ref="accessLevelResolver"/>
+                <entry key="sportsConverter" value-ref="sportsConverter"/>
+                <entry key="leagueConverter" value-ref="leagueConverter"/>
+                <entry key="accessLevelConverter" value-ref="accessLevelConverter"/>
             </map>
         </property>
     </bean>

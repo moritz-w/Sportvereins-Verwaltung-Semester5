@@ -4,6 +4,7 @@ import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.entity.team.TeamEntity;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.repository.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,27 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
 
     //region RMI wrapper methods
     @Override
-    public ArrayList<TeamDTO> getAllEntries() {
+    public ArrayList<TeamDTO> getAllEntries(SessionDTO session) {
         return new ArrayList<>(this.getAll());
     }
 
     @Override
-    public ResponseMessageDTO saveOrUpdateEntry(TeamDTO teamDTO) {
+    public ResponseMessageDTO saveOrUpdateEntry(SessionDTO session, TeamDTO teamDTO) {
         return this.saveOrUpdate(teamDTO);
     }
+
+    @Override
+    public TeamDTO getByIdFull(SessionDTO session, String id){
+        return this.getDetails(id, true);
+    }
+
+    @Override
+    public TeamDTO getById(SessionDTO session, String id){
+        return this.getDetails(id, false);
+    }
+
+    @Override
+    public TeamDTO getByLeague(SessionDTO session, String leagueId) { return null; }
     //endregion
 
 }

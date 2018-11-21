@@ -58,5 +58,10 @@ public class AuthenticationController implements IAuthenticationController {
     public SessionDTO authenticate(String userId, char[] password) throws RemoteException {
         return tryAuthentication(new UserAuthentication(userId, password));
     }
+
+    @Override
+    public void logout(SessionDTO session) throws RemoteException {
+        sessionManager.invalidate(session);
+    }
     //endregion
 }

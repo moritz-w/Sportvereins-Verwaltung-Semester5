@@ -19,7 +19,7 @@
             <a>lastName</a>
             <b>lastName</b>
         </field>
-        <field custom-converter-id="sportsResolver">
+        <field custom-converter-id="sportsConverter">
             <a>sports</a>
             <b>sports</b>
         </field>

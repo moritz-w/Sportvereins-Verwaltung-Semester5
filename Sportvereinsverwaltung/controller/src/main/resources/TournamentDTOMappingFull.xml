@@ -7,10 +7,10 @@
     <mapping map-id="TournamentDTOMappingFull">
         <class-a>at.fhv.sportsclub.entity.tournament.TournamentEntity</class-a>
         <class-b>at.fhv.sportsclub.model.tournament.TournamentDTO</class-b>
-        <field custom-converter-id="leagueResolver">
+        <field-exclude>
             <a>league</a>
             <b>league</b>
-        </field>
+        </field-exclude>
     </mapping>
 
 </mappings>

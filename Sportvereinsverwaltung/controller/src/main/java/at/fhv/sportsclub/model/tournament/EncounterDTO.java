@@ -23,7 +23,7 @@ public @Data class EncounterDTO implements Serializable, IDTO {
     private String id;
 
     private LocalDate date;
-    private LocalTime time;
+    private int time;
     @NotNull
     private ParticipantDTO homeTeam;
     @NotNull

@@ -15,7 +15,7 @@ public @Data class EncounterEntity implements CommonEntity {
     private String id;
 
     private LocalDate date;
-    private LocalTime time;
+    private int time;
     private ObjectId homeTeam;
     private ObjectId guestTeam;
     private int homePoints;

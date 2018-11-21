@@ -26,9 +26,7 @@ public @Data class TournamentDTO implements Serializable, IDTO {
     private String league;  // object id
     private String leagueName;
     private String sportsName;
-    @NotNull
     private List<EncounterDTO> encounters;
-    @NotNull
     private List<ParticipantDTO> teams;
     private ResponseMessageDTO response;
 }

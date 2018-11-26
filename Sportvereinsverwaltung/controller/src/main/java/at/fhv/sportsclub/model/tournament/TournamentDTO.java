@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.model.tournament;
 
 import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
@@ -29,4 +30,5 @@ public @Data class TournamentDTO implements Serializable, IDTO {
     private List<EncounterDTO> encounters;
     private List<ParticipantDTO> teams;
     private ResponseMessageDTO response;
+    private ModificationType modificationType;
 }

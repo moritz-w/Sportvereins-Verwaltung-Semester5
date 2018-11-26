@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.model.tournament;
 
 import at.fhv.sportsclub.model.common.IDTO;
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
@@ -18,7 +19,7 @@ public @Data class EncounterDTO implements Serializable, IDTO {
 
     public EncounterDTO() { }
 
-    private static final long serialVersionUID = 1111111098267757691L;
+    private static final long serialVersionUID = 1111111098267757692L; // changed 26.11
 
     private String id;
 
@@ -31,4 +32,6 @@ public @Data class EncounterDTO implements Serializable, IDTO {
     private int homePoints;
     private int guestPoints;
     private ResponseMessageDTO response;
+
+    private ModificationType modificationType;
 }

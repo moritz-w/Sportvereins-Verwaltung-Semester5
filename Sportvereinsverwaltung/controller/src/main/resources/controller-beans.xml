@@ -58,17 +58,4 @@
     <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>
     <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator" />
 
-    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://10.0.51.91:8161" />
-    </bean>
-
-    <jms:listener-container container-type="default"
-                            connection-factory="connectionFactory" acknowledge="auto">
-        <jms:listener destination="messageQueue" ref="simpleMessageListener"
-                      method="onMessage" />
-    </jms:listener-container>
-
-    <!-- To receive JMS message -->
-    <bean id="simpleMessageListener" class="at.fhv.sportsclub.controller.impl.SimpleMessageListener" />
-
 </beans>

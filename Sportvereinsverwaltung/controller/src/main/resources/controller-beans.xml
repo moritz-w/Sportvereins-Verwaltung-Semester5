@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jms="http://www.springframework.org/schema/jms"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="persist-beans.xml"/>
@@ -56,5 +57,18 @@
 
     <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>
     <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator" />
+
+    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://10.0.51.91:8161" />
+    </bean>
+
+    <jms:listener-container container-type="default"
+                            connection-factory="connectionFactory" acknowledge="auto">
+        <jms:listener destination="messageQueue" ref="simpleMessageListener"
+                      method="onMessage" />
+    </jms:listener-container>
+
+    <!-- To receive JMS message -->
+    <bean id="simpleMessageListener" class="at.fhv.sportsclub.controller.impl.SimpleMessageListener" />
 
 </beans>

@@ -37,13 +37,23 @@ public class MessageController implements IMessageController {
 
     private Connection connection;
 
-    static {
-        clientQueueName = "mainQueue";
-        ackMode = Session.AUTO_ACKNOWLEDGE;
+    @Override
+    public void sendMessagesToQueue(Map<String, String> messages) {
+        messages.forEach(new BiConsumer<String, String>() {
+            @Override
+            public void accept(String s, String s2) {
+                sendMessageToQueue(s, s2);
+            }
+        });
     }
 
     @Override
     public void sendMessageToQueue(String message, String username) {
+        sendMessageToQueue(message, username, null);
+    }
+
+    @Override
+    public void sendMessageToQueue(String message, String username, String replyTo) {
         try {
             openConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -56,22 +66,15 @@ public class MessageController implements IMessageController {
             TextMessage textMessage = session.createTextMessage(message);
             textMessage.setStringProperty("username", username);
             textMessage.setJMSCorrelationID(createRandomString());
+            if(replyTo != null) {
+                textMessage.setStringProperty("replyTo", replyTo);
+            }
 
             producer.send(textMessage);
             closeConnection();
         } catch (JMSException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void sendMessagesToQueue(Map<String, String> messages) {
-        messages.forEach(new BiConsumer<String, String>() {
-            @Override
-            public void accept(String s, String s2) {
-                sendMessageToQueue(s, s2);
-            }
-        });
     }
 
     @Override
@@ -98,17 +101,26 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public boolean deleteMessageFromQueue(String correlationID) {
+    public boolean removeMessageFromQueueAndArchive(String correlationID, String replyMessage) {
         try {
             openConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            MessageConsumer consumer = session.createConsumer(session.createQueue("mainQueue"), "JMSCorrelationID = " + correlationID);
+            Queue mainQueue = session.createQueue("mainQueue");
+            MessageConsumer consumer = session.createConsumer(mainQueue, "JMSCorrelationID = " + correlationID);
             Message receivedMessage = consumer.receive();
 
             if(receivedMessage == null) {
                 return false;
             }
+
+            if(replyToReceiver != null) {
+                receivedMessage.
+
+                MessageProducer producer = session.createProducer(mainQueue);
+                producer.send(receivedMessage);
+            }
+
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));
             archiveQueueProducer.send(receivedMessage);
 

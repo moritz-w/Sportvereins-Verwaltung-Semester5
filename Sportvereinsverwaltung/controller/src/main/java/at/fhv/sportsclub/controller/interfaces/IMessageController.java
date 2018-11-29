@@ -1,7 +1,6 @@
 package at.fhv.sportsclub.controller.interfaces;
 
 import javax.jms.Message;
-import javax.jms.Queue;
 import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +11,14 @@ import java.util.Map;
 
 public interface IMessageController extends Remote {
 
-    void sendMessageToQueue(String message, String username);
-
     /**
      * Send multiple messages to the queue.
      * @param messages Map<String(Username), String(messageText)>
      */
-    void sendMessagesToQueue(Map<String, String> messages);// sendMessagesToQueue(List<Message>, List<User>)
-
-    List<Message> browseMessagesForUser(String username); // (UserString für messageSelektor); //With Browser
-    boolean deleteMessageFromQueue(String correlationID);
+    void sendMessagesToQueue(Map<String, String> messages);
+    void sendMessageToQueue(String message, String username);
+    void sendMessageToQueue(String message, String username, String replyTo);
+    List<Message> browseMessagesForUser(String username);
+    boolean removeMessageFromQueueAndArchive(String correlationID, String replyToReceiver);
 
 }

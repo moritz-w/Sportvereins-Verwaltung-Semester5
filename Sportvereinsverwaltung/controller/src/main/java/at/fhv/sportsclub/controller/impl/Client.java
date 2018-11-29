@@ -75,11 +75,7 @@ public class Client implements MessageListener {
         }
     }
  
-    private String createRandomString() {
-        Random random = new Random(System.currentTimeMillis());
-        long randomLong = random.nextLong();
-        return Long.toHexString(randomLong);
-    }
+
  
     public void onMessage(Message message) {
         String messageText = null;

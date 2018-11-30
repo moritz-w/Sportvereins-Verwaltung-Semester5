@@ -1,5 +1,7 @@
 package at.fhv.sportsclub.controller.interfaces;
 
+import at.fhv.sportsclub.model.security.SessionDTO;
+
 import javax.jms.Message;
 import java.rmi.Remote;
 import java.util.List;
@@ -16,9 +18,9 @@ public interface IMessageController extends Remote {
      * @param messages Map<String(Username), String(messageText)>
      */
     void sendMessagesToQueue(Map<String, String> messages);
-    void sendMessageToQueue(String message, String username);
-    void sendMessageToQueue(String message, String username, String replyTo);
-    List<Message> browseMessagesForUser(String username);
-    boolean removeMessageFromQueueAndArchive(String correlationID, String replyToReceiver);
+    void sendMessageToQueue(SessionDTO session, String message, String username);
+    void sendMessageToQueue(SessionDTO session, String message, String username, String replyTo);
+    List<Message> browseMessagesForUser(SessionDTO session, String username);
+    boolean removeMessageFromQueueAndArchive(SessionDTO session, String correlationID, String replyToReceiver);
 
 }

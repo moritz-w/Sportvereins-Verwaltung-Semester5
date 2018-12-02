@@ -10,8 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public @Data class EncounterEntity implements CommonEntity {
-
-    @Id
     private String id;
 
     private LocalDate date;

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CustomTournamentRepository {
     void addTeamToTournament(String tournamentId, List<ParticipantEntity> participantEntities);
+    void removeTeamFromTournament(String tournamentId, List<ParticipantEntity> participantEntities);
     void addEncounterToTournament(String tournamentId, List<EncounterEntity> encounters);
-    void addPersonsToParticipant(String participantId, List<String> participants);
+    void removeEncounterFromTournament(String tournamentId, List<EncounterEntity> encounterEntities);
 }

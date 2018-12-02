@@ -3,15 +3,18 @@ package at.fhv.sportsclub.controller.impl;
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.entity.team.TeamEntity;
+import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.repository.team.TeamRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * businessMonkey
@@ -43,7 +46,7 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     }
 
     @Override
-    public TeamDTO getByIdFull(SessionDTO session, String id){
+    public TeamDTO getEntryDetails(SessionDTO session, String id){
         return this.getDetails(id, true);
     }
 
@@ -53,7 +56,25 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     }
 
     @Override
-    public TeamDTO getByLeague(SessionDTO session, String leagueId) { return null; }
+    public ListWrapper<TeamDTO> getByLeague(SessionDTO session, String leagueId) {
+        List<TeamDTO> teamDTOS = mapAnyCollection(
+                teamRepository.getAllByLeagueEquals(new ObjectId(leagueId)), TeamDTO.class, "TeamDTOMappingLight"
+        );
+        ListWrapper<TeamDTO> teamWrapper = new ListWrapper<>();
+        if (teamDTOS.isEmpty()) {
+            teamWrapper.setResponse(createErrorMessage("No results could be obtained for the given league"));
+        } else {
+            teamWrapper.setContents(new ArrayList<>(teamDTOS));
+        }
+        return teamWrapper;
+    }
+
+    @Override
+    public ListWrapper<TeamDTO> getBySport(SessionDTO session, String sportId) {
+        return null;
+    }
+
+
     //endregion
 
 }

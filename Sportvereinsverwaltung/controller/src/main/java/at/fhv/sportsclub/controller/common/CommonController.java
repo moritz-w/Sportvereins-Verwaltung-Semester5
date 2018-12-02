@@ -32,7 +32,7 @@ import java.util.*;
  */
 
 public abstract class CommonController<DTO extends IDTO, E extends CommonEntity, R extends CommonRepository<E, String>>
-        implements Controller<DTO, ResponseMessageDTO> {
+        implements Controller<DTO, E, ResponseMessageDTO> {
 
     private final Class<DTO> dtoClass;
     private final Class<E> entityClass;
@@ -61,15 +61,20 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
      * and the contextId, which refers to ID of a newly created or updated Entity.
      */
     @Override
-    public ResponseMessageDTO saveOrUpdate(DTO dto) {
+    public ResponseMessageDTO saveOrUpdate(DTO dto, BeforeMapHook<DTO> beforeMapHook, BeforeSaveHook<E> beforeSaveHook) {
         ResponseMessageDTO responseMessageDTO = validateDto(dto);
         if (!responseMessageDTO.isValidated()) {
             return responseMessageDTO;
         }
         try {
-            E updatedEntity = this.repository.saveOrUpdate(
-                    this.map(dto, this.entityClass, this.getMappingIdByConvention(defaultMappingPostFixFull))
-            );
+            if(beforeMapHook != null) {
+                beforeMapHook.modify(dto);
+            }
+            E mappedEntity = this.map(dto, this.entityClass, this.getMappingIdByConvention(defaultMappingPostFixFull));
+            if(beforeSaveHook != null){
+                beforeSaveHook.modify(mappedEntity);
+            }
+            E updatedEntity = this.repository.saveOrUpdate(mappedEntity);
             responseMessageDTO.setContextId(updatedEntity.getId());
         } catch (DataAccessResourceFailureException e) {
             e.printStackTrace();
@@ -79,6 +84,19 @@ public abstract class CommonController<DTO extends IDTO, E extends CommonEntity,
         }
         responseMessageDTO.setSuccess(true);
         return responseMessageDTO;
+    }
+
+    @Override
+    public ResponseMessageDTO saveOrUpdate(DTO dto){
+        return this.saveOrUpdate(dto, null, null);
+    }
+
+    protected interface BeforeMapHook<DTO> {
+        void modify(DTO dto);
+    }
+
+    protected interface BeforeSaveHook<E> {
+        void modify(E entity);
     }
 
     /**

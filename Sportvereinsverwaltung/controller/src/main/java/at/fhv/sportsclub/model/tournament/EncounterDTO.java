@@ -26,9 +26,9 @@ public @Data class EncounterDTO implements Serializable, IDTO {
     private LocalDate date;
     private int time;
     @NotNull
-    private ParticipantDTO homeTeam;
+    private String homeTeam;
     @NotNull
-    private ParticipantDTO guestTeam;
+    private String guestTeam;
     private int homePoints;
     private int guestPoints;
     private ResponseMessageDTO response;

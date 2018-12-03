@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
+import at.fhv.sportsclub.controller.common.RequiredPrivileges;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
 import at.fhv.sportsclub.entity.tournament.EncounterEntity;
 import at.fhv.sportsclub.entity.tournament.ParticipantEntity;
@@ -10,6 +11,7 @@ import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
@@ -52,16 +54,19 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     }
     // region RMI wrapper methods
     @Override
+    @RequiredPrivileges(category = "Tournament", accessLevel = {AccessLevel.READ})
     public ListWrapper<TournamentDTO> getAllEntries(SessionDTO session) throws RemoteException {
         return new ListWrapper<>(new ArrayList<>(this.getAll()), null);
     }
 
     @Override
+    @RequiredPrivileges(category = "Tournament", accessLevel = {AccessLevel.READ})
     public TournamentDTO getEntryDetails(SessionDTO session, String id) throws RemoteException {
         return this.getDetails(id, true);
     }
 
     @Override
+    @RequiredPrivileges(category = "Tournament", accessLevel = {AccessLevel.READ})
     public TournamentDTO getById(SessionDTO session, String id) throws RemoteException{
         return this.getDetails(id, false);
     }
@@ -74,6 +79,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
      * @return
      */
     @Override
+    @RequiredPrivileges(category = "Tournament", accessLevel = {AccessLevel.SPECIAL})
     public ListWrapper<TournamentDTO> getTournamentByTrainerId(SessionDTO session, String personId){
         ListWrapper<TeamDTO> teamsByTrainer = teamController.getTeamsByTrainerId(session, personId);
         if (teamsByTrainer.getResponse() != null){
@@ -94,6 +100,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     }
 
     @Override
+    @RequiredPrivileges(category = "Tournament", accessLevel = {AccessLevel.WRITE})
     public TournamentDTO saveOrUpdateEntry(SessionDTO session, TournamentDTO tournament){
         this.session = session;
         TournamentDTO emptyResult = new TournamentDTO();

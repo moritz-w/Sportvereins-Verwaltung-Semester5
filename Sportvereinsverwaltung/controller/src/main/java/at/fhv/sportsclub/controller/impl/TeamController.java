@@ -1,12 +1,14 @@
 package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
+import at.fhv.sportsclub.controller.common.RequiredPrivileges;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
 import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.entity.team.TeamEntity;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
+import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.repository.team.TeamRepository;
@@ -45,26 +47,31 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
 
     //region RMI wrapper methods
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ArrayList<TeamDTO> getAllEntries(SessionDTO session) {
         return new ArrayList<>(this.getAll());
     }
 
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.WRITE})
     public ResponseMessageDTO saveOrUpdateEntry(SessionDTO session, TeamDTO teamDTO) {
         return this.saveOrUpdate(teamDTO);
     }
 
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public TeamDTO getEntryDetails(SessionDTO session, String id){
         return this.getDetails(id, true);
     }
 
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public TeamDTO getById(SessionDTO session, String id){
         return this.getDetails(id, false);
     }
 
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ListWrapper<TeamDTO> getByLeague(SessionDTO session, String leagueId) {
         List<TeamDTO> teamDTOS = mapAnyCollection(
                 teamRepository.getAllByLeagueEquals(new ObjectId(leagueId)), TeamDTO.class, "TeamDTOMappingLight"
@@ -79,6 +86,7 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     }
 
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ListWrapper<TeamDTO> getBySport(SessionDTO session, String sportId) {
         HashSet<String> leagues;
         if (leagueBySportCache.get(sportId) == null){
@@ -112,6 +120,7 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
      * @return A list of light mapped teams the given person trains
      */
     @Override
+    @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ListWrapper<TeamDTO> getTeamsByTrainerId(SessionDTO session, String trainerPersonId){
         ArrayList<PersonEntity> personEntities = new ArrayList<>();
         PersonEntity trainer = new PersonEntity();

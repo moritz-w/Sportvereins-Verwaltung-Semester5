@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
+import at.fhv.sportsclub.controller.common.RequiredPrivileges;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.resolver.LeagueResolver;
 import at.fhv.sportsclub.controller.resolver.SportsResolver;
@@ -13,6 +14,7 @@ import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.repository.dept.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,36 +60,44 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
 
     //region RMI wrapper methods
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<DepartmentDTO> getAllEntries(SessionDTO session) {
         return new ListWrapper<>(new ArrayList<>(this.getAll()), null);
     }
 
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.WRITE})
     public ResponseMessageDTO saveOrUpdateEntry(SessionDTO session, DepartmentDTO departmentDTO) {
         return this.saveOrUpdate(departmentDTO);
     }
 
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<SportDTO> getAllSportEntries(SessionDTO session) {
         return new ListWrapper<>(new ArrayList<>(this.getAllSports("SportEntityMappingLight")), null);
     }
 
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<SportDTO> getAllSportEntriesFull(SessionDTO session){
         return new ListWrapper<>(new ArrayList<>(this.getAllSports("SportEntityMappingFull")), null);
     }
 
+    @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId){
         SportDTO sportDTO = sportResolver.resolveFromObjectIdFull(sportId);
         return new ListWrapper<>(new ArrayList<>(sportDTO.getLeagues()), null);
     }
 
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public SportDTO getSportByLeagueId(SessionDTO session, String leagueId){
         return this.leagueResolver.resolveFromObjectIdFull(leagueId);
     }
 
     @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public LeagueDTO getLeagueById(SessionDTO session, String id){
         return leagueResolver.resolveFromObjectId(id);
     }

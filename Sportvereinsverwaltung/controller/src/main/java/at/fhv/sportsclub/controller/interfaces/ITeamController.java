@@ -22,4 +22,5 @@ public interface ITeamController extends Remote {
     TeamDTO getEntryDetails(SessionDTO session, String id) throws RemoteException;
     ListWrapper<TeamDTO> getByLeague(SessionDTO session, String leagueId) throws RemoteException;
     ListWrapper<TeamDTO> getBySport(SessionDTO session, String sportId) throws RemoteException;
+    ListWrapper<TeamDTO> getTeamsByTrainerId(SessionDTO session, String trainerPersonId) throws RemoteException;
 }

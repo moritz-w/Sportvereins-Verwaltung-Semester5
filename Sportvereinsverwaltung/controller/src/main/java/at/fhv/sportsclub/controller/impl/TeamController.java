@@ -2,6 +2,7 @@ package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.ITeamController;
+import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.entity.team.TeamEntity;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
@@ -104,6 +105,25 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
         );
     }
 
+    /**
+     * Returns a list of teams a person (trainer) 'trains'
+     * @param session Session ID
+     * @param trainerPersonId The person id of the trainer who's teams are requested
+     * @return A list of light mapped teams the given person trains
+     */
+    @Override
+    public ListWrapper<TeamDTO> getTeamsByTrainerId(SessionDTO session, String trainerPersonId){
+        ArrayList<PersonEntity> personEntities = new ArrayList<>();
+        PersonEntity trainer = new PersonEntity();
+        trainer.setId(trainerPersonId);
+        personEntities.add(trainer);
+        List<TeamEntity> teamsByTrainer = this.teamRepository.getAllByTrainersIsContaining(personEntities);
+        if (teamsByTrainer.isEmpty()){
+            return new ListWrapper<>(null, createErrorMessage("No team data could be obtained for the given trainer ID"));
+        }
+        List<TeamDTO> teamDTOMappingLight = mapAnyCollection(teamsByTrainer, TeamDTO.class, "TeamDTOMappingLight");
+        return new ListWrapper<>(new ArrayList<>(teamDTOMappingLight), null);
+    }
 
     //endregion
 

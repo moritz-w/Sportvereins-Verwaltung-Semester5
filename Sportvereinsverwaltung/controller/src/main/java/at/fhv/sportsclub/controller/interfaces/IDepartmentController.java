@@ -25,7 +25,7 @@ public interface IDepartmentController extends Remote {
 
     LeagueDTO getLeagueById(SessionDTO session, String id) throws RemoteException;
 
-    ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId);
+    ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId) throws RemoteException;
 
 }
 

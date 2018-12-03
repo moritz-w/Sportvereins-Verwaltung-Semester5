@@ -1,6 +1,7 @@
 package at.fhv.sportsclub.repository.tournament;
 
 import at.fhv.sportsclub.entity.CommonEntity;
+import at.fhv.sportsclub.entity.team.TeamEntity;
 import at.fhv.sportsclub.entity.tournament.EncounterEntity;
 import at.fhv.sportsclub.entity.tournament.ParticipantEntity;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
@@ -107,6 +108,16 @@ public class CustomTournamentRepositoryImpl implements CustomTournamentRepositor
                 removeArrayElement(tournamentId, "encounters", encounterEntity);
             }
         }
+    }
+
+    @Override
+    public List<TournamentEntity> getTournamentByTeamId(List<ObjectId> teamdIds){
+        Query q = new Query();
+        /* db.Tournament.findOne({"teams.team": { "$in": [ ObjectId("id") ]}}) */
+        q.addCriteria(
+          where("teams.team").in(teamdIds)
+        );
+        return mongoOperations.find(q, TournamentEntity.class);
     }
 
     private <T> void pushToArray(String documentId, String arrayName, T entity) {

@@ -3,7 +3,11 @@ package at.fhv.sportsclub.controller.impl;
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
 import at.fhv.sportsclub.controller.resolver.LeagueResolver;
+import at.fhv.sportsclub.controller.resolver.SportsResolver;
 import at.fhv.sportsclub.entity.dept.DepartmentEntity;
+import at.fhv.sportsclub.entity.dept.SportEntity;
+import at.fhv.sportsclub.exception.DataAccessException;
+import at.fhv.sportsclub.exception.InvalidInputDataException;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.DepartmentDTO;
@@ -27,16 +31,19 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         implements IDepartmentController {
 
     private final LeagueResolver leagueResolver;
+    private final SportsResolver sportResolver;
     private DepartmentRepository departmentRepository;
 
     @Autowired
     public DepartmentController(
             DepartmentRepository repository,
-            @Qualifier("leagueResolver")LeagueResolver leagueResolver
-    ){
+            @Qualifier("leagueResolver")LeagueResolver leagueResolver,
+            @Qualifier("sportsResolver")SportsResolver sportsResolver
+            ){
         super(repository, DepartmentDTO.class, DepartmentEntity.class);
         this.departmentRepository = repository;
         this.leagueResolver = leagueResolver;
+        this.sportResolver = sportsResolver;
     }
 
     private List<SportDTO> getAllSports(String mapId) {
@@ -68,6 +75,11 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     @Override
     public ListWrapper<SportDTO> getAllSportEntriesFull(SessionDTO session){
         return new ListWrapper<>(new ArrayList<>(this.getAllSports("SportEntityMappingFull")), null);
+    }
+
+    public ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId){
+        SportDTO sportDTO = sportResolver.resolveFromObjectIdFull(sportId);
+        return new ListWrapper<>(new ArrayList<>(sportDTO.getLeagues()), null);
     }
 
     @Override

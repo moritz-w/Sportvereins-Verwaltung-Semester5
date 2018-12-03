@@ -1,9 +1,6 @@
 package at.fhv.sportsclub.factory;
 
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.controller.interfaces.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -17,4 +14,5 @@ public interface IControllerFactory extends Remote {
     IDepartmentController getDepartmentController() throws RemoteException;
     ITeamController getTeamController() throws RemoteException;
     ITournamentController getTournamentController() throws RemoteException;
+    IMessageController getMessageController() throws RemoteException;
 }

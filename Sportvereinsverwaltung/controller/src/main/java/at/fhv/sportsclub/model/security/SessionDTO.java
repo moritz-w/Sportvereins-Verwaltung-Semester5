@@ -17,6 +17,7 @@ public @Data class SessionDTO<T> implements Serializable {
     private T sessionId;
     private Long expires;
     private List<RoleDTO> roles;
+    private String myUserId;
 
     private ResponseMessageDTO responseMessage;
 }

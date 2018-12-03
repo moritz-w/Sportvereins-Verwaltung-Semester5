@@ -1,6 +1,9 @@
 package at.fhv.sportsclub.factory;
 
-import at.fhv.sportsclub.controller.impl.*;
+import at.fhv.sportsclub.controller.impl.DepartmentController;
+import at.fhv.sportsclub.controller.impl.PersonController;
+import at.fhv.sportsclub.controller.impl.TeamController;
+import at.fhv.sportsclub.controller.impl.TournamentController;
 import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
@@ -33,10 +36,6 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public TournamentController createTournamentController(){
         return null;
     }
-    @Lookup
-    public MessageController createMessageController(){
-        return null;
-    }
 
     @Override
     public IPersonController getPersonController() throws RemoteException {
@@ -56,10 +55,5 @@ public class ControllerFactoryImpl implements IControllerFactory {
     @Override
     public ITournamentController getTournamentController() throws RemoteException {
         return (ITournamentController) UnicastRemoteObject.exportObject(createTournamentController(), 0);
-    }
-
-    @Override
-    public IMessageController getMessageController() throws RemoteException {
-        return (IMessageController) UnicastRemoteObject.exportObject(createMessageController(), 0);
     }
 }

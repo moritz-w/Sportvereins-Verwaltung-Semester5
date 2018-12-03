@@ -66,6 +66,33 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
         return this.getDetails(id, false);
     }
 
+    /**
+     * Returns a list of tournaments, where a team with the given personId is set as a trainer, takes part
+     * part in the tournament.
+     * @param session
+     * @param personId
+     * @return
+     */
+    @Override
+    public ListWrapper<TournamentDTO> getTournamentByTrainerId(SessionDTO session, String personId){
+        ListWrapper<TeamDTO> teamsByTrainer = teamController.getTeamsByTrainerId(session, personId);
+        if (teamsByTrainer.getResponse() != null){
+            return new ListWrapper<>(null, teamsByTrainer.getResponse());
+        }
+        List<ObjectId> teamIds = new ArrayList<>();
+        for (TeamDTO teamDTO : teamsByTrainer.getContents()) {
+            teamIds.add(new ObjectId(teamDTO.getId()));
+        }
+        List<TournamentEntity> tournamentsByTeamId = tournamentRepository.getTournamentByTeamId(teamIds);
+        if (tournamentsByTeamId.isEmpty()) {
+            return new ListWrapper<>(null, createErrorMessage("No tournaments found for the given teams"));
+        }
+        List<TournamentDTO> tournamentDTOList = mapAnyCollection(
+                tournamentsByTeamId, TournamentDTO.class, "TournamentDTOMappingFull"
+        );
+        return new ListWrapper<>(new ArrayList<>(tournamentDTOList), null);
+    }
+
     @Override
     public TournamentDTO saveOrUpdateEntry(SessionDTO session, TournamentDTO tournament){
         this.session = session;

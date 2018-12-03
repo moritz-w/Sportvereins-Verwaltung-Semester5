@@ -10,7 +10,7 @@ import javax.jms.Queue;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -18,7 +18,7 @@ import java.util.function.BiConsumer;
 /**
  * Created by Alex on 25.11.2018.
  */
-@Service
+@Component
 @Scope("prototype")
 public class MessageController implements IMessageController {
 

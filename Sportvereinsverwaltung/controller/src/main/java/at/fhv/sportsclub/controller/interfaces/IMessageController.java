@@ -17,10 +17,10 @@ public interface IMessageController extends Remote {
      * Send multiple messages to the queue.
      * @param messages Map<String(Username), String(messageText)>
      */
-    void sendMessagesToQueue(Map<String, String> messages);
-    void sendMessageToQueue(SessionDTO session, String message, String username);
-    void sendMessageToQueue(SessionDTO session, String message, String username, String replyTo);
-    List<Message> browseMessagesForUser(SessionDTO session, String username);
-    boolean removeMessageFromQueueAndArchive(SessionDTO session, String correlationID, String replyToReceiver);
+    void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages);
+    void sendMessageToQueue(SessionDTO sessionDTO, String message, String username);
+    void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo);
+    List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username);
+    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyToReceiver);
 
 }

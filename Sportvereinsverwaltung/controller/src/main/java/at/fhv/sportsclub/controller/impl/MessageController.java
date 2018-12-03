@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 import javax.jms.*;
 import javax.jms.Queue;
 
+import at.fhv.sportsclub.model.security.SessionDTO;
+import lombok.Setter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -23,39 +25,24 @@ import java.util.function.BiConsumer;
 public class MessageController implements IMessageController {
 
     @Resource(lookup = "tcp://10.0.51.91:61616/")
-    ActiveMQConnectionFactory connectionFactory;
-
-    /*@Resource(lookup = "java:jboss/activemq/queue/TestQueue")
-    private Queue queue;*/
-
-
-    /*enum Queuenames {
-        MAIN_QUEUE (""),
-        ARCHIVE_QUEUE ("archiveQueue");
-        @Getter private String name;
-    }*/
+    @Setter
+    private ActiveMQConnectionFactory connectionFactory;
 
     private Connection connection;
 
     @Override
-    public void sendMessagesToQueue(Map<String, String> messages) {
-        messages.forEach(new BiConsumer<String, String>() {
-            @Override
-            public void accept(String s, String s2) {
-                sendMessageToQueue(s, s2);
-            }
-        });
+    public void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages) {
+        messages.forEach((s, s2) -> sendMessageToQueue(sessionDTO, s, s2));
     }
 
     @Override
-    public void sendMessageToQueue(String message, String username) {
-        sendMessageToQueue(message, username, null);
+    public void sendMessageToQueue(SessionDTO sessionDTO, String message, String username) {
+        sendMessageToQueue(sessionDTO, message, username, null);
     }
 
     @Override
-    public void sendMessageToQueue(String message, String username, String replyTo) {
+    public void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo) {
         try {
-            openConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             Queue queue = session.createQueue("mainQueue");
@@ -71,18 +58,16 @@ public class MessageController implements IMessageController {
             }
 
             producer.send(textMessage);
-            closeConnection();
         } catch (JMSException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public List<Message> browseMessagesForUser(String username) {
+    public List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username) {
         LinkedList<Message> result = new LinkedList<>();
 
         try {
-            openConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             QueueBrowser browser = session.createBrowser(session.createQueue("mainQueue"), "username = " + username);
@@ -92,8 +77,6 @@ public class MessageController implements IMessageController {
             while(enumeration.hasMoreElements()) {
                 result.addFirst((Message) enumeration.nextElement());
             }
-
-            closeConnection();
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -101,37 +84,32 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public boolean removeMessageFromQueueAndArchive(String correlationID, String replyMessage) {
+    public boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage) {
         try {
-            openConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             Queue mainQueue = session.createQueue("mainQueue");
             MessageConsumer consumer = session.createConsumer(mainQueue, "JMSCorrelationID = " + correlationID);
-            Message receivedMessage = consumer.receive();
+            TextMessage receivedMessage = (TextMessage) consumer.receive();
 
             if(receivedMessage == null) {
                 return false;
             }
 
-            if(replyToReceiver != null) {
-                receivedMessage.
-
-                MessageProducer producer = session.createProducer(mainQueue);
-                producer.send(receivedMessage);
+            if(replyMessage != null) {
+                String replyTo = receivedMessage.getStringProperty("replyTo");
+                sendMessageToQueue(sessionDTO, receivedMessage.getText(), replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));
             archiveQueueProducer.send(receivedMessage);
-
-            closeConnection();
         } catch (JMSException e) {
             e.printStackTrace();
         }
         return true;
     }
 
-    @PostConstruct // ?
+    @PostConstruct
     private void openConnection() {
          connection = null;
         try {

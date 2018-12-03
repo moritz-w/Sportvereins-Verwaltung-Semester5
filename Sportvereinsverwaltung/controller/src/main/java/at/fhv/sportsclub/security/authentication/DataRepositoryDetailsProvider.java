@@ -32,8 +32,8 @@ public class DataRepositoryDetailsProvider implements UserDetailsProvider {
     }
 
     @Override
-    public UserDetails getUserDetails(String userId) {
-        Optional<PersonEntity> entity = repository.findPersonEntityByContact_EmailAddress(userId);
+    public UserDetails getUserDetails(String userName) {
+        Optional<PersonEntity> entity = repository.findPersonEntityByContact_EmailAddress(userName);
         if (!entity.isPresent()){
             return null;
         }
@@ -42,6 +42,6 @@ public class DataRepositoryDetailsProvider implements UserDetailsProvider {
         for (RoleEntity roleEntity : personEntity.getRoles()) {
             roles.add(this.mapper.map(roleEntity, RoleDTO.class, "RoleDTOMapping"));
         }
-        return new UserDetails(userId, null, roles);
+        return new UserDetails(personEntity.getId(), userName, null, roles);
     }
 }

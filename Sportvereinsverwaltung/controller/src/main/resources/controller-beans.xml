@@ -54,6 +54,7 @@
             <list>
                 <value>dozerJdk8Converters.xml</value>
                 <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/SportEntityMappingFull.xml</value>
             </list>
         </property>
     </bean>

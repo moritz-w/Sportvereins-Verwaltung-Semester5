@@ -166,6 +166,7 @@ var teamIdPool = [];
 var participatingTeamsIndex = [];
 
 var exampleRoleId = new ObjectId();
+var adminRoleId = new ObjectId();
 
 function transformIdArrayToDbRef(ids, ref){
     dbRefs = []
@@ -176,6 +177,39 @@ function transformIdArrayToDbRef(ids, ref){
         })
     });
     return dbRefs;
+}
+
+function generateAdminRole() {
+    return {
+        _id: adminRoleId,
+        name: "Admin",
+        privileges: [
+            {
+                domain: "Person",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Team",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Department",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Tournament",
+                accessLevels: [
+                    "read", "write", "special"
+                ]
+            }
+        ] 
+    }
 }
 
 function generateExampleRole(){
@@ -330,6 +364,7 @@ function insertRandomizedData(){
         embeddedLeagueArray.push(generateRandomizedLeague());        
     }
     db.Role.insertOne(generateExampleRole());
+    db.Role.insertOne(generateAdminRole());
     var embeddedSportArray = generateSports(embeddedLeagueArray);
     for (var index = 0; index < personDataEntries; index++) {
         db.Person.insertOne(generateRandomizedPerson());
@@ -364,7 +399,7 @@ function main(){
         db.getCollection(element).drop();
     });
     
-    db.Person.insertOne(
+    db.Person.insertMany([
             {
                 firstName: "Snoop",
                 lastName: "Dogg",
@@ -383,11 +418,55 @@ function main(){
                 roles: [
                     {
                         "$ref": "Role",
+                        "$id": adminRoleId
+                    }
+                ]
+            },
+            {
+                firstName: "TF",
+                lastName: "Test",
+                dateOfBirth: new Date("1990-01-02"),
+                gender: "M",
+                address: {
+                    street: "Dogg Street 187",
+                    zipCode: "D066",
+                    city: "Compton"
+                },
+                contact: {
+                    phoneNumber: "+43 11111 1111",
+                    emailAddress: "tf-test"
+                },
+                sports: [],
+                roles: [
+                    {
+                        "$ref": "Role",
+                        "$id": adminRoleId
+                    }
+                ]
+            },
+            {
+                firstName: "Dr",
+                lastName: "Dre",
+                dateOfBirth: new Date("1990-01-02"),
+                gender: "M",
+                address: {
+                    street: "Dre Street 187",
+                    zipCode: "D066",
+                    city: "Compton"
+                },
+                contact: {
+                    phoneNumber: "+43 11111 1111",
+                    emailAddress: "studio@dre.dr"
+                },
+                sports: [],
+                roles: [
+                    {
+                        "$ref": "Role",
                         "$id": exampleRoleId
                     }
                 ]
             }
-    );
+        ]);
 
     insertRandomizedData();
 }

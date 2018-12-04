@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="persist-beans.xml"/>
+    <import resource="security-beans.xml"/>
+    <context:component-scan base-package="at.fhv.sportsclub"/>
+
+    <!--
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+
+            <property name="converters" >
+                <list>
+                    <bean class="at.fhv.sportsclub.controller.common.ClasspathURLConverter"/>
+                </list>
+            </property>
+    </bean>
+    -->
+
+    <bean class="org.dozer.DozerBeanMapper" id="generalMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>dozerJdk8Converters.xml</value>
+                <value>./customMappings/AddressEntityMapping.xml</value>
+                <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/SportEntityMappingFull.xml</value>
+                <value>./customMappings/PrivilegeMapping.xml</value>
+                <value>./customMappings/ParticipantMapping.xml</value>
+                <value>./customMappings/EncounterEntityMapping.xml</value>
+                <value>PersonDTOMappingLight.xml</value>
+                <value>PersonDTOMappingFull.xml</value>
+                <value>TeamDTOMappingLight.xml</value>
+                <value>TeamDTOMappingFull.xml</value>
+                <value>RoleDTOMapping.xml</value>
+                <value>TournamentDTOMappingFull.xml</value>
+                <value>TournamentDTOMappingLight.xml</value>
+            </list>
+        </property>
+        <property name="customConvertersWithId">
+            <map>
+                <entry key="sportsConverter" value-ref="sportsConverter"/>
+                <entry key="leagueConverter" value-ref="leagueConverter"/>
+                <entry key="accessLevelConverter" value-ref="accessLevelConverter"/>
+                <entry key="objectIdConverter" value-ref="objectIdConverter"/>
+                <entry key="embeddedObjectIdConverter" value-ref="embeddedObjectIdConverter"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean class="org.dozer.DozerBeanMapper" id="resolverMapper">
+        <property name="mappingFiles">
+            <list>
+                <value>dozerJdk8Converters.xml</value>
+                <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/SportEntityMappingFull.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="javax.validation.Validation" id="validatorFactory" factory-method="buildDefaultValidatorFactory"/>
+    <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator" />
+
+</beans>

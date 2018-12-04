@@ -28,5 +28,8 @@
 
 # IntelliJ
 out/
+*.class
+**/target
 
 *.log
+*.iml

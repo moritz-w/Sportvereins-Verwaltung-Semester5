@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+      http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping map-id="TeamDTOMappingFull">
+        <class-a>at.fhv.sportsclub.entity.team.TeamEntity</class-a>
+        <class-b>at.fhv.sportsclub.model.team.TeamDTO</class-b>
+        <field custom-converter-id="leagueConverter">
+            <a>league</a>
+            <b>league</b>
+        </field>
+        <field map-id="TeamMembersMappingLight">
+            <a>members</a>
+            <b>members</b>
+        </field>
+        <field map-id="TeamMembersMappingLight">
+            <a>trainers</a>
+            <b>trainers</b>
+        </field>
+    </mapping>
+
+</mappings>

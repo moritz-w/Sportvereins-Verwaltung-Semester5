@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="at.fhv.sportsclub.security"/>
+
+    <!--
+       A cglib class proxy is used, even though it is not recommended, but since the Lookup Proxy, needs to
+       access the AOP proxy, it is required to have an instance of the corresponding controller class.
+       Otherwise with method injection the
+    -->
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="aspects" ref="authorizationController">
+            <aop:pointcut id="authorizeBeforeControllerRequest"
+                          expression="execution(public * at.fhv.sportsclub.controller.interfaces.*.* (..))
+                          and args(session, ..) and @annotation(at.fhv.sportsclub.controller.common.RequiredPrivileges)"
+            />
+            <aop:around method="checkPermissions" pointcut-ref="authorizeBeforeControllerRequest" />
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="sessionManager" class="at.fhv.sportsclub.security.session.SimpleSessionManager">
+        <constructor-arg>
+            <bean class="at.fhv.sportsclub.security.session.SimpleSessionIdService"/>
+        </constructor-arg>
+    </bean>
+
+
+    <bean class="at.fhv.sportsclub.security.authentication.AuthenticationController">
+        <constructor-arg>
+            <list>
+                <bean class="at.fhv.sportsclub.security.authentication.InMemoryAuthenticationProvider"/>
+                <bean class="at.fhv.sportsclub.security.authentication.LdapAuthenticationProvider"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg ref="dataRepositoryDetailsProvider"/>
+        <constructor-arg ref="sessionManager"/>
+    </bean>
+
+</beans>

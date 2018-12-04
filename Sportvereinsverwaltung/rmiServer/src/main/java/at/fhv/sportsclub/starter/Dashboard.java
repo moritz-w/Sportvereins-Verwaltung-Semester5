@@ -1,12 +1,12 @@
 package at.fhv.sportsclub.starter;
 
 import com.mongodb.connection.Server;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import org.apache.log4j.Logger;
 
 import java.net.*;
 import java.rmi.RemoteException;
@@ -17,12 +17,15 @@ import java.util.ResourceBundle;
       Author: Moritz W.
       Co-Authors: 
 */
-public class Dashboard implements Initializable {
+public class Dashboard implements Initializable, UiNotify<String> {
+
+    private static Logger logger = Logger.getRootLogger();
 
     public TextField portInput;
     public Button startStopBtn;
     public Label ipInfoLbl;
     public Label serverStatusLbl;
+    public TextArea logOutputTxt;
 
     private boolean started = false;
     private Thread rmiThread;
@@ -45,7 +48,6 @@ public class Dashboard implements Initializable {
                 startStopBtn.setText("Launch");
                 ServerRunMe.unbindRMIRegistry();
                 started = false;
-                System.exit(0);
             } else {
                 startStopBtn.setText("Stop");
                 serverStatusLbl.setText("Server running");
@@ -64,6 +66,10 @@ public class Dashboard implements Initializable {
                 started = true;
             }
         });
+        logger.addAppender(new UiAppender(this));
+
+        logOutputTxt.textProperty().addListener((observable, oldValue, newValue) -> logOutputTxt.setScrollTop(Double.MAX_VALUE));
+
     }
 
     private void showErrorAlert(String text){
@@ -72,6 +78,10 @@ public class Dashboard implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(text);
         alert.showAndWait();
+    }
+
+    public void update(String data){
+        logOutputTxt.appendText(data +"\n");
     }
 
 

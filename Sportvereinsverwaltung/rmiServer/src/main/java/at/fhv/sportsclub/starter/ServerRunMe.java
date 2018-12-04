@@ -66,6 +66,5 @@ public class ServerRunMe extends Application {
 
     public static void main(String[] args) throws RemoteException {
         launch(args);
-        //createRMIRegistry(1099);
     }
 }

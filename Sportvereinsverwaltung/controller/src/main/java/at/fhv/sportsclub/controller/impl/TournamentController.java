@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,13 +86,24 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
         if (teamsByTrainer.getResponse() != null){
             return new ListWrapper<>(null, teamsByTrainer.getResponse());
         }
-        List<ObjectId> teamIds = new ArrayList<>();
+        HashSet<ObjectId> teamIds = new HashSet<>();
         for (TeamDTO teamDTO : teamsByTrainer.getContents()) {
             teamIds.add(new ObjectId(teamDTO.getId()));
         }
-        List<TournamentEntity> tournamentsByTeamId = tournamentRepository.getTournamentByTeamId(teamIds);
+        List<TournamentEntity> tournamentsByTeamId = tournamentRepository.getTournamentByTeamId(new ArrayList<>(teamIds));
         if (tournamentsByTeamId.isEmpty()) {
             return new ListWrapper<>(null, createErrorMessage("No tournaments found for the given teams"));
+        }
+        for (TournamentEntity tournamentEntity : tournamentsByTeamId) {
+            List<ParticipantEntity> validParticipants = new ArrayList<>();
+            for (ParticipantEntity participantEntity : tournamentEntity.getTeams()) {
+                if (teamIds.contains(participantEntity.getTeam())){
+                    validParticipants.add(participantEntity);
+                }
+            }
+            if (!validParticipants.isEmpty()){
+                tournamentEntity.setTeams(validParticipants);
+            }
         }
         List<TournamentDTO> tournamentDTOList = mapAnyCollection(
                 tournamentsByTeamId, TournamentDTO.class, "TournamentDTOMappingFull"

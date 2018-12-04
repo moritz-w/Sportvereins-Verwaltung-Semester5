@@ -13,6 +13,9 @@ import java.util.ArrayList;
 */
 @AllArgsConstructor
 public @Data class ListWrapper<E> implements Serializable, IDTO {
+
+    private static final long serialVersionUID = 9111185098267757690L;
+
     private ArrayList<E> contents;
     private ResponseMessageDTO response;
 

@@ -36,11 +36,11 @@ public class SportsResolver {
     }
 
     public SportDTO resolveFromObjectIdFull(String id){
-        return internalResolve(id, "");
+        return internalResolve(id, "SportEntityMappingFull");
     }
 
     private SportDTO internalResolve(String id, String mappingID){
-        SportDTO sportDTO= null;
+        SportDTO sportDTO = null;
         try {
             SportEntity sportEntity = departmentRepository.getSportById(id);
             try {

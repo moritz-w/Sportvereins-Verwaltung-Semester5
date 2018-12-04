@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Document(collection = "Tournament")
@@ -19,6 +20,7 @@ public @Data class TournamentEntity implements CommonEntity {
     private ObjectId league;
     private String leagueName;
     private String sportsName;
+    private LocalDate date;
     private List<EncounterEntity> encounters;
     private List<ParticipantEntity> teams;
 }

@@ -20,6 +20,16 @@ public class SimpleSessionIdService implements SessionIdService<String> {
     private final static Logger logger = Logger.getRootLogger();
     private final static String secret = "9GOy5Bs7vXmmT4SFaaq9Y1WMM1fRy59Q";
 
+    /**
+     * This method is not safe to use I guess...
+     * Probably not the ideal way to create a session ID since a lot of strings are used. To improve
+     * this method, the temporary data to generate the session need to be overwritten when invalidating the session.
+     * For this reason the conversion of the nonce into a string is not ideal. The secret is also not safe to use. It
+     * should be a placeholder for a shared secret between authentication servers. Might also be useful
+     * for JWT tokens, which require such a shared secret.
+     * @param userDetails The userdetails including the user id and nonce. The nonce is required for validation as well.
+     * @return A session ID SHA256 hash, that was created with the help of the User Details.
+     */
     @Override
     public String generateSessionId(UserDetails userDetails) {
         try {

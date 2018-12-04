@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface DepartmentRepository extends CommonRepository<DepartmentEntity, String>,
                                               CustomDepartmentRepository
 {
-
 }

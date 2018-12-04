@@ -101,5 +101,12 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     public LeagueDTO getLeagueById(SessionDTO session, String id){
         return leagueResolver.resolveFromObjectId(id);
     }
+
+    @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
+    public DepartmentDTO getDepartmentBySportId(SessionDTO session, String sportId){
+        DepartmentEntity departmentBySportId = departmentRepository.getDepartmentBySportId(sportId);
+        return map(departmentBySportId, DepartmentDTO.class, "DepartmentDTOMappingFull");
+    }
     //endregion
 }

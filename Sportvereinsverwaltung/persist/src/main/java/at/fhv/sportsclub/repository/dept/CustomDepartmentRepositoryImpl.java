@@ -224,4 +224,18 @@ public class CustomDepartmentRepositoryImpl implements CustomDepartmentRepositor
         }
         return leagueEntity;
     }
+
+    //region Mongo Query
+    /**
+     * db.Department.find({"sports._id": ObjectId("5c05eb82e9a0326156979fcb")}, {"sports": 0})
+     */
+    //endregion
+    @Override
+    public DepartmentEntity getDepartmentBySportId(String id) {
+        Query q = new Query();
+        q.addCriteria(where("sports._id").is(new ObjectId(id))).fields().exclude("sports");
+        return mongoOperations.findOne(
+                q, DepartmentEntity.class
+        );
+    }
 }

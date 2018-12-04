@@ -475,10 +475,11 @@ function main(){
     insertRandomizedData();
     
     var sliceIndex = getRandomNumber(0, personIdPool.length - teamSize);
+    var snoopTeamName = composeTeamName();
     db.Team.insertOne(
         {
             _id: snoopTeam,
-            name: composeTeamName(),
+            name: snoopTeamName,
             members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
             trainers: [
                 {
@@ -498,6 +499,7 @@ function main(){
                 teams: [
                     {
                         _id: new ObjectId(),
+                        teamName: snoopTeamName,
                         team: snoopTeam,
                         participants: []
                     }

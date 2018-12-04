@@ -11,6 +11,10 @@
             <a>league</a>
             <b>league</b>
         </field>
+        <field map-id="TeamMembersMappingLight">
+            <a>members</a>
+            <b>members</b>
+        </field>
     </mapping>
 
 </mappings>

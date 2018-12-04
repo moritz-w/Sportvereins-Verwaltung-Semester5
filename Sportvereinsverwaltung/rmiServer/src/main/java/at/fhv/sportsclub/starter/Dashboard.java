@@ -1,8 +1,5 @@
 package at.fhv.sportsclub.starter;
 
-import com.mongodb.connection.Server;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
@@ -48,6 +45,7 @@ public class Dashboard implements Initializable, UiNotify<String> {
                 startStopBtn.setText("Launch");
                 ServerRunMe.unbindRMIRegistry();
                 started = false;
+                System.exit(0);
             } else {
                 startStopBtn.setText("Stop");
                 serverStatusLbl.setText("Server running");

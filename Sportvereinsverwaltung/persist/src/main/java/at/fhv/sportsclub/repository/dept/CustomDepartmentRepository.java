@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.repository.dept;
 
+import at.fhv.sportsclub.entity.dept.DepartmentEntity;
 import at.fhv.sportsclub.entity.dept.LeagueEntity;
 import at.fhv.sportsclub.entity.dept.SportEntity;
 import at.fhv.sportsclub.exception.DataAccessException;
@@ -14,4 +15,5 @@ public interface CustomDepartmentRepository {
     SportEntity getSportById(String id) throws InvalidInputDataException, DataAccessException;
     SportEntity getSportByLeagueId(String id) throws InvalidInputDataException, DataAccessException;
     LeagueEntity getLeagueById(String id) throws InvalidInputDataException, DataAccessException;
+    DepartmentEntity getDepartmentBySportId(String id);
 }

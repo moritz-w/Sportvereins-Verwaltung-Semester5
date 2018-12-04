@@ -36,6 +36,8 @@
                 <value>RoleDTOMapping.xml</value>
                 <value>TournamentDTOMappingFull.xml</value>
                 <value>TournamentDTOMappingLight.xml</value>
+                <value>DepartmentDTOMappingLight.xml</value>
+                <value>DepartmentDTOMappingFull.xml</value>
             </list>
         </property>
         <property name="customConvertersWithId">

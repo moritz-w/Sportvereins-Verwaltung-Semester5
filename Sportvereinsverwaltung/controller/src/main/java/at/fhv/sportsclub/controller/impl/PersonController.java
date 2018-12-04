@@ -21,12 +21,14 @@ import java.util.ArrayList;
 @Scope("prototype")
 public class PersonController extends CommonController<PersonDTO, PersonEntity, PersonRepository> implements IPersonController {
 
+    private DepartmentController departmentController;
     private PersonRepository personRepository;
 
     @Autowired
-    public PersonController(PersonRepository repository) {
+    public PersonController(PersonRepository repository, DepartmentController departmentController) {
         super(repository, PersonDTO.class, PersonEntity.class);
         this.personRepository = repository;
+        this.departmentController = departmentController;
     }
 
     //region RMI wrapper methods

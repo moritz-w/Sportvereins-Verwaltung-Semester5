@@ -15,6 +15,10 @@
             <a>members</a>
             <b>members</b>
         </field>
+        <field map-id="TeamMembersMappingLight">
+            <a>trainers</a>
+            <b>trainers</b>
+        </field>
     </mapping>
 
 </mappings>

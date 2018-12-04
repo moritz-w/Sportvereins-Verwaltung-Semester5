@@ -1,11 +1,18 @@
 package at.fhv.sportsclub;
 
+import at.fhv.sportsclub.model.common.ListWrapper;
+import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.AddressDTO;
 import at.fhv.sportsclub.model.person.ContactDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import at.fhv.sportsclub.model.team.TeamDTO;
+import at.fhv.sportsclub.model.tournament.EncounterDTO;
+import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.TournamentDTO;
+import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.junit.BeforeClass;
@@ -42,32 +49,73 @@ public class LoopbackClientTest {
             e.printStackTrace();
         }
     }
-/*
+
     @Test
     public void testRMIConnectionAndLookupFactory() throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(port);
+        IAuthenticationController authController = (IAuthenticationController) registry.lookup("AuthenticationService");
         IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
+        SessionDTO session = authController.authenticate("snoop@do.gg", "snoop@do.gg".toCharArray());
+        ITeamController teamController = controllerFactory.getTeamController();
+        ITournamentController controller = controllerFactory.getTournamentController();
         IPersonController personController = controllerFactory.getPersonController();
+        PersonDTO person = personController.getEntryDetails(session, "5bf4b57197710c31da9f3253");
+
+        ListWrapper<TournamentDTO> tournamentByTrainerId1 = controller.getTournamentByTrainerId(session, session.getMyUserId());
+
+        TeamDTO entryDetails = teamController.getEntryDetails(session, "5c05eb83e9a032615697a00c");
+
+        ListWrapper<TeamDTO> teamsByTrainerId = teamController.getTeamsByTrainerId(session, "5bf4b57197710c31da9f3266");
+        ListWrapper<TournamentDTO> tournamentByTrainerId = controller.getTournamentByTrainerId(session, "5bf4b57197710c31da9f3266");
+        ListWrapper<TeamDTO> bySport = teamController.getBySport(session, "5bf4b57197710c31da9f3249");
+        ListWrapper<TeamDTO> byLeague = teamController.getByLeague(session, "5bf4b57197710c31da9f323d");
+
+        TournamentDTO tournamentDTO = new TournamentDTO();
+        List<ParticipantDTO> teams = new ArrayList<>();
+        ParticipantDTO teamA = new ParticipantDTO();
+        teamA.setId("5c045201cbb3a266a8df2e4c");
+        teamA.setTeam("5bf4b57197710c31da9f328a");
+        teamA.setModificationType(ModificationType.MODIFIED);
+        ArrayList<PersonDTO> personDTOS = new ArrayList<>();
+        //personDTOS.add(person);
+        teamA.setParticipants(personDTOS);
+        teams.add(teamA);
+//        tournamentDTO.setLeague("5bf4b57197710c31da9f3248");
+        tournamentDTO.setTeams(teams);
+        List<EncounterDTO> encounters = new ArrayList<>();
+        EncounterDTO exampleEncounter = new EncounterDTO();
+        exampleEncounter.setId("5c0454b4cbb3a283a41d00d3");
+        exampleEncounter.setHomePoints(500);
+        exampleEncounter.setHomeTeam("5c045201cbb3a266a8df2e4c");
+        exampleEncounter.setGuestTeam("5c045201cbb3a266a8df2e4c");
+        exampleEncounter.setModificationType(ModificationType.REMOVED);
+        encounters.add(exampleEncounter);
+        tournamentDTO.setEncounters(encounters);
+        tournamentDTO.setId("5c04455ecbb3a26f4cb9ec5b");
+        //tournamentDTO.setModificationType(ModificationType.MODIFIED);
+        TournamentDTO tournament = controller.saveOrUpdateEntry(session, tournamentDTO);
+
+
         //ArrayList<PersonDTO> allEntries = personController.getAllEntries(null);
         //IAuthenticationController authenticationController = controllerFactory.getAuthenticationController();
         //String pw = "test";
         //SessionDTO session = authenticationController.authenticate("mwi4339@students.fhv.at", pw.toCharArray());
 
-        IDepartmentController departmentController = controllerFactory.getDepartmentController();
-        SportDTO randomSport = departmentController.getAllSportEntries().get(0);
-        AddressDTO address = new AddressDTO(null, "Memory lane", "000", "Compton", null);
-        ContactDTO contact = new ContactDTO(null, "0009", "mw@gmail.com", null);
-        ArrayList<SportDTO> sports = new ArrayList<>();
-        sports.add(randomSport);
-        ResponseMessageDTO responseMessageDTO = personController.saveOrUpdateEntry(
-                new PersonDTO(null, "Alfons", "Hatler", LocalDate.now(), address, contact, sports, null)
-        );
-        PersonDTO entryDetails = personController.getEntryDetails(responseMessageDTO.getContextId());
+//        IDepartmentController departmentController = controllerFactory.getDepartmentController();
+//        SportDTO randomSport = departmentController.getAllSportEntries().get(0);
+//        AddressDTO address = new AddressDTO(null, "Memory lane", "000", "Compton", null);
+//        ContactDTO contact = new ContactDTO(null, "0009", "mw@gmail.com", null);
+//        ArrayList<SportDTO> sports = new ArrayList<>();
+//        sports.add(randomSport);
+//        ResponseMessageDTO responseMessageDTO = personController.saveOrUpdateEntry(
+//                new PersonDTO(null, "Alfons", "Hatler", LocalDate.now(), address, contact, sports, null, null)
+//        );
+        //PersonDTO entryDetails = personController.getEntryDetails(responseMessageDTO.getContextId());
 
         //ArrayList<PersonDTO> allEntries = personController.getAllEntries(null);
         //PersonDTO snoopDogg = personController.getEntryDetails(allEntries.get(0).getId());
        // System.out.println(snoopDogg.toString());
     }
-*/
+
 
 }

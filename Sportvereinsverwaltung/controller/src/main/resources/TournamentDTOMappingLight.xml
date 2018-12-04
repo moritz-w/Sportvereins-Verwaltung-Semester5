@@ -15,6 +15,14 @@
             <a>name</a>
             <b>name</b>
         </field>
+        <field>
+            <a>leagueName</a>
+            <b>leagueName</b>
+        </field>
+        <field>
+            <a>sportsName</a>
+            <b>sportsName</b>
+        </field>
     </mapping>
 
 </mappings>

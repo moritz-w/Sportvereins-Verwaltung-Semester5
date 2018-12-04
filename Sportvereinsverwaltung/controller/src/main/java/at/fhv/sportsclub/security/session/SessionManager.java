@@ -40,9 +40,15 @@ public abstract class SessionManager<T> {
 
         Long expirationTime = System.currentTimeMillis() / 1000L + sessionTime;
         sessionStore.put(generatedSessionId, new Session(userDetails, expirationTime));
-        return new SessionDTO<>(generatedSessionId, expirationTime, userDetails.getRoles(), null);
+        return new SessionDTO<>(
+                generatedSessionId, expirationTime, userDetails.getRoles(), userDetails.getUserId(),null
+        );
     }
 
+    /**
+     * Not yet implemented, but should work like a OAuth like token refresh
+     * with the old session that can be used to obtain a new session ID.
+     */
     public SessionDTO<T> refreshSession(SessionDTO<T> session){
         return null;
     }
@@ -91,6 +97,6 @@ public abstract class SessionManager<T> {
         ResponseMessageDTO responseMessage = new ResponseMessageDTO(new LinkedList<>(), false);
         responseMessage.setSuccess(false);
         responseMessage.setInfoMessage(message);
-        return new SessionDTO<T>(null, 0L, null, responseMessage);
+        return new SessionDTO<>(null, 0L, null, null, responseMessage);
     }
 }

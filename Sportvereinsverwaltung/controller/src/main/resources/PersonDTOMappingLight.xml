@@ -29,4 +29,21 @@
         </field>
     </mapping>
 
+    <mapping wildcard="false" map-id="TeamMembersMappingLight">
+        <class-a>at.fhv.sportsclub.entity.person.PersonEntity</class-a>
+        <class-b>at.fhv.sportsclub.model.person.PersonDTO</class-b>
+        <field>
+            <a>id</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>firstName</a>
+            <b>firstName</b>
+        </field>
+        <field>
+            <a>lastName</a>
+            <b>lastName</b>
+        </field>
+    </mapping>
+
 </mappings>

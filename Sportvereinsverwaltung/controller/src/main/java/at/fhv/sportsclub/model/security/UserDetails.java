@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public @Data class UserDetails {
     private String userId;
+    private String userName;
     private String nonce;
     private List<RoleDTO> roles;
 }

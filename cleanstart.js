@@ -2,6 +2,8 @@
 var dbname = "sportsclub";
 var connection = "localhost:32768";     // default port: 27017
 var collections = ["Person", "Team", "Department", "Tournament"];
+var snoopId = new ObjectId();
+var snoopTeam = new ObjectId();
 
 /* Random data config */
 var personDataEntries = 50;
@@ -166,6 +168,7 @@ var teamIdPool = [];
 var participatingTeamsIndex = [];
 
 var exampleRoleId = new ObjectId();
+var adminRoleId = new ObjectId();
 
 function transformIdArrayToDbRef(ids, ref){
     dbRefs = []
@@ -176,6 +179,39 @@ function transformIdArrayToDbRef(ids, ref){
         })
     });
     return dbRefs;
+}
+
+function generateAdminRole() {
+    return {
+        _id: adminRoleId,
+        name: "Admin",
+        privileges: [
+            {
+                domain: "Person",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Team",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Department",
+                accessLevels: [
+                    "read", "write"
+                ]
+            },
+            {
+                domain: "Tournament",
+                accessLevels: [
+                    "read", "write", "special"
+                ]
+            }
+        ] 
+    }
 }
 
 function generateExampleRole(){
@@ -330,6 +366,7 @@ function insertRandomizedData(){
         embeddedLeagueArray.push(generateRandomizedLeague());        
     }
     db.Role.insertOne(generateExampleRole());
+    db.Role.insertOne(generateAdminRole());
     var embeddedSportArray = generateSports(embeddedLeagueArray);
     for (var index = 0; index < personDataEntries; index++) {
         db.Person.insertOne(generateRandomizedPerson());
@@ -355,6 +392,7 @@ function insertRandomizedData(){
 // ----------------
 // 
 // ----------------
+    
 function main(){
 
     dbconnection = new Mongo(connection);
@@ -364,8 +402,9 @@ function main(){
         db.getCollection(element).drop();
     });
     
-    db.Person.insertOne(
+    db.Person.insertMany([
             {
+                _id: snoopId,
                 firstName: "Snoop",
                 lastName: "Dogg",
                 dateOfBirth: new Date("1990-01-02"),
@@ -383,13 +422,91 @@ function main(){
                 roles: [
                     {
                         "$ref": "Role",
+                        "$id": adminRoleId
+                    }
+                ]
+            },
+            {
+                firstName: "TF",
+                lastName: "Test",
+                dateOfBirth: new Date("1990-01-02"),
+                gender: "M",
+                address: {
+                    street: "Dogg Street 187",
+                    zipCode: "D066",
+                    city: "Compton"
+                },
+                contact: {
+                    phoneNumber: "+43 11111 1111",
+                    emailAddress: "tf-test"
+                },
+                sports: [],
+                roles: [
+                    {
+                        "$ref": "Role",
+                        "$id": adminRoleId
+                    }
+                ]
+            },
+            {
+                firstName: "Dr",
+                lastName: "Dre",
+                dateOfBirth: new Date("1990-01-02"),
+                gender: "M",
+                address: {
+                    street: "Dre Street 187",
+                    zipCode: "D066",
+                    city: "Compton"
+                },
+                contact: {
+                    phoneNumber: "+43 11111 1111",
+                    emailAddress: "studio@dre.dr"
+                },
+                sports: [],
+                roles: [
+                    {
+                        "$ref": "Role",
                         "$id": exampleRoleId
                     }
                 ]
             }
-    );
+        ]);
 
     insertRandomizedData();
+    
+    var sliceIndex = getRandomNumber(0, personIdPool.length - teamSize);
+    var snoopTeamName = composeTeamName();
+    db.Team.insertOne(
+        {
+            _id: snoopTeam,
+            name: snoopTeamName,
+            members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [
+                {
+                    "$ref": "Person",
+                    "$id" : snoopId
+                }
+            ],
+            league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
+        }
+    );
+
+    db.Tournament.insertOne(
+        {
+                name: composeTournamentName(),
+                league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
+                date: new Date("2018-01-01"),
+                encounters: [],
+                teams: [
+                    {
+                        _id: new ObjectId(),
+                        teamName: snoopTeamName,
+                        team: snoopTeam,
+                        participants: []
+                    }
+                ]
+        }
+    );
 }
 
 main();

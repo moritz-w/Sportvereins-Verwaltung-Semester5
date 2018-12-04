@@ -27,6 +27,8 @@
                 <value>./customMappings/SportEntityMappingLight.xml</value>
                 <value>./customMappings/SportEntityMappingFull.xml</value>
                 <value>./customMappings/PrivilegeMapping.xml</value>
+                <value>./customMappings/ParticipantMapping.xml</value>
+                <value>./customMappings/EncounterEntityMapping.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
                 <value>TeamDTOMappingLight.xml</value>
@@ -41,6 +43,8 @@
                 <entry key="sportsConverter" value-ref="sportsConverter"/>
                 <entry key="leagueConverter" value-ref="leagueConverter"/>
                 <entry key="accessLevelConverter" value-ref="accessLevelConverter"/>
+                <entry key="objectIdConverter" value-ref="objectIdConverter"/>
+                <entry key="embeddedObjectIdConverter" value-ref="embeddedObjectIdConverter"/>
             </map>
         </property>
     </bean>
@@ -50,6 +54,7 @@
             <list>
                 <value>dozerJdk8Converters.xml</value>
                 <value>./customMappings/SportEntityMappingLight.xml</value>
+                <value>./customMappings/SportEntityMappingFull.xml</value>
             </list>
         </property>
     </bean>

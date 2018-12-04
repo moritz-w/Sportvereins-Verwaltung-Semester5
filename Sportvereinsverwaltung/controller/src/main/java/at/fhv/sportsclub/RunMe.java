@@ -1,7 +1,6 @@
 package at.fhv.sportsclub;
 
 import at.fhv.sportsclub.controller.impl.DepartmentController;
-import at.fhv.sportsclub.controller.impl.TeamController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

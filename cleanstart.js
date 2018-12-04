@@ -495,6 +495,7 @@ function main(){
         {
                 name: composeTournamentName(),
                 league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
+                date: new Date("2018-01-01"),
                 encounters: [],
                 teams: [
                     {

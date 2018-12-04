@@ -2,6 +2,8 @@
 var dbname = "sportsclub";
 var connection = "localhost:32768";     // default port: 27017
 var collections = ["Person", "Team", "Department", "Tournament"];
+var snoopId = new ObjectId();
+var snoopTeam = new ObjectId();
 
 /* Random data config */
 var personDataEntries = 50;
@@ -390,6 +392,7 @@ function insertRandomizedData(){
 // ----------------
 // 
 // ----------------
+    
 function main(){
 
     dbconnection = new Mongo(connection);
@@ -401,6 +404,7 @@ function main(){
     
     db.Person.insertMany([
             {
+                _id: snoopId,
                 firstName: "Snoop",
                 lastName: "Dogg",
                 dateOfBirth: new Date("1990-01-02"),
@@ -469,6 +473,37 @@ function main(){
         ]);
 
     insertRandomizedData();
+    
+    var sliceIndex = getRandomNumber(0, personIdPool.length - teamSize);
+    db.Team.insertOne(
+        {
+            _id: snoopTeam,
+            name: composeTeamName(),
+            members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [
+                {
+                    "$ref": "Person",
+                    "$id" : snoopId
+                }
+            ],
+            league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
+        }
+    );
+
+    db.Tournament.insertOne(
+        {
+                name: composeTournamentName(),
+                league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
+                encounters: [],
+                teams: [
+                    {
+                        _id: new ObjectId(),
+                        team: snoopTeam,
+                        participants: []
+                    }
+                ]
+        }
+    );
 }
 
 main();

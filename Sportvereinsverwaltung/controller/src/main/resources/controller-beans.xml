@@ -4,8 +4,8 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <import resource="persist-beans.xml"/>
-    <import resource="security-beans.xml"/>
+    <import resource="classpath:persist-beans.xml"/>
+    <import resource="classpath:security-beans.xml"/>
     <context:component-scan base-package="at.fhv.sportsclub"/>
 
     <!--

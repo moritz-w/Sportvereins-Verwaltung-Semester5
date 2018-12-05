@@ -9,6 +9,7 @@ import javax.jms.Queue;
 
 import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
+import at.fhv.sportsclub.services.MessageGeneratorService;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -93,7 +94,7 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage) {
+    public boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, Boolean confirm) {
         try {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -106,9 +107,10 @@ public class MessageController implements IMessageController {
                 return false;
             }
 
-            if(replyMessage != null) {
+            if(confirm != null) {
                 String replyTo = receivedMessage.getStringProperty("replyTo");
-                sendMessageToQueue(sessionDTO, replyMessage, replyTo);
+                // Confirm Message muss hier generiert werden.
+                sendMessageToQueue(sessionDTO, MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(), replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));

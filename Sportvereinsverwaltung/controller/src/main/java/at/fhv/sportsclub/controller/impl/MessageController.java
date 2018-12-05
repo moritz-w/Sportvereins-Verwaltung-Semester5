@@ -8,12 +8,14 @@ import javax.jms.*;
 import javax.jms.Queue;
 
 import at.fhv.sportsclub.model.message.MessageDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.services.MessageGeneratorService;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -26,9 +28,11 @@ public class MessageController implements IMessageController {
     private ActiveMQConnectionFactory connectionFactory;
 
     private Connection connection;
+    private PersonController personController;
 
-    public MessageController() {
+    public MessageController(PersonController personController) {
         this.connectionFactory = new ActiveMQConnectionFactory("tcp://10.0.51.91:61616/");
+        this.personController = personController;
     }
 
     @Override
@@ -110,7 +114,16 @@ public class MessageController implements IMessageController {
             if(confirm != null) {
                 String replyTo = receivedMessage.getStringProperty("replyTo");
                 // Confirm Message muss hier generiert werden.
-                sendMessageToQueue(sessionDTO, MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(), replyTo);
+                try {
+                    String sentMessage = receivedMessage.getText();
+                    PersonDTO player =  personController.getEntryDetails(sessionDTO, sessionDTO.getMyUserId());
+                    String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm, player);
+                    sendMessageToQueue(sessionDTO, message, replyTo);
+                }catch (RemoteException re){
+                    re.printStackTrace();
+                }
+
+
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));

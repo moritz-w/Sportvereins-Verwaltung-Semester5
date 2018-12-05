@@ -36,8 +36,8 @@ public class MessageGeneratorService {
             sb.append("Dear " + coach.getFirstName() + " " + coach.getLastName() + ",");
             sb.append("\n\n");
             sb.append("You hav been invited to this tournament: " + tournament.getName());
-            sb.append("The tournament will take place on " + tournament.getDate());
-            sb.append("If you are the head coach we need you to put together a team which you want to take to this tournament.\n");
+            sb.append("\nThe tournament will take place on " + tournament.getDate());
+            sb.append("\nIf you are the head coach we need you to put together a team which you want to take to this tournament.\n");
             sb.append("Kind regards\n");
             messages.add(sb.toString());
         }
@@ -50,18 +50,30 @@ public class MessageGeneratorService {
         StringBuilder sb = new StringBuilder();
         sb.append("Dear " + player.getFirstName() + " " + player.getLastName() + ",");
         sb.append("\n\n");
-        sb.append("Congratulations!\n" + "You have been nominated for the tournament " + tournament.getName() + ".");
-//      sb.append("The tournament will take place on " + tournament.getDate);
-        sb.append("I need you to give me a response weather you are able to take part or not.\n\n");
+        sb.append("Congratulations!\n" + "You have been nominated for this tournament: " + tournament.getName() + ".\n");
+        sb.append("The tournament will take place on " + tournament.getDate());
+        sb.append("\nI need you to give me a response weather you are able to take part or not.\n\n");
         sb.append("Kind regards\n" + coach.getFirstName() + " " + coach.getLastName());
 
 
         return sb.toString();
     }
 
-    public static String informCoachIfPlayerTakesPartOrNot(PersonDTO coach, PersonDTO player, TournamentDTO tournament){
+    public static String informCoachIfPlayerTakesPartOrNot(String sentMessage, Boolean confirm, PersonDTO player){
         //Der spieler muss dem trainer bescheid geben ob er am tunier teilnemen wird oder nicht
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("This is the message you sent:\n\n");
+        sb.append(sentMessage);
+        sb.append("\n\n");
+        if (confirm.booleanValue()){
+            sb.append(player.getFirstName() + player.getLastName() + "will be able to take part in this event");
+        } else {
+            sb.append("Unfortunately " + player.getFirstName() + player.getLastName() + "will not be able to take part in this event");
+        }
+        sb.append("\n\nKind regards");
+
+        return sb.toString();
     }
 
 }

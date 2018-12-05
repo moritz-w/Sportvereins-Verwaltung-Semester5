@@ -61,7 +61,7 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
         for (SportDTO sport: personDTO.getSports()) {
             DepartmentDTO departmentDTO = departmentController.getDepartmentBySportId(session, sport.getId());
             String message = MessageGeneratorService.informDeptHeadAddMemberToTeam(personDTO, departmentDTO.getDeptLeader(),sport);
-            messageController.sendMessageToQueue(session, message, personDTO.getId());
+            messageController.sendMessageToQueue(session, message, departmentDTO.getDeptLeader().getId());
         }
     }
 }

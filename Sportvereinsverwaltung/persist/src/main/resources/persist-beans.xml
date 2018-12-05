@@ -18,14 +18,14 @@
         <mongo:custom-converters base-package="at.fhv.sportsclub.repository.converters"/>
     </mongo:mapping-converter>
 
-    <bean id="mongoClient" class="com.mongodb.MongoClient">
+<!--    <bean id="mongoClient" class="com.mongodb.MongoClient">
         <constructor-arg>
             <value type="java.lang.String">${mongo.host}</value>
         </constructor-arg>
         <constructor-arg>
             <value type="java.lang.Integer">${mongo.port}</value>
         </constructor-arg>
-    </bean>
+    </bean>-->
 
     <mongo:db-factory id="mongoDbFactory" dbname="${mongo.dbname}" mongo-ref="mongoClient" />
 
@@ -33,6 +33,5 @@
         <constructor-arg ref="mongoDbFactory"/>
         <constructor-arg ref="mongoConverter"/>
     </bean>
-
 
 </beans>

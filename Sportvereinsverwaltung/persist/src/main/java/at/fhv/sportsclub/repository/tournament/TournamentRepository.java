@@ -1,10 +1,9 @@
 package at.fhv.sportsclub.repository.tournament;
 
-import at.fhv.sportsclub.entity.tournament.ParticipantEntity;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
 import at.fhv.sportsclub.repository.CommonRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface TournamentRepository extends CommonRepository<TournamentEntity, String>, CustomTournamentRepository  {
 }

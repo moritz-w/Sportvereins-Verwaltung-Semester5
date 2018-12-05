@@ -24,6 +24,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Service;
+import at.fhv.sportsclub.services.MessageGeneratorService;
+
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     private final TournamentRepository tournamentRepository;
     private final DepartmentController departmentController;
     private final TeamController teamController;
+    private final MessageController messageController;
 
     private SessionDTO session;
 
@@ -46,12 +49,14 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     public TournamentController(
             TournamentRepository repository,
             DepartmentController departmentController,
-            TeamController teamController
+            TeamController teamController,
+            MessageController messageController
     ) {
         super(repository, TournamentDTO.class, TournamentEntity.class);
         this.tournamentRepository = repository;
         this.departmentController = departmentController;
         this.teamController = teamController;
+        this.messageController = messageController;
     }
     // region RMI wrapper methods
     @Override
@@ -132,6 +137,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO participant : tournament.getTeams()) {
                 denormalizeParticipant(participant);
+                this.informCoaches(participant, tournament);
             }
 
             tournament.setEncounters(new ArrayList<>());
@@ -158,6 +164,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO updateCandidate : updateCandidates) {
                 denormalizeParticipant(updateCandidate);
+                this.informCoaches(updateCandidate, tournament);
             }
 
             tournamentRepository.addTeamToTournament(
@@ -226,4 +233,14 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
     //endregion
 
+    private void informCoaches(ParticipantDTO participant, TournamentDTO tournament){
+        TeamDTO team = teamController.getEntryDetails(session, participant.getTeam());
+        List<String> messages = MessageGeneratorService.informCoachInviteToTurnament(team.getTrainers(), tournament);
+        int i = 0;
+        for (String message :
+                messages) {
+            messageController.sendMessageToQueue(session, message,team.getTrainers().get(i).getId());
+            i++;
+        }
+    }
 }

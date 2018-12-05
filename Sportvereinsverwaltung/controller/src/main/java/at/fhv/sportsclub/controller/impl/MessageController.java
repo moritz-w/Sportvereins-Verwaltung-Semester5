@@ -108,7 +108,7 @@ public class MessageController implements IMessageController {
 
             if(replyMessage != null) {
                 String replyTo = receivedMessage.getStringProperty("replyTo");
-                sendMessageToQueue(sessionDTO, receivedMessage.getText(), replyTo);
+                sendMessageToQueue(sessionDTO, replyMessage, replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));

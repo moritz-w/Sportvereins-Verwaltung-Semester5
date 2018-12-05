@@ -23,12 +23,12 @@
         <property name="mappingFiles">
             <list>
                 <value>dozerJdk8Converters.xml</value>
-                <value>./customMappings/AddressEntityMapping.xml</value>
-                <value>./customMappings/SportEntityMappingLight.xml</value>
-                <value>./customMappings/SportEntityMappingFull.xml</value>
-                <value>./customMappings/PrivilegeMapping.xml</value>
-                <value>./customMappings/ParticipantMapping.xml</value>
-                <value>./customMappings/EncounterEntityMapping.xml</value>
+                <value>AddressEntityMapping.xml</value>
+                <value>SportEntityMappingLight.xml</value>
+                <value>SportEntityMappingFull.xml</value>
+                <value>PrivilegeMapping.xml</value>
+                <value>ParticipantMapping.xml</value>
+                <value>EncounterEntityMapping.xml</value>
                 <value>PersonDTOMappingLight.xml</value>
                 <value>PersonDTOMappingFull.xml</value>
                 <value>TeamDTOMappingLight.xml</value>
@@ -47,6 +47,7 @@
                 <entry key="accessLevelConverter" value-ref="accessLevelConverter"/>
                 <entry key="objectIdConverter" value-ref="objectIdConverter"/>
                 <entry key="embeddedObjectIdConverter" value-ref="embeddedObjectIdConverter"/>
+                <entry key="personConverter" value-ref="personConverter"/>
             </map>
         </property>
     </bean>
@@ -55,8 +56,10 @@
         <property name="mappingFiles">
             <list>
                 <value>dozerJdk8Converters.xml</value>
-                <value>./customMappings/SportEntityMappingLight.xml</value>
-                <value>./customMappings/SportEntityMappingFull.xml</value>
+                <value>SportEntityMappingLight.xml</value>
+                <value>SportEntityMappingFull.xml</value>
+                <value>PersonDTOMappingFull.xml</value>
+                <value>PersonDTOMappingLight.xml</value>
             </list>
         </property>
     </bean>

@@ -31,7 +31,9 @@ public class ServerRunMe extends Application {
     private static Registry registry;
 
     public static void createRMIRegistry(int port) throws RemoteException{
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("rmi-beans.xml");
+        ApplicationContext appContext = new ClassPathXmlApplicationContext(     // "persist-beans.xml", "controller-beans.xml", "security-beans.xml",
+                "rmi-beans.xml"
+        );
         boolean active = ((ClassPathXmlApplicationContext) appContext).isActive();
         IControllerFactory controllerFactory = appContext.getBean(ControllerFactoryImpl.class);
         configurationController = appContext.getBean(ConfigurationController.class);

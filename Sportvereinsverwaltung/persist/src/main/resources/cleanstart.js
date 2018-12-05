@@ -10,7 +10,7 @@ function executeScript() {
     /* Random data config */
     var personDataEntries = 50;
     var leagueDataEntries = 70;         // trying to estimate 7 leagues per sport (currently 10 sports)
-    var teamDataEntries = 30;
+    var teamDataEntries = 90;
     var tournamentDataEntries = 20;
     var participatingTeamsPerTournamentDataEntries = 8;
     var encountersPerTournamentDataEntries = 5;    // number of encounters per tournament
@@ -320,12 +320,14 @@ function executeScript() {
         return {
             _id: uid,
             name: composeTeamName(),
-            members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            //transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),
             trainers: [
-                {
+                personIdPool[getRandomNumber(0, personIdPool.length)]
+/*                {
                     "$ref": "Person",
                     "$id": personIdPool[getRandomNumber(0, personIdPool.length)]
-                }
+                }*/
             ],
             league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
         };
@@ -483,14 +485,14 @@ function executeScript() {
         {
             _id: snoopTeam,
             name: snoopTeamName,
-            members: transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
-            trainers: [
-                {
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [ snoopId
+                /*{
                     "$ref": "Person",
                     "$id": snoopId
-                }
+                }*/
             ],
-            league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
+            league: snoopLeague
         }
     );
 
@@ -505,7 +507,7 @@ function executeScript() {
             sports: [
                 {
                     _id: snoopSport,
-                    name: "Football",
+                    name: "Wake and Bake",
                     leagues: [
                         {
                             _id: snoopLeague,

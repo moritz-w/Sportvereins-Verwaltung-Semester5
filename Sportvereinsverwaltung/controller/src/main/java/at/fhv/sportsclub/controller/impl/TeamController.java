@@ -73,8 +73,14 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     @Override
     @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ListWrapper<TeamDTO> getByLeague(SessionDTO session, String leagueId) {
+        ObjectId leagueOId;
+        try {
+            leagueOId = new ObjectId(leagueId);
+        } catch (IllegalArgumentException e){
+            return new ListWrapper<>(null, createErrorMessage("Invalid id given"));
+        }
         List<TeamDTO> teamDTOS = mapAnyCollection(
-                teamRepository.getAllByLeagueEquals(new ObjectId(leagueId)), TeamDTO.class, "TeamDTOMappingLight"
+                teamRepository.getAllByLeagueEquals(leagueOId), TeamDTO.class, "TeamDTOMappingLight"
         );
         ListWrapper<TeamDTO> teamWrapper = new ListWrapper<>();
         if (teamDTOS.isEmpty()) {

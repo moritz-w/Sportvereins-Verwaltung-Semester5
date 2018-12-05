@@ -87,6 +87,9 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId){
         SportDTO sportDTO = sportResolver.resolveFromObjectIdFull(sportId);
+        if (sportDTO == null){
+            return new ListWrapper<>(null, createErrorMessage("Nothing found for the given sport ID"));
+        }
         return new ListWrapper<>(new ArrayList<>(sportDTO.getLeagues()), null);
     }
 

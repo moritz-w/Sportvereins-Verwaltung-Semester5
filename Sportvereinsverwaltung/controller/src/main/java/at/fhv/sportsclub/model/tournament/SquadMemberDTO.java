@@ -16,6 +16,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public @Data class SquadMemberDTO implements Serializable, IDTO {
 
+    private static final long serialVersionUID = 111111198212757692L;
+
     public SquadMemberDTO(){}
 
     private PersonDTO member;

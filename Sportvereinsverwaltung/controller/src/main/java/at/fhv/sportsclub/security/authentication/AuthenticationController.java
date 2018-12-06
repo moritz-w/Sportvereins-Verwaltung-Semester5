@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.security.authentication;
 
+import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.security.UserAuthentication;
 import at.fhv.sportsclub.model.security.UserDetails;
@@ -35,7 +36,7 @@ public class AuthenticationController implements IAuthenticationController {
      */
     private SessionDTO tryAuthentication(UserAuthentication authentication){
         Iterator<AuthenticationProvider> providerIterator = authenticationProviderList.iterator();
-        boolean authenticated;
+        boolean authenticated = false;
         SessionDTO session = null;
         while(providerIterator.hasNext() && session == null){
             authenticated = providerIterator.next().authenticate(authentication);
@@ -43,6 +44,12 @@ public class AuthenticationController implements IAuthenticationController {
                 UserDetails userDetails = userDetailsProvider.getUserDetails(authentication.getId());
                 session = sessionManager.createNewSession(userDetails);
             }
+        }
+        if (!authenticated){
+            ResponseMessageDTO response = new ResponseMessageDTO();
+            response.setSuccess(false);
+            response.setInfoMessage("Invalid credentials");
+            return new SessionDTO<>("", -1L, null, "", response);
         }
         afterAuthCleanup(authentication);
         return session;

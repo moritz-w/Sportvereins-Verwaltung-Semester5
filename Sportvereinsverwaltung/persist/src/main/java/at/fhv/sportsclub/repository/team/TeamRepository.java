@@ -21,7 +21,7 @@ import java.util.List;
 @CacheConfig(cacheNames = {"teams"})
 public interface TeamRepository extends CommonRepository<TeamEntity, String>, CustomTeamRepository{
     List<TeamEntity> getAllByLeagueEquals(ObjectId league);
-    List<TeamEntity> getAllByTrainersIsContaining(List<PersonEntity> trainers);
+    List<TeamEntity> getAllByTrainersIsContaining(List<String> trainers);
     @Cacheable(sync = true)
     List<TeamEntity> findAll();
 }

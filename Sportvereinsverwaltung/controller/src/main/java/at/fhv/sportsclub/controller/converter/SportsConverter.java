@@ -67,7 +67,11 @@ public class SportsConverter implements CustomConverter {
             return null;
         }
 
-        if (source instanceof List && !((List) source).isEmpty()){
+        if (source instanceof List){
+
+            if (((List) source).isEmpty()){
+                return new ArrayList<>();
+            }
 
             if (((List) source).get(0) instanceof ObjectId){
                 ArrayList<SportDTO> dtos = new ArrayList<>();

@@ -53,9 +53,9 @@ public class TeamMemberResolver {
             }
             try {
                 if (mappingID.isEmpty()) {
-                    person = resolverMapper.map(personEntity, PersonDTO.class);
+                    person = resolverMapper.map(personEntity.get(), PersonDTO.class);
                 } else {
-                    person = resolverMapper.map(personEntity, PersonDTO.class, mappingID);
+                    person = resolverMapper.map(personEntity.get(), PersonDTO.class, mappingID);
                 }
             } catch (MappingException e){
                 logger.fatal("Mapping from entity to domain failed", e);

@@ -65,6 +65,12 @@ public class LoopbackClientTest {
     }
 
     @Test
+    public void testGetTeamEntryDetails() throws RemoteException, NotBoundException {
+        ITeamController teamController = controllerFactory.getTeamController();
+        TeamDTO entryDetails = teamController.getEntryDetails(session, "5c084d41b360dbb82138788e");
+    }
+
+    @Test
     public void testGetTournamentByTrainer() throws RemoteException, NotBoundException{
         ITournamentController tournamentController = controllerFactory.getTournamentController();
         ListWrapper<TournamentDTO> tournamentByTrainerId = tournamentController.getTournamentByTrainerId(session, "5c084d41b360dbb8213877c7");

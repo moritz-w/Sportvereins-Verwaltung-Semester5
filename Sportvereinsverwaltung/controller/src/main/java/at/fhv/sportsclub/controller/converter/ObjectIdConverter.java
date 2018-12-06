@@ -17,7 +17,11 @@ public class ObjectIdConverter implements CustomConverter {
             return null;
         }
         if (source instanceof String){
-            return new ObjectId((String) source);
+            try {
+                return new ObjectId((String) source);
+            } catch (IllegalArgumentException e){
+                return null;
+            }
         }
         else if (source instanceof ObjectId){
             return ((ObjectId) source).toHexString();

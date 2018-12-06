@@ -351,6 +351,7 @@ function executeScript() {
         return {
             _id: participantId,
             team: teamIdPool[teamIdIndex],
+            teamName: "",
             participants: []
         }
     }
@@ -359,6 +360,8 @@ function executeScript() {
         return {
             name: composeTournamentName(),
             date: new Date("2019-01-01"),
+            leagueName: "",
+            sportsName: "",
             league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
             encounters: encounters,
             teams: participants

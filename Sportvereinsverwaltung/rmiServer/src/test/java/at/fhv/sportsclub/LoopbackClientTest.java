@@ -3,6 +3,7 @@ package at.fhv.sportsclub;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.dept.DepartmentDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.AddressDTO;
 import at.fhv.sportsclub.model.person.ContactDTO;
@@ -40,6 +41,10 @@ import java.util.concurrent.Executors;
 public class LoopbackClientTest {
 
     private static int port = 1099;
+    private static Registry registry;
+    private static IAuthenticationController authController;
+    private static IControllerFactory controllerFactory;
+    private static SessionDTO session;
 
     @BeforeClass
     public static void startServer(){
@@ -48,17 +53,44 @@ public class LoopbackClientTest {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        try {
+            registry = LocateRegistry.getRegistry(port);
+            authController = (IAuthenticationController) registry.lookup("AuthenticationService");
+            controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
+            session = authController.authenticate("snoop@do.gg", "snoop@do.gg".toCharArray());
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGetTournamentByTrainer() throws RemoteException, NotBoundException{
+        ITournamentController tournamentController = controllerFactory.getTournamentController();
+        ListWrapper<TournamentDTO> tournamentByTrainerId = tournamentController.getTournamentByTrainerId(session, "5c084d41b360dbb8213877c7");
+    }
+
+    @Test
+    public void testGetTeamsBySport() throws RemoteException, NotBoundException {
+        ITeamController teamController = controllerFactory.getTeamController();
+        ListWrapper<TeamDTO> bySport = teamController.getBySport(session, "5c084d41b360dbb82138781a");
+    }
+
+    @Test
+    public void testGetTournaments() throws RemoteException, NotBoundException {
+        ITournamentController tournamentController = controllerFactory.getTournamentController();
+        ListWrapper<TournamentDTO> allEntries = tournamentController.getAllEntries(session);
+        TournamentDTO entryDetails = tournamentController.getEntryDetails(session, allEntries.getContents().get(0).getId());
     }
 
     @Test
     public void testRMIConnectionAndLookupFactory() throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(port);
-        IAuthenticationController authController = (IAuthenticationController) registry.lookup("AuthenticationService");
-        IControllerFactory controllerFactory = (IControllerFactory) registry.lookup("ControllerFactory");
-        SessionDTO session = authController.authenticate("snoop@do.gg", "snoop@do.gg".toCharArray());
         ITeamController teamController = controllerFactory.getTeamController();
         ITournamentController controller = controllerFactory.getTournamentController();
         IPersonController personController = controllerFactory.getPersonController();
+        IDepartmentController departmentController = controllerFactory.getDepartmentController();
+
+        DepartmentDTO departmentBySportId = departmentController.getDepartmentBySportId(session, "5c05eb82e9a0326156979fcb");
+
         PersonDTO person = personController.getEntryDetails(session, "5bf4b57197710c31da9f3253");
 
         ListWrapper<TournamentDTO> tournamentByTrainerId1 = controller.getTournamentByTrainerId(session, session.getMyUserId());

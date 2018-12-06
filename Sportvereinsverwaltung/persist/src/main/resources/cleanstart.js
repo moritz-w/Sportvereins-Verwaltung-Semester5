@@ -358,6 +358,7 @@ function executeScript() {
     function generateRandomizedTournament(encounters, participants) {
         return {
             name: composeTournamentName(),
+            date: new Date("2019-01-01"),
             league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
             encounters: encounters,
             teams: participants
@@ -525,7 +526,7 @@ function executeScript() {
             league: snoopLeague,
             leagueName: "Dogg League",
             sportsName: "Football",
-            date: new Date("2018-01-01"),
+            date: new Date("2019-01-01"),
             encounters: [],
             teams: [
                 {

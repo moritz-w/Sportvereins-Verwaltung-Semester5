@@ -12,6 +12,7 @@ import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import org.apache.log4j.Logger;
@@ -108,7 +109,7 @@ public class LoopbackClientTest {
         teamA.setId("5c045201cbb3a266a8df2e4c");
         teamA.setTeam("5bf4b57197710c31da9f328a");
         teamA.setModificationType(ModificationType.MODIFIED);
-        ArrayList<PersonDTO> personDTOS = new ArrayList<>();
+        ArrayList<SquadMemberDTO> personDTOS = new ArrayList<>();
         //personDTOS.add(person);
         teamA.setParticipants(personDTOS);
         teams.add(teamA);

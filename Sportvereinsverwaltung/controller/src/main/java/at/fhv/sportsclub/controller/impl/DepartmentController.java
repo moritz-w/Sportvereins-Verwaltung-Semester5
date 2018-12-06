@@ -111,5 +111,18 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
         DepartmentEntity departmentBySportId = departmentRepository.getDepartmentBySportId(sportId);
         return map(departmentBySportId, DepartmentDTO.class, "DepartmentDTOMappingFull");
     }
+
+    public SportDTO getSportById(SessionDTO session, String sportId){
+        try {
+            SportEntity sport = departmentRepository.getSportById(sportId);
+            return map(sport, SportDTO.class, "SportEntityMappingLight");
+        } catch (InvalidInputDataException e) {
+            e.printStackTrace();
+            return new SportDTO(null, null, null, createErrorMessage("Invalid ID given"));
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return new SportDTO(null, null, null, createErrorMessage("No data could be obtained"));
+        }
+    }
     //endregion
 }

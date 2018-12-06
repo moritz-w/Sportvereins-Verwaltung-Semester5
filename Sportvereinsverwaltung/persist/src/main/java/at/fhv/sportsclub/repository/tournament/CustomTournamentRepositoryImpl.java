@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -118,6 +119,20 @@ public class CustomTournamentRepositoryImpl implements CustomTournamentRepositor
           where("teams.team").in(teamdIds)
         );
         return mongoOperations.find(q, TournamentEntity.class);
+    }
+
+    @Override
+    public void setTournamentName(String id, String name) {
+        Update up = new Update();
+        up.set("name", name);
+        mongoOperations.updateFirst(Query.query(where("_id").is(id)), up, TournamentEntity.class);
+    }
+
+    @Override
+    public void setTournamentDate(String id, LocalDate date) {
+        Update up = new Update();
+        up.set("date", date);
+        mongoOperations.updateFirst(Query.query(where("_id").is(id)), up, TournamentEntity.class);
     }
 
     private <T> void pushToArray(String documentId, String arrayName, T entity) {

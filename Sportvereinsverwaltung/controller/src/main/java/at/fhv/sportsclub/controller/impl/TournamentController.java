@@ -147,6 +147,13 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             } else {
                 return rejectRequest(saveResponse.getInfoMessage());
             }
+        } else {
+            if (tournament.getName() != null) {
+                tournamentRepository.setTournamentName(tournament.getId(), tournament.getName());
+            }
+            if (tournament.getDate() != null) {
+                tournamentRepository.setTournamentDate(tournament.getId(), tournament.getDate());
+            }
         }
 
         // save or update participating teams by pushing modified data to the document array over the corresponding repository methods

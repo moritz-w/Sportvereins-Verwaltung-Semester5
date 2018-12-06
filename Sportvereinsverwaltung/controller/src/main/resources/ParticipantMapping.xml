@@ -11,9 +11,18 @@
             <a>team</a>
             <b>team</b>
         </field>
-        <field map-id="PersonDTOMappingLight">
+        <field map-id="SquadMemberMapping">      <!--map-id="PersonDTOMappingLight"-->
             <a>participants</a>
             <b>participants</b>
+        </field>
+    </mapping>
+
+    <mapping map-id="SquadMemberMapping">
+        <class-a>at.fhv.sportsclub.entity.tournament.SquadMemberEntity</class-a>
+        <class-b>at.fhv.sportsclub.model.tournament.SquadMemberDTO</class-b>
+        <field custom-converter-id="personConverter">
+            <a>member</a>
+            <b>member</b>
         </field>
     </mapping>
 

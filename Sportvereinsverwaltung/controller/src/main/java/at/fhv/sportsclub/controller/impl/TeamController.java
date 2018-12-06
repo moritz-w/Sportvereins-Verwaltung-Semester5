@@ -128,8 +128,8 @@ public class TeamController extends CommonController<TeamDTO, TeamEntity, TeamRe
     @Override
     @RequiredPrivileges(category = "Team", accessLevel = {AccessLevel.READ})
     public ListWrapper<TeamDTO> getTeamsByTrainerId(SessionDTO session, String trainerPersonId){
-        ArrayList<String> trainerIds = new ArrayList<>();
-        trainerIds.add(trainerPersonId);
+        ArrayList<ObjectId> trainerIds = new ArrayList<>();
+        trainerIds.add(new ObjectId(trainerPersonId));
         List<TeamEntity> teamsByTrainer = this.teamRepository.getAllByTrainersIsContaining(trainerIds);
         if (teamsByTrainer.isEmpty()){
             return new ListWrapper<>(null, createErrorMessage("No team data could be obtained for the given trainer ID"));

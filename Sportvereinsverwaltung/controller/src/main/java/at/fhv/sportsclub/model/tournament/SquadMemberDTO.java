@@ -15,6 +15,9 @@ import java.io.Serializable;
 */
 @AllArgsConstructor
 public @Data class SquadMemberDTO implements Serializable, IDTO {
+
+    public SquadMemberDTO(){}
+
     private PersonDTO member;
     private boolean participating;
     private ResponseMessageDTO response;

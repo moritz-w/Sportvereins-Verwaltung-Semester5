@@ -7,6 +7,7 @@ import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.repository.person.PersonRepository;
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.dozer.Mapper;
 import org.dozer.MappingException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,16 +32,16 @@ public class TeamMemberResolver {
         this.resolverMapper = resolverMapper;
     }
 
-    public PersonDTO resolveFromObjectId(String id){
-        return internalResolve(id, "TeamMembersMappingLight");
+    public PersonDTO resolveFromObjectId(ObjectId id){
+        return internalResolve(id.toHexString(), "TeamMembersMappingLight");
     }
 
-    public PersonDTO resolveFromObjectIdFull(String id){
-        return internalResolve(id, "PersonDTOMappingFull");
+    public PersonDTO resolveFromObjectIdFull(ObjectId id){
+        return internalResolve(id.toHexString(), "PersonDTOMappingFull");
     }
 
-    public String resolveFromDTO(PersonDTO person) {
-        return person.getId();
+    public ObjectId resolveFromDTO(PersonDTO person) {
+        return new ObjectId(person.getId());
     }
 
     private PersonDTO internalResolve(String id, String mappingID){

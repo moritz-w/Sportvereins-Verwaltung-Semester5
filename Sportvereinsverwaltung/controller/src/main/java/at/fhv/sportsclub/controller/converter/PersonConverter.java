@@ -34,19 +34,23 @@ public class PersonConverter implements CustomConverter {
 
         if (source instanceof List && !((List) source).isEmpty()) {
 
-            if (((List) source).get(0) instanceof String){
+            if (((List) source).get(0) instanceof ObjectId){
                 ArrayList<PersonDTO> dtos = new ArrayList<>();
-                for (String id :(List<String>)source) {
+                for (ObjectId id :(List<ObjectId>)source) {
                     dtos.add(teamMemberResolver.resolveFromObjectId(id));
                 }
                 return dtos;
             } else if (((List) source).get(0) instanceof PersonDTO){
-                ArrayList<String> personIds = new ArrayList<>();
+                ArrayList<ObjectId> personIds = new ArrayList<>();
                 for (PersonDTO person : (List<PersonDTO>) source) {
                     personIds.add(teamMemberResolver.resolveFromDTO(person));
                 }
                 return personIds;
             }
+        } else if (source instanceof PersonDTO){
+            return teamMemberResolver.resolveFromDTO((PersonDTO) source);
+        } else if (source instanceof ObjectId) {
+            return teamMemberResolver.resolveFromObjectId((ObjectId) source);
         }
         return null;
     }

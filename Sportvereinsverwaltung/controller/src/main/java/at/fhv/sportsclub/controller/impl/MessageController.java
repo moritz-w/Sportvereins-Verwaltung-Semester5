@@ -12,7 +12,10 @@ import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.services.MessageGeneratorService;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
@@ -28,11 +31,9 @@ public class MessageController implements IMessageController {
     private ActiveMQConnectionFactory connectionFactory;
 
     private Connection connection;
-    private PersonController personController;
 
-    public MessageController(PersonController personController) {
+    public MessageController() {
         this.connectionFactory = new ActiveMQConnectionFactory("tcp://10.0.51.91:61616/");
-        this.personController = personController;
     }
 
     @Override
@@ -114,21 +115,18 @@ public class MessageController implements IMessageController {
             if(confirm != null) {
                 String replyTo = receivedMessage.getStringProperty("replyTo");
                 // Confirm Message muss hier generiert werden.
-                try {
-                    String sentMessage = receivedMessage.getText();
-                    PersonDTO player =  personController.getEntryDetails(sessionDTO, sessionDTO.getMyUserId());
-                    String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm, player);
-                    sendMessageToQueue(sessionDTO, message, replyTo);
-                }catch (RemoteException re){
-                    re.printStackTrace();
-                }
+                String sentMessage = receivedMessage.getText();
 
-
+                ApplicationContext appContext = new ClassPathXmlApplicationContext("controller-beans.xml");
+                PersonController personController = appContext.getBean(PersonController.class);
+                PersonDTO player = personController.getEntryDetails(sessionDTO, sessionDTO.getMyUserId());
+                String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm, player);
+                sendMessageToQueue(sessionDTO, message, replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));
             archiveQueueProducer.send(receivedMessage);
-        } catch (JMSException e) {
+        } catch (JMSException | RemoteException e) {
             e.printStackTrace();
         }
         return true;

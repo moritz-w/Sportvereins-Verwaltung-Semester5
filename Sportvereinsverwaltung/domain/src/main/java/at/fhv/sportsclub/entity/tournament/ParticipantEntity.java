@@ -13,5 +13,6 @@ public @Data class ParticipantEntity implements CommonEntity {
     private String id;
     private ObjectId team;
     private String teamName;
+    private String type;
     private List<SquadMemberEntity> participants;
 }

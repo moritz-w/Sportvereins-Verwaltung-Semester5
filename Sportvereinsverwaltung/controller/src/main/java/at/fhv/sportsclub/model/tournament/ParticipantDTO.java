@@ -24,6 +24,7 @@ public @Data class ParticipantDTO implements Serializable, IDTO {
 
     private String team;
     private String teamName;
+    private String type;
     private List<SquadMemberDTO> participants;
     private ResponseMessageDTO response;
 

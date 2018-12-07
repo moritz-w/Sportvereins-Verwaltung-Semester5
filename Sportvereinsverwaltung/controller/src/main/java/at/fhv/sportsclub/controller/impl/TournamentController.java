@@ -239,6 +239,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             return;
         }
         participantDTO.setTeamName(teamData.getName());
+        participantDTO.setType(teamData.getType());
         if (participantDTO.getParticipants() == null) {
             participantDTO.setParticipants(new ArrayList<>());
         }

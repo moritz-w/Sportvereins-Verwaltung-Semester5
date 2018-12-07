@@ -4,8 +4,6 @@ function executeScript() {
     var dbname = "sportsclub";
     var connection = "localhost:32768";     // default port: 27017
     var collections = ["Person", "Team", "Department", "Tournament"];
-    var snoopId = new ObjectId();
-    var snoopTeam = new ObjectId();
 
     /* Random data config */
     var personDataEntries = 50;
@@ -329,7 +327,8 @@ function executeScript() {
                     "$id": personIdPool[getRandomNumber(0, personIdPool.length)]
                 }*/
             ],
-            league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)]
+            league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
+            type: "intern"
         };
     }
 
@@ -385,6 +384,7 @@ function executeScript() {
         for (index = 0; index < teamDataEntries; index++) {
             db.Team.insertOne(generateRandomizedTeam());
         }
+/*
 
         for (index = 0; index < tournamentDataEntries; index++) {
             var embeddedParticipantsArray = [];
@@ -397,6 +397,7 @@ function executeScript() {
             }
             db.Tournament.insertOne(generateRandomizedTournament(embeddedEncountersArray, embeddedParticipantsArray));
         }
+*/
 
     }
 
@@ -406,6 +407,8 @@ function executeScript() {
     collections.forEach(function (element) {
         db.getCollection(element).drop();
     });
+
+    var snoopId = new ObjectId();
 
     db.Person.insertMany([
         {
@@ -481,11 +484,16 @@ function executeScript() {
 
     var sliceIndex = getRandomNumber(0, personIdPool.length - teamSize);
     var snoopTeamName = composeTeamName();
+    var dreTeamName = composeTeamName();
+    var eazyETeamName = composeTeamName();
     var snoopDepartment = new ObjectId();
     var snoopLeague = new ObjectId();
     var snoopSport = new ObjectId();
+    var snoopTeam = new ObjectId();
+    var eazyETeam = new ObjectId();
+    var dreTeam = new ObjectId();
 
-    db.Team.insertOne(
+    db.Team.insertMany([
         {
             _id: snoopTeam,
             name: snoopTeamName,
@@ -496,9 +504,62 @@ function executeScript() {
                     "$id": snoopId
                 }*/
             ],
-            league: snoopLeague
+            league: snoopLeague,
+            type: "Intern"
+        },
+        {
+            _id: dreTeam,
+            name: dreTeamName,
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [ snoopId
+                /*{
+                    "$ref": "Person",
+                    "$id": snoopId
+                }*/
+            ],
+            league: snoopLeague,
+            type: "Intern"
+        },
+        {
+            _id: eazyETeam,
+            name: eazyETeamName,
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [ snoopId
+                /*{
+                    "$ref": "Person",
+                    "$id": snoopId
+                }*/
+            ],
+            league: snoopLeague,
+            type: "Intern"
+        },
+        {
+            _id: new ObjectId(),
+            name: composeTeamName(),
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [ snoopId
+                /*{
+                    "$ref": "Person",
+                    "$id": snoopId
+                }*/
+            ],
+            league: snoopLeague,
+            type: "Intern"
+        },
+        {
+            _id: new ObjectId(),
+            name: composeTeamName(),
+            members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
+            trainers: [ snoopId
+                /*{
+                    "$ref": "Person",
+                    "$id": snoopId
+                }*/
+            ],
+            league: snoopLeague,
+            type: "Intern"
         }
-    );
+    ]);
 
     db.Department.insertOne(
         {
@@ -511,11 +572,11 @@ function executeScript() {
             sports: [
                 {
                     _id: snoopSport,
-                    name: "Wake and Bake",
+                    name: "Sheep Rodeo",
                     leagues: [
                         {
                             _id: snoopLeague,
-                            name: "Dogg League"
+                            name: "Sheep Classics"
                         }
                     ]
                 }
@@ -527,6 +588,7 @@ function executeScript() {
         {
             name: composeTournamentName(),
             league: snoopLeague,
+            sport: snoopSport,
             leagueName: "Dogg League",
             sportsName: "Football",
             date: new Date("2019-01-01"),
@@ -535,7 +597,22 @@ function executeScript() {
                 {
                     _id: new ObjectId(),
                     teamName: snoopTeamName,
+                    type: "Intern",
                     team: snoopTeam,
+                    participants: []
+                },
+                {
+                    _id: new ObjectId(),
+                    teamName: dreTeamName,
+                    type: "Intern",
+                    team: dreTeam,
+                    participants: []
+                },
+                {
+                    _id: new ObjectId(),
+                    teamName: eazyETeamName,
+                    type: "Intern",
+                    team: eazyETeam,
                     participants: []
                 }
             ]

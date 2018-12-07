@@ -17,7 +17,8 @@ public @Data class TeamEntity implements CommonEntity {
     @Id
     private String id;
 
-    private String name, type;
+    private String name;
+    private String type;
     //@DBRef
     private List<ObjectId> members;
     //@DBRef

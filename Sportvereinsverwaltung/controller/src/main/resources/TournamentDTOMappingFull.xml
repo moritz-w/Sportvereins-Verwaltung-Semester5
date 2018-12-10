@@ -11,6 +11,10 @@
             <a>league</a>
             <b>league</b>
         </field>
+        <field custom-converter-id="objectIdConverter">
+            <a>sport</a>
+            <b>sport</b>
+        </field>
         <field map-id="ParticipantMapping">
             <a>teams</a>
             <b>teams</b>

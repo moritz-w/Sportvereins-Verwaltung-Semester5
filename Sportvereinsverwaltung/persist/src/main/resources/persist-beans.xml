@@ -3,20 +3,30 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-    <context:annotation-config/>
+    <cache:annotation-driven/>
+
+    <bean class="org.springframework.cache.support.SimpleCacheManager" id="cacheManager">
+        <property name="caches">
+            <bean class="org.springframework.cache.concurrent.ConcurrentMapCache">
+                <constructor-arg value="teams"/>
+            </bean>
+        </property>
+    </bean>
+
     <context:component-scan base-package="at.fhv.sportsclub.repository"/>
     <context:property-placeholder location="classpath:mongo.properties"/>
 
     <mongo:repositories
-            base-package="at.fhv.sportsclub"
+            base-package="at.fhv.sportsclub.repository"
             base-class="at.fhv.sportsclub.repository.CommonRepositoryImpl">
     </mongo:repositories>
 
-    <mongo:mapping-converter id="mongoConverter">
+<!--    <mongo:mapping-converter id="mongoConverter">
         <mongo:custom-converters base-package="at.fhv.sportsclub.repository.converters"/>
-    </mongo:mapping-converter>
+    </mongo:mapping-converter>-->
 
     <bean id="mongoClient" class="com.mongodb.MongoClient">
         <constructor-arg>
@@ -31,8 +41,7 @@
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg ref="mongoDbFactory"/>
-        <constructor-arg ref="mongoConverter"/>
+<!--        <constructor-arg ref="mongoConverter"/>-->
     </bean>
-
 
 </beans>

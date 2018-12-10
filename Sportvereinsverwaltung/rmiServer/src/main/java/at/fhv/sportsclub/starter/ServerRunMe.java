@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.starter;
 
+import at.fhv.sportsclub.controller.impl.ConfigurationController;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import at.fhv.sportsclub.factory.ControllerFactoryImpl;
 import at.fhv.sportsclub.factory.IControllerFactory;
@@ -26,11 +27,17 @@ import java.rmi.server.UnicastRemoteObject;
 public class ServerRunMe extends Application {
 
     private static Logger rootLogger = Logger.getRootLogger();
+    private static ConfigurationController configurationController;
     private static Registry registry;
 
     public static void createRMIRegistry(int port) throws RemoteException{
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("rmi-beans.xml");
+        ApplicationContext appContext = new ClassPathXmlApplicationContext(     // "persist-beans.xml", "controller-beans.xml", "security-beans.xml",
+                "rmi-beans.xml"
+        );
+        boolean active = ((ClassPathXmlApplicationContext) appContext).isActive();
         IControllerFactory controllerFactory = appContext.getBean(ControllerFactoryImpl.class);
+        configurationController = appContext.getBean(ConfigurationController.class);
+
         IAuthenticationController authenticationController = appContext.getBean(AuthenticationController.class);
 
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(controllerFactory,0);
@@ -45,7 +52,7 @@ public class ServerRunMe extends Application {
         rootLogger.info("RMI registry started");
     }
 
-    public static void unbindRMIRegistry(){
+    static void unbindRMIRegistry(){
         if(registry == null){return;}
         try {
             registry.unbind("AuthenticationService");
@@ -66,5 +73,9 @@ public class ServerRunMe extends Application {
 
     public static void main(String[] args) throws RemoteException {
         launch(args);
+    }
+
+    static ConfigurationController getConfigurationController(){
+        return configurationController;
     }
 }

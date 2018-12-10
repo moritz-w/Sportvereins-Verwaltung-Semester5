@@ -39,6 +39,10 @@ public class SportsResolver {
         return internalResolve(id, "SportEntityMappingFull");
     }
 
+    public ObjectId resolveFromDTO(SportDTO dto){
+        return new ObjectId(dto.getId());
+    }
+
     private SportDTO internalResolve(String id, String mappingID){
         SportDTO sportDTO = null;
         try {
@@ -58,10 +62,6 @@ public class SportsResolver {
             logger.warn("Not data could be obtained for the given ID " + id, e);
         }
         return sportDTO == null ? new SportDTO() : sportDTO;
-    }
-
-    public ObjectId resolveFromDTO(SportDTO dto){
-        return new ObjectId(dto.getId());
     }
 
 }

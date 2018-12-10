@@ -33,7 +33,6 @@ public class LdapAuthenticationProvider implements AuthenticationProvider{
         ldapParams.put(Context.SECURITY_AUTHENTICATION, "simple");
         ldapParams.put(Context.SECURITY_PRINCIPAL, username);
         ldapParams.put(Context.SECURITY_CREDENTIALS, password);
-        ldapParams.put("com.sun.jndi.ldap.read.timeout", "1000");
 
         // Specify SSL
         ldapParams.put(Context.SECURITY_PROTOCOL, "ssl");

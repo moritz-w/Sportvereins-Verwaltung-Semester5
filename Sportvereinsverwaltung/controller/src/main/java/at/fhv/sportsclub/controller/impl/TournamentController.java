@@ -18,6 +18,7 @@ import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
 import at.fhv.sportsclub.repository.tournament.TournamentRepository;
+import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @Scope("prototype")
 public class TournamentController extends CommonController<TournamentDTO, TournamentEntity, TournamentRepository> implements ITournamentController {
 
+    private static final Logger logger = Logger.getRootLogger();
     private final TournamentRepository tournamentRepository;
     private final DepartmentController departmentController;
     private final TeamController teamController;
@@ -145,6 +147,13 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             } else {
                 return rejectRequest(saveResponse.getInfoMessage());
             }
+        } else {
+            if (tournament.getName() != null) {
+                tournamentRepository.setTournamentName(tournament.getId(), tournament.getName());
+            }
+            if (tournament.getDate() != null) {
+                tournamentRepository.setTournamentDate(tournament.getId(), tournament.getDate());
+            }
         }
 
         // save or update participating teams by pushing modified data to the document array over the corresponding repository methods
@@ -190,27 +199,38 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
     //region Data helper methods
     private void denormalizeTournament(TournamentDTO tournamentDTO){
-        if (tournamentDTO.getLeague() == null) {
+        if (tournamentDTO.getLeague() == null && tournamentDTO.getSport() == null) {
             return;
         }
-        // refactor to use repositories instead? would be nicer and faster, but ignores authorization
-        SportDTO sportDTO = this.departmentController.getSportByLeagueId(this.session, tournamentDTO.getLeague());
-        if(sportDTO.getId() == null){
-            return;
-        }
-        List<LeagueDTO> leagueDTOs = new LinkedList<>();
-        for (LeagueDTO leagueDTO : sportDTO.getLeagues()) {
-            if(leagueDTO.getId().equals(tournamentDTO.getLeague())){
-                leagueDTOs.add(leagueDTO);
+        if (tournamentDTO.getLeague() != null) {
+            // refactor to use repositories instead? would be nicer and faster, but ignores authorization
+            SportDTO sportDTO = this.departmentController.getSportByLeagueId(this.session, tournamentDTO.getLeague());
+            if (sportDTO.getId() == null) {
+                return;
             }
-        }
-        if (leagueDTOs.isEmpty()) {
-            return;
-        }
+            List<LeagueDTO> leagueDTOs = new LinkedList<>();
+            for (LeagueDTO leagueDTO : sportDTO.getLeagues()) {
+                if (leagueDTO.getId().equals(tournamentDTO.getLeague())) {
+                    leagueDTOs.add(leagueDTO);
+                }
+            }
+            if (leagueDTOs.isEmpty()) {
+                return;
+            }
 
-        LeagueDTO leagueDTO = leagueDTOs.get(0);
-        tournamentDTO.setLeagueName(leagueDTO.getName());
-        tournamentDTO.setSportsName(sportDTO.getName());
+            LeagueDTO leagueDTO = leagueDTOs.get(0);
+            tournamentDTO.setLeagueName(leagueDTO.getName());
+            tournamentDTO.setSportsName(sportDTO.getName());
+            tournamentDTO.setSport(sportDTO.getId());
+        } else if (tournamentDTO.getSport() != null) {
+            SportDTO sport = this.departmentController.getSportById(session, tournamentDTO.getSport());
+            if (sport.getResponse() != null){
+                logger.error(sport.getResponse());
+                return;
+            }
+            tournamentDTO.setSportsName(sport.getName());
+            tournamentDTO.setLeague("");
+        }
     }
 
     private void denormalizeParticipant(ParticipantDTO participantDTO){
@@ -219,6 +239,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             return;
         }
         participantDTO.setTeamName(teamData.getName());
+        participantDTO.setType(teamData.getType());
         if (participantDTO.getParticipants() == null) {
             participantDTO.setParticipants(new ArrayList<>());
         }

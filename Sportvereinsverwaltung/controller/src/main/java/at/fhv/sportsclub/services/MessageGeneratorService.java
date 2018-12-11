@@ -44,7 +44,7 @@ public class MessageGeneratorService {
         return messages;
     }
 
-    public static String informPlayerPartOfTeam(TournamentDTO tournament, PersonDTO player, PersonDTO coach){
+    public static String informPlayerPartOfTeam(TournamentDTO tournament, PersonEntity player, PersonDTO coach){
         //Spieler informieren das sein trainer ihn für das turnier nominiert hat
 
         StringBuilder sb = new StringBuilder();

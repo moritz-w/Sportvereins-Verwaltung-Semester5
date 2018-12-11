@@ -2,7 +2,6 @@ package at.fhv.sportsclub.security.authentication;
 
 import at.fhv.sportsclub.model.security.SessionDTO;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /*
@@ -16,7 +15,7 @@ import java.rmi.RemoteException;
  * those interface. But for the Authentication Controller, no proxy should intercept
  * the method calls. That's why it was moved to this package.
  */
-public interface IAuthenticationController extends Remote{
+public interface IAuthenticationController extends java.rmi.Remote{
     SessionDTO authenticate(String userId, char[] password) throws RemoteException;
     void logout(SessionDTO session) throws RemoteException;
 }

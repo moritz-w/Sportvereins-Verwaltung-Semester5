@@ -19,6 +19,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by Alex on 06.11.2018.
@@ -72,7 +74,51 @@ public class ServerRunMe extends Application {
     }
 
     public static void main(String[] args) throws RemoteException {
-        launch(args);
+        Options options = argParse(args);
+        if(options.isSet("u")){
+            int port = 1099;
+            if(options.isSet("p")){
+                port = new Integer(options.getParam("p"));
+            }
+            createRMIRegistry(port);
+        } else {
+            launch(args);
+        }
+    }
+
+    private static Options argParse(String[] args){
+        Options options = new Options();
+        for (String arg : args) {
+            options.addStringArg(arg);
+        }
+        return options;
+    }
+
+    private static class Options {
+        private HashMap<String, String> argMap;
+        private String previous;
+
+        Options() {
+            this.argMap = new HashMap<>();
+        }
+
+        void addStringArg(String arg){
+            if (arg.contains("-")) {
+                previous = arg.replace("-", "");
+                argMap.put(previous, "");
+            } else {
+                argMap.put(previous, arg);
+            }
+        }
+
+        boolean isSet(String arg){
+            return argMap.containsKey(arg);
+        }
+
+        String getParam(String arg){
+            return argMap.getOrDefault(arg, "");
+        }
+
     }
 
     static ConfigurationController getConfigurationController(){

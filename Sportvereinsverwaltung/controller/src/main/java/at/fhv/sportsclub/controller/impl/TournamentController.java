@@ -143,6 +143,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO participant : tournament.getTeams()) {
                 denormalizeParticipant(participant);
+
                 this.informCoaches(participant, tournament);
             }
 
@@ -177,13 +178,15 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO updateCandidate : updateCandidates) {
                 denormalizeParticipant(updateCandidate);
-                this.informCoaches(updateCandidate, tournament);
-                for (SquadMemberDTO squadMember :
-                        updateCandidate.getParticipants()) {
+                if(updateCandidate.getType().equals("intern") || updateCandidate.getType().equals("Intern")){
+                    this.informCoaches(updateCandidate, tournament);
+                    for (SquadMemberDTO squadMember :
+                            updateCandidate.getParticipants()) {
                         if (!squadMember.isInformed()){
                             informPlayers(squadMember, tournament, updateCandidate);
                             squadMember.setInformed(true);
                         }
+                    }
                 }
             }
 
@@ -268,19 +271,22 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     private void informPlayers(SquadMemberDTO squadMember, TournamentDTO tournament, ParticipantDTO updateCandidate){
             Optional<PersonEntity> playerOptional = personRepository.findById(squadMember.getMember().getId());
             PersonEntity player = playerOptional.get();
-            PersonDTO coach = teamController.getById(session, updateCandidate.getTeam()).getTrainers().get(0);
+            Optional<PersonEntity> coachOptional = personRepository.findById(session.getMyUserId());
+            PersonEntity coach = coachOptional.get();
             String message = MessageGeneratorService.informPlayerPartOfTeam(tournament, player, coach);
-            messageController.sendMessageToQueue(session, message, player.getId());
+            messageController.sendMessageToQueue(session, message, player.getId(), session.getMyUserId());
     }
 
     private void informCoaches(ParticipantDTO participant, TournamentDTO tournament){
         TeamDTO team = teamController.getEntryDetails(session, participant.getTeam());
         List<String> messages = MessageGeneratorService.informCoachInviteToTurnament(team.getTrainers(), tournament);
-        int i = 0;
-        for (String message :
-                messages) {
-            messageController.sendMessageToQueue(session, message,team.getTrainers().get(i).getId());
-            i++;
+        if(messages != null){
+            int i = 0;
+            for (String message :
+                    messages) {
+                messageController.sendMessageToQueue(session, message,team.getTrainers().get(i).getId());
+                i++;
+            }
         }
     }
 }

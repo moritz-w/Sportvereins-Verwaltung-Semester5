@@ -29,22 +29,26 @@ public class MessageGeneratorService {
     public static List<String> informCoachInviteToTurnament(List<PersonDTO> coaches, TournamentDTO tournament){
         //Trainer informieren, dass er am tuniert teil nimmt und einen kader erstellen muss
 
-        StringBuilder sb = new StringBuilder();
-        LinkedList<String> messages = new LinkedList<>();
-        for (PersonDTO coach :
-                coaches) {
-            sb.append("Dear " + coach.getFirstName() + " " + coach.getLastName() + ",");
-            sb.append("\n\n");
-            sb.append("You hav been invited to this tournament: " + tournament.getName());
-            sb.append("\nThe tournament will take place on " + tournament.getDate());
-            sb.append("\nIf you are the head coach we need you to put together a team which you want to take to this tournament.\n");
-            sb.append("Kind regards\n");
-            messages.add(sb.toString());
+        if(coaches == null || coaches.size() == 0){
+            return null;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            LinkedList<String> messages = new LinkedList<>();
+            for (PersonDTO coach :
+                    coaches) {
+                sb.append("Dear " + coach.getFirstName() + " " + coach.getLastName() + ",");
+                sb.append("\n\n");
+                sb.append("You hav been invited to this tournament: " + tournament.getName());
+                sb.append("\nThe tournament will take place on " + tournament.getDate());
+                sb.append("\nIf you are the head coach we need you to put together a team which you want to take to this tournament.\n");
+                sb.append("Kind regards\n");
+                messages.add(sb.toString());
+            }
+            return messages;
         }
-        return messages;
     }
 
-    public static String informPlayerPartOfTeam(TournamentDTO tournament, PersonEntity player, PersonDTO coach){
+    public static String informPlayerPartOfTeam(TournamentDTO tournament, PersonEntity player, PersonEntity coach){
         //Spieler informieren das sein trainer ihn für das turnier nominiert hat
 
         StringBuilder sb = new StringBuilder();

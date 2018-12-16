@@ -117,16 +117,13 @@ public class MessageController implements IMessageController {
                 // Confirm Message muss hier generiert werden.
                 String sentMessage = receivedMessage.getText();
 
-                ApplicationContext appContext = new ClassPathXmlApplicationContext("controller-beans.xml");
-                PersonController personController = appContext.getBean(PersonController.class);
-                PersonDTO player = personController.getEntryDetails(sessionDTO, sessionDTO.getMyUserId());
-                String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm, player);
+                String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm);
                 sendMessageToQueue(sessionDTO, message, replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));
             archiveQueueProducer.send(receivedMessage);
-        } catch (JMSException | RemoteException e) {
+        } catch (JMSException e) {
             e.printStackTrace();
         }
         return true;

@@ -536,7 +536,7 @@ function executeScript() {
             _id: dreTeam,
             name: dreTeamName,
             members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
-            trainers: [ billyId
+            trainers: [ snoopId
                 /*{
                     "$ref": "Person",
                     "$id": snoopId

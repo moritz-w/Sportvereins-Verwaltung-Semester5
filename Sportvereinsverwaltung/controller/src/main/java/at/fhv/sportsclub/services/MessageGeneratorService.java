@@ -63,7 +63,7 @@ public class MessageGeneratorService {
         return sb.toString();
     }
 
-    public static String informCoachIfPlayerTakesPartOrNot(String sentMessage, Boolean confirm, PersonDTO player){
+    public static String informCoachIfPlayerTakesPartOrNot(String sentMessage, Boolean confirm){
         //Der spieler muss dem trainer bescheid geben ob er am tunier teilnemen wird oder nicht
         StringBuilder sb = new StringBuilder();
 
@@ -71,12 +71,11 @@ public class MessageGeneratorService {
         sb.append(sentMessage);
         sb.append("\n\n");
         if (confirm.booleanValue()){
-            sb.append(player.getFirstName() + player.getLastName() + "will be able to take part in this event");
+            sb.append("This player will be able to take part in this event");
         } else {
-            sb.append("Unfortunately " + player.getFirstName() + player.getLastName() + "will not be able to take part in this event");
+            sb.append("Unfortunately this player will not be able to take part in this event");
         }
         sb.append("\n\nKind regards");
-
         return sb.toString();
     }
 

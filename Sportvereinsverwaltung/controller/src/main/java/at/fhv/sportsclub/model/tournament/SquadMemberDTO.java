@@ -23,5 +23,5 @@ public @Data class SquadMemberDTO implements Serializable, IDTO {
     private PersonDTO member;
     private boolean participating;
     private ResponseMessageDTO response;
-    private boolean informed;
+    private boolean alreadyAddedToSquad;
 }

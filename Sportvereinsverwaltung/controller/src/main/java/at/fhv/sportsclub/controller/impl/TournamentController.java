@@ -178,13 +178,14 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO updateCandidate : updateCandidates) {
                 denormalizeParticipant(updateCandidate);
-                if(updateCandidate.getType().equals("intern") || updateCandidate.getType().equals("Intern")){
+                if( ( updateCandidate.getType().equals("intern")   ||   updateCandidate.getType().equals("Intern")   )    ){
+                    /*Coach is informed althour he already knows about tournament*/
                     this.informCoaches(updateCandidate, tournament);
                     for (SquadMemberDTO squadMember :
                             updateCandidate.getParticipants()) {
-                        if (!squadMember.isInformed()){
+                        if (!squadMember.isAlreadyAddedToSquad()){
                             informPlayers(squadMember, tournament, updateCandidate);
-                            squadMember.setInformed(true);
+                            squadMember.setAlreadyAddedToSquad(true);
                         }
                     }
                 }

@@ -10,7 +10,7 @@ public class SpringContextBeanFactory {
 
     public static SpringContextBean getInstance(){
         if (contextBean == null) {
-            return new SpringContextBean();
+            contextBean = new SpringContextBean();
         }
         return contextBean;
     }

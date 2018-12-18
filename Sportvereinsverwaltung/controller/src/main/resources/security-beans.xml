@@ -22,7 +22,7 @@
         </aop:aspect>
     </aop:config>
 
-    <bean id="sessionManager" class="at.fhv.sportsclub.security.session.SimpleSessionManager">
+    <bean id="sessionManager" class="at.fhv.sportsclub.security.session.SimpleSessionManager" scope="singleton">
         <constructor-arg>
             <bean class="at.fhv.sportsclub.security.session.SimpleSessionIdService"/>
         </constructor-arg>

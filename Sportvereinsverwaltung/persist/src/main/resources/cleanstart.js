@@ -328,7 +328,7 @@ function executeScript() {
                 }*/
             ],
             league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
-            type: "intern"
+            type: "Intern"
         };
     }
 

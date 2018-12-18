@@ -11,6 +11,7 @@ import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import at.fhv.sportsclub.security.exception.SessionInvalidException;
 import at.fhv.sportsclub.security.session.SessionManager;
+import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -28,6 +29,7 @@ import java.util.*;
 @Component
 public class AuthorizationController {
 
+    private static final Logger logger = Logger.getRootLogger();
     private final SessionManager sessionManager;
 
     @Autowired
@@ -59,7 +61,6 @@ public class AuthorizationController {
                     return injectResponse(returnType, "Insufficient access rights");
                 }
             } catch (SessionInvalidException e) {
-                e.printStackTrace();
                 return injectResponse(returnType, e.getMessage());
 
             }

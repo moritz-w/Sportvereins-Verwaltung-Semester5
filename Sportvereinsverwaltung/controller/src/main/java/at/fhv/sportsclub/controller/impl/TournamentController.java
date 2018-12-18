@@ -132,7 +132,8 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             emptyResult.setResponse(responseMessageDTO);
             return emptyResult;
         }
-         // if properties in the tournament were modified like the league or tournament name (excludes arrays)
+
+        // if properties in the tournament were modified like the league or tournament name (excludes arrays)
         if(tournament.getModificationType() == ModificationType.MODIFIED){
             denormalizeTournament(tournament);
         } else if (tournament.getModificationType() == ModificationType.REMOVED){

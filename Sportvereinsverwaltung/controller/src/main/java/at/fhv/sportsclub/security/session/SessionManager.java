@@ -5,6 +5,7 @@ import at.fhv.sportsclub.model.security.RoleDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.security.UserDetails;
 import at.fhv.sportsclub.security.exception.SessionInvalidException;
+import org.apache.log4j.Logger;
 
 import java.beans.Encoder;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +14,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
       Created: 14.11.2018
@@ -22,13 +24,14 @@ import java.util.List;
 public abstract class SessionManager<T> {
 
     private static final Long sessionTime = 360000L;
+    private static final Logger logger = Logger.getRootLogger();
 
     private SessionIdService<T> sessionIdService;
-    private HashMap<T, Session> sessionStore;
+    private volatile ConcurrentHashMap<T, Session> sessionStore;
 
     public SessionManager(SessionIdService<T> sessionIdService){
         this.sessionIdService = sessionIdService;
-        this.sessionStore = new HashMap<>();
+        this.sessionStore = new ConcurrentHashMap<>();
     }
 
     public SessionDTO<T> createNewSession(UserDetails userDetails){
@@ -68,10 +71,12 @@ public abstract class SessionManager<T> {
     private String validateSession(SessionDTO<T> session){
         Session validSession = sessionStore.get(session.getSessionId());
         if (validSession == null){
+            logger.info("Session ID not found " + session.getSessionId());
             return "Session ID invalid";
         }
         UserDetails userDetails = validSession.getUserDetails();
         if (!sessionIdService.validateSessionId(session.getSessionId(), userDetails)){
+            logger.info("Session ID validation with user details failed for " + session.getSessionId());
             return "Session ID invalid";
         }
         if(isExpired(validSession.getExpires())){

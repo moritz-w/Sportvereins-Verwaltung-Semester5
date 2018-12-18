@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
  * Created by Alex on 06.11.2018.
  */
 
-@Component
+@Component("rmiControllerFactory")
 public class ControllerFactoryImpl implements IControllerFactory {
 
     @Lookup

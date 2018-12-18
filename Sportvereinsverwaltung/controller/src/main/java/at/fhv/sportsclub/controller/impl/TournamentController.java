@@ -3,6 +3,7 @@ package at.fhv.sportsclub.controller.impl;
 import at.fhv.sportsclub.controller.common.CommonController;
 import at.fhv.sportsclub.controller.common.RequiredPrivileges;
 import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.entity.tournament.EncounterEntity;
 import at.fhv.sportsclub.entity.tournament.ParticipantEntity;
 import at.fhv.sportsclub.entity.tournament.TournamentEntity;
@@ -11,12 +12,15 @@ import at.fhv.sportsclub.model.common.ModificationType;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
 import at.fhv.sportsclub.model.dept.LeagueDTO;
 import at.fhv.sportsclub.model.dept.SportDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.team.TeamDTO;
 import at.fhv.sportsclub.model.tournament.EncounterDTO;
 import at.fhv.sportsclub.model.tournament.ParticipantDTO;
+import at.fhv.sportsclub.model.tournament.SquadMemberDTO;
 import at.fhv.sportsclub.model.tournament.TournamentDTO;
+import at.fhv.sportsclub.repository.person.PersonRepository;
 import at.fhv.sportsclub.repository.tournament.TournamentRepository;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -25,12 +29,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Service;
+import at.fhv.sportsclub.services.MessageGeneratorService;
+
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +44,8 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     private final TournamentRepository tournamentRepository;
     private final DepartmentController departmentController;
     private final TeamController teamController;
+    private final MessageController messageController;
+    private final PersonRepository personRepository;
 
     private SessionDTO session;
 
@@ -48,12 +53,16 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
     public TournamentController(
             TournamentRepository repository,
             DepartmentController departmentController,
-            TeamController teamController
+            TeamController teamController,
+            MessageController messageController,
+            PersonRepository personRepository
     ) {
         super(repository, TournamentDTO.class, TournamentEntity.class);
         this.tournamentRepository = repository;
         this.departmentController = departmentController;
         this.teamController = teamController;
+        this.messageController = messageController;
+        this.personRepository = personRepository;
     }
     // region RMI wrapper methods
     @Override
@@ -123,6 +132,7 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             emptyResult.setResponse(responseMessageDTO);
             return emptyResult;
         }
+
         // if properties in the tournament were modified like the league or tournament name (excludes arrays)
         if(tournament.getModificationType() == ModificationType.MODIFIED){
             denormalizeTournament(tournament);
@@ -134,6 +144,8 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO participant : tournament.getTeams()) {
                 denormalizeParticipant(participant);
+
+                this.informCoaches(participant, tournament);
             }
 
             tournament.setEncounters(new ArrayList<>());
@@ -154,12 +166,12 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             if (tournament.getDate() != null) {
                 tournamentRepository.setTournamentDate(tournament.getId(), tournament.getDate());
             }
-        }
+        } 
 
         // save or update participating teams by pushing modified data to the document array over the corresponding repository methods
         if(tournament.getTeams() != null && !tournament.getTeams().isEmpty()){
             List<ParticipantDTO> updateCandidates = tournament.getTeams().stream()
-                    .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.MODIFIED)
+                    .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.MODIFIED || participantDTO.getModificationType() == ModificationType.INFORMEDANDMODIFIED)
                     .collect(Collectors.toList());
             List<ParticipantDTO> deleteCandidates = tournament.getTeams().stream()
                     .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.REMOVED)
@@ -167,6 +179,19 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
             for (ParticipantDTO updateCandidate : updateCandidates) {
                 denormalizeParticipant(updateCandidate);
+                if( ( updateCandidate.getType().equals("intern")   ||   updateCandidate.getType().equals("Intern")   )    ){
+                    /*Coach is informed althour he already knows about tournament*/
+                    if(updateCandidate.getModificationType() != ModificationType.INFORMEDANDMODIFIED){
+                        this.informCoaches(updateCandidate, tournament);
+                    }
+                    for (SquadMemberDTO squadMember :
+                            updateCandidate.getParticipants()) {
+                        if (!squadMember.isAlreadyAddedToSquad()){
+                            informPlayers(squadMember, tournament, updateCandidate);
+                            squadMember.setAlreadyAddedToSquad(true);
+                        }
+                    }
+                }
             }
 
             tournamentRepository.addTeamToTournament(
@@ -247,4 +272,25 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
 
     //endregion
 
+    private void informPlayers(SquadMemberDTO squadMember, TournamentDTO tournament, ParticipantDTO updateCandidate){
+            Optional<PersonEntity> playerOptional = personRepository.findById(squadMember.getMember().getId());
+            PersonEntity player = playerOptional.get();
+            Optional<PersonEntity> coachOptional = personRepository.findById(session.getMyUserId());
+            PersonEntity coach = coachOptional.get();
+            String message = MessageGeneratorService.informPlayerPartOfTeam(tournament, player, coach);
+            messageController.sendMessageToQueue(session, message, player.getId(), session.getMyUserId());
+    }
+
+    private void informCoaches(ParticipantDTO participant, TournamentDTO tournament){
+        TeamDTO team = teamController.getEntryDetails(session, participant.getTeam());
+        List<String> messages = MessageGeneratorService.informCoachInviteToTurnament(team.getTrainers(), tournament);
+        if(messages != null){
+            int i = 0;
+            for (String message :
+                    messages) {
+                messageController.sendMessageToQueue(session, message,team.getTrainers().get(i).getId());
+                i++;
+            }
+        }
+    }
 }

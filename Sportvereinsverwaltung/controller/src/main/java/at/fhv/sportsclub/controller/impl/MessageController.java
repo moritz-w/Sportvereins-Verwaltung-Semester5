@@ -4,16 +4,21 @@ import at.fhv.sportsclub.controller.interfaces.IMessageController;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.jms.*;
 import javax.jms.Queue;
 
+import at.fhv.sportsclub.model.message.MessageDTO;
+import at.fhv.sportsclub.model.person.PersonDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
-import lombok.Setter;
+import at.fhv.sportsclub.services.MessageGeneratorService;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -65,8 +70,8 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username) {
-        LinkedList<Message> result = new LinkedList<>();
+    public List<MessageDTO> browseMessagesForUser(SessionDTO sessionDTO, String username) {
+        LinkedList<MessageDTO> result = new LinkedList<>();
 
         try {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -76,7 +81,16 @@ public class MessageController implements IMessageController {
 
             // The newer Message will be insert at the beginning.
             while(enumeration.hasMoreElements()) {
-                result.addFirst((Message) enumeration.nextElement());
+                TextMessage next = (TextMessage) enumeration.nextElement();
+                result.addFirst(
+                        new MessageDTO(
+                                next.getStringProperty("username"),
+                                next.getText(),
+                                next.getStringProperty("replyTo"),
+                                next.getJMSCorrelationID(),
+                                null
+                        )
+                );
             }
         } catch (JMSException e) {
             e.printStackTrace();
@@ -85,7 +99,7 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage) {
+    public boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, Boolean confirm) {
         try {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -98,9 +112,13 @@ public class MessageController implements IMessageController {
                 return false;
             }
 
-            if(replyMessage != null) {
+            if(confirm != null) {
                 String replyTo = receivedMessage.getStringProperty("replyTo");
-                sendMessageToQueue(sessionDTO, receivedMessage.getText(), replyTo);
+                // Confirm Message muss hier generiert werden.
+                String sentMessage = receivedMessage.getText();
+
+                String message = MessageGeneratorService.informCoachIfPlayerTakesPartOrNot(sentMessage, confirm);
+                sendMessageToQueue(sessionDTO, message, replyTo);
             }
 
             MessageProducer archiveQueueProducer = session.createProducer(session.createQueue("archiveQueue"));

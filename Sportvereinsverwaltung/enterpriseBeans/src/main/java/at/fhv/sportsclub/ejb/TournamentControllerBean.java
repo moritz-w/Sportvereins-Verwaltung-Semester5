@@ -36,7 +36,7 @@ public class TournamentControllerBean implements ITournamentController {
     @Override
     public TournamentDTO getEntryDetails(SessionDTO session, String id) {
         try {
-            tournamentController.getEntryDetails(session, id);
+            return tournamentController.getEntryDetails(session, id);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

@@ -42,8 +42,8 @@ public class SpringServiceFactory {
     public TournamentController createTournamentController(){
         return null;
     }
-    @Lookup
+
     public AuthenticationController createAuthenticationController() {
-        return null;
+        return this.authenticationController;
     }
 }

@@ -1,24 +1,17 @@
 package at.fhv.sportsclub.controller.impl;
 
 import at.fhv.sportsclub.controller.interfaces.IMessageController;
+import at.fhv.sportsclub.model.message.MessageDTO;
+import at.fhv.sportsclub.model.security.SessionDTO;
+import at.fhv.sportsclub.services.MessageGeneratorService;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jms.*;
 import javax.jms.Queue;
-
-import at.fhv.sportsclub.model.message.MessageDTO;
-import at.fhv.sportsclub.model.person.PersonDTO;
-import at.fhv.sportsclub.model.security.SessionDTO;
-import at.fhv.sportsclub.services.MessageGeneratorService;
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Service;
-
-import java.rmi.RemoteException;
 import java.util.*;
 
 /**

@@ -171,7 +171,9 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
         // save or update participating teams by pushing modified data to the document array over the corresponding repository methods
         if(tournament.getTeams() != null && !tournament.getTeams().isEmpty()){
             List<ParticipantDTO> updateCandidates = tournament.getTeams().stream()
-                    .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.MODIFIED || participantDTO.getModificationType() == ModificationType.INFORMEDANDMODIFIED)
+                    .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.MODIFIED ||
+                            participantDTO.getModificationType() == ModificationType.INFORMEDANDMODIFIED ||
+                            participantDTO.getModificationType() == ModificationType.ADDEDTEAM)
                     .collect(Collectors.toList());
             List<ParticipantDTO> deleteCandidates = tournament.getTeams().stream()
                     .filter(participantDTO -> participantDTO.getModificationType() == ModificationType.REMOVED)
@@ -180,8 +182,9 @@ public class TournamentController extends CommonController<TournamentDTO, Tourna
             for (ParticipantDTO updateCandidate : updateCandidates) {
                 denormalizeParticipant(updateCandidate);
                 if( ( updateCandidate.getType().equals("intern")   ||   updateCandidate.getType().equals("Intern")   )    ){
-                    /*Coach is informed althour he already knows about tournament*/
-                    if(updateCandidate.getModificationType() != ModificationType.INFORMEDANDMODIFIED){
+                    /* Coach is informed although he already knows about tournament */
+                    if(updateCandidate.getModificationType() != ModificationType.INFORMEDANDMODIFIED &&
+                            updateCandidate.getModificationType() == ModificationType.ADDEDTEAM){
                         this.informCoaches(updateCandidate, tournament);
                     }
                     for (SquadMemberDTO squadMember :

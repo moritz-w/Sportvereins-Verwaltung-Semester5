@@ -24,7 +24,7 @@
             <HBox alignment="CENTER" spacing="10.0">
                <children>
                   <Label text="Port number: " />
-                  <TextField fx:id="portInput" alignment="BASELINE_CENTER" prefWidth="70.0" promptText="Port" text="1099" />
+                  <TextField fx:id="portInput" alignment="BASELINE_CENTER" prefWidth="70.0" promptText="Port" text="1090" />
                   <Button fx:id="startStopBtn" mnemonicParsing="false" text="Launch" />
                </children>
             </HBox>

@@ -46,7 +46,7 @@ public class ServerRunMe extends Application {
         IAuthenticationController authStub =
                 (IAuthenticationController) UnicastRemoteObject.exportObject(authenticationController, 0);
 
-        registry = LocateRegistry.createRegistry(port <= 1 ? 1099 : port);
+        registry = LocateRegistry.createRegistry(port <= 1 ? 1090 : port);
         // Auth Controller is exported as own object in the registry
         registry.rebind("AuthenticationService", authStub);
         registry.rebind("ControllerFactory", stub);
@@ -76,7 +76,7 @@ public class ServerRunMe extends Application {
     public static void main(String[] args) throws RemoteException {
         Options options = argParse(args);
         if(options.isSet("u")){
-            int port = 1099;
+            int port = 1090;
             if(options.isSet("p")){
                 port = new Integer(options.getParam("p"));
             }

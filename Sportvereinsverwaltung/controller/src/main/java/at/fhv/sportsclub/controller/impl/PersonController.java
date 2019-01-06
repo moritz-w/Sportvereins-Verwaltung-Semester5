@@ -6,6 +6,8 @@ import at.fhv.sportsclub.controller.interfaces.IPersonController;
 import at.fhv.sportsclub.entity.person.PersonEntity;
 import at.fhv.sportsclub.model.common.ListWrapper;
 import at.fhv.sportsclub.model.common.ResponseMessageDTO;
+import at.fhv.sportsclub.model.dept.DepartmentDTO;
+import at.fhv.sportsclub.model.dept.SportDTO;
 import at.fhv.sportsclub.model.security.AccessLevel;
 import at.fhv.sportsclub.model.security.SessionDTO;
 import at.fhv.sportsclub.model.person.PersonDTO;
@@ -13,6 +15,7 @@ import at.fhv.sportsclub.repository.person.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import at.fhv.sportsclub.services.MessageGeneratorService;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -21,12 +24,16 @@ import java.util.ArrayList;
 @Scope("prototype")
 public class PersonController extends CommonController<PersonDTO, PersonEntity, PersonRepository> implements IPersonController {
 
+    private DepartmentController departmentController;
     private PersonRepository personRepository;
+    private MessageController messageController;
 
     @Autowired
-    public PersonController(PersonRepository repository) {
+    public PersonController(PersonRepository repository, DepartmentController departmentController, MessageController messageController) {
         super(repository, PersonDTO.class, PersonEntity.class);
         this.personRepository = repository;
+        this.departmentController = departmentController;
+        this.messageController = messageController;
     }
 
     //region RMI wrapper methods
@@ -39,6 +46,7 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
     @Override
     @RequiredPrivileges(category = "Person", accessLevel = {AccessLevel.WRITE})
     public ResponseMessageDTO saveOrUpdateEntry(SessionDTO session, PersonDTO personDTO) {
+        this.informDeptHead(session, personDTO);
         return this.saveOrUpdate(personDTO);
     }
 
@@ -49,4 +57,11 @@ public class PersonController extends CommonController<PersonDTO, PersonEntity, 
     }
 
     //endregion
+    private void informDeptHead(SessionDTO session, PersonDTO personDTO){
+        for (SportDTO sport: personDTO.getSports()) {
+            DepartmentDTO departmentDTO = departmentController.getDepartmentBySportId(session, sport.getId());
+            String message = MessageGeneratorService.informDeptHeadAddMemberToTeam(personDTO, departmentDTO.getDeptLeader(),sport);
+            messageController.sendMessageToQueue(session, message, departmentDTO.getDeptLeader().getId());
+        }
+    }
 }

@@ -87,6 +87,9 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public ListWrapper<LeagueDTO> getLeaguesBySportId(SessionDTO session, String sportId){
         SportDTO sportDTO = sportResolver.resolveFromObjectIdFull(sportId);
+        if (sportDTO == null){
+            return new ListWrapper<>(null, createErrorMessage("Nothing found for the given sport ID"));
+        }
         return new ListWrapper<>(new ArrayList<>(sportDTO.getLeagues()), null);
     }
 
@@ -100,6 +103,26 @@ public class DepartmentController extends CommonController<DepartmentDTO, Depart
     @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
     public LeagueDTO getLeagueById(SessionDTO session, String id){
         return leagueResolver.resolveFromObjectId(id);
+    }
+
+    @Override
+    @RequiredPrivileges(category = "Department", accessLevel = {AccessLevel.READ})
+    public DepartmentDTO getDepartmentBySportId(SessionDTO session, String sportId){
+        DepartmentEntity departmentBySportId = departmentRepository.getDepartmentBySportId(sportId);
+        return map(departmentBySportId, DepartmentDTO.class, "DepartmentDTOMappingFull");
+    }
+
+    public SportDTO getSportById(SessionDTO session, String sportId){
+        try {
+            SportEntity sport = departmentRepository.getSportById(sportId);
+            return map(sport, SportDTO.class, "SportEntityMappingLight");
+        } catch (InvalidInputDataException e) {
+            e.printStackTrace();
+            return new SportDTO(null, null, null, createErrorMessage("Invalid ID given"));
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return new SportDTO(null, null, null, createErrorMessage("No data could be obtained"));
+        }
     }
     //endregion
 }

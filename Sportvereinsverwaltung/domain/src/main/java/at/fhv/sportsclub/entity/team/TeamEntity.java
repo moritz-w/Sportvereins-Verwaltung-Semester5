@@ -17,10 +17,11 @@ public @Data class TeamEntity implements CommonEntity {
     @Id
     private String id;
 
-    private String name, type;
-    @DBRef
-    private List<PersonEntity> members;
-    @DBRef
-    private List<PersonEntity> trainers;
+    private String name;
+    private String type;
+    //@DBRef
+    private List<ObjectId> members;
+    //@DBRef
+    private List<ObjectId> trainers;
     private ObjectId league;
 }

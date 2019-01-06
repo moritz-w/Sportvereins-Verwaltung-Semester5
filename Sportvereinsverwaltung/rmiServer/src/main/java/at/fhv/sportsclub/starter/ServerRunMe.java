@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.starter;
 
+import at.fhv.sportsclub.controller.impl.ConfigurationController;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import at.fhv.sportsclub.factory.ControllerFactoryImpl;
 import at.fhv.sportsclub.factory.IControllerFactory;
@@ -18,6 +19,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by Alex on 06.11.2018.
@@ -26,11 +29,17 @@ import java.rmi.server.UnicastRemoteObject;
 public class ServerRunMe extends Application {
 
     private static Logger rootLogger = Logger.getRootLogger();
+    private static ConfigurationController configurationController;
     private static Registry registry;
 
     public static void createRMIRegistry(int port) throws RemoteException{
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("rmi-beans.xml");
+        ApplicationContext appContext = new ClassPathXmlApplicationContext(     // "persist-beans.xml", "controller-beans.xml", "security-beans.xml",
+                "rmi-beans.xml"
+        );
+        boolean active = ((ClassPathXmlApplicationContext) appContext).isActive();
         IControllerFactory controllerFactory = appContext.getBean(ControllerFactoryImpl.class);
+        configurationController = appContext.getBean(ConfigurationController.class);
+
         IAuthenticationController authenticationController = appContext.getBean(AuthenticationController.class);
 
         IControllerFactory stub = (IControllerFactory) UnicastRemoteObject.exportObject(controllerFactory,0);
@@ -45,7 +54,7 @@ public class ServerRunMe extends Application {
         rootLogger.info("RMI registry started");
     }
 
-    public static void unbindRMIRegistry(){
+    static void unbindRMIRegistry(){
         if(registry == null){return;}
         try {
             registry.unbind("AuthenticationService");
@@ -65,6 +74,54 @@ public class ServerRunMe extends Application {
     }
 
     public static void main(String[] args) throws RemoteException {
-        launch(args);
+        Options options = argParse(args);
+        if(options.isSet("u")){
+            int port = 1099;
+            if(options.isSet("p")){
+                port = new Integer(options.getParam("p"));
+            }
+            createRMIRegistry(port);
+        } else {
+            launch(args);
+        }
+    }
+
+    private static Options argParse(String[] args){
+        Options options = new Options();
+        for (String arg : args) {
+            options.addStringArg(arg);
+        }
+        return options;
+    }
+
+    private static class Options {
+        private HashMap<String, String> argMap;
+        private String previous;
+
+        Options() {
+            this.argMap = new HashMap<>();
+        }
+
+        void addStringArg(String arg){
+            if (arg.contains("-")) {
+                previous = arg.replace("-", "");
+                argMap.put(previous, "");
+            } else {
+                argMap.put(previous, arg);
+            }
+        }
+
+        boolean isSet(String arg){
+            return argMap.containsKey(arg);
+        }
+
+        String getParam(String arg){
+            return argMap.getOrDefault(arg, "");
+        }
+
+    }
+
+    static ConfigurationController getConfigurationController(){
+        return configurationController;
     }
 }

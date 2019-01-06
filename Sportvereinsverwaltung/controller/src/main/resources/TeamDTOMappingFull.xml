@@ -11,11 +11,11 @@
             <a>league</a>
             <b>league</b>
         </field>
-        <field map-id="TeamMembersMappingLight">
+        <field custom-converter-id="personConverter">
             <a>members</a>
             <b>members</b>
         </field>
-        <field map-id="TeamMembersMappingLight">
+        <field custom-converter-id="personConverter">
             <a>trainers</a>
             <b>trainers</b>
         </field>

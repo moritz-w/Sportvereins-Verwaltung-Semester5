@@ -1,9 +1,6 @@
 package at.fhv.sportsclub.factory;
 
-import at.fhv.sportsclub.controller.impl.DepartmentController;
-import at.fhv.sportsclub.controller.impl.PersonController;
-import at.fhv.sportsclub.controller.impl.TeamController;
-import at.fhv.sportsclub.controller.impl.TournamentController;
+import at.fhv.sportsclub.controller.impl.*;
 import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
@@ -17,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
  * Created by Alex on 06.11.2018.
  */
 
-@Component
+@Component("rmiControllerFactory")
 public class ControllerFactoryImpl implements IControllerFactory {
 
     @Lookup
@@ -34,6 +31,10 @@ public class ControllerFactoryImpl implements IControllerFactory {
     }
     @Lookup
     public TournamentController createTournamentController(){
+        return null;
+    }
+    @Lookup
+    public MessageController createMessageController() {
         return null;
     }
 
@@ -56,4 +57,10 @@ public class ControllerFactoryImpl implements IControllerFactory {
     public ITournamentController getTournamentController() throws RemoteException {
         return (ITournamentController) UnicastRemoteObject.exportObject(createTournamentController(), 0);
     }
+
+    @Override
+    public IMessageController getMessageController() throws RemoteException {
+        return (IMessageController) UnicastRemoteObject.exportObject(createMessageController(), 0);
+    }
+
 }

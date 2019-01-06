@@ -18,6 +18,7 @@ public @Data class TournamentEntity implements CommonEntity {
     private String id;
     private String name;
     private ObjectId league;
+    private ObjectId sport;
     private String leagueName;
     private String sportsName;
     private LocalDate date;

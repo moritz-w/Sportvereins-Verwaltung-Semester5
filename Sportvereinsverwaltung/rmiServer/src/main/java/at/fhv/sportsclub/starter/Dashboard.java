@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.starter;
 
+import at.fhv.sportsclub.controller.impl.ConfigurationController;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
@@ -23,6 +24,8 @@ public class Dashboard implements Initializable, UiNotify<String> {
     public Label ipInfoLbl;
     public Label serverStatusLbl;
     public TextArea logOutputTxt;
+    public Button resetBtn;
+    public TextField scriptInput;
 
     private boolean started = false;
     private Thread rmiThread;
@@ -38,36 +41,10 @@ public class Dashboard implements Initializable, UiNotify<String> {
             System.exit(-1);
         }
 
-        startStopBtn.setOnAction(event -> {
-            if (started){
-                serverStatusLbl.setTextFill(Color.web("#E01F40"));
-                serverStatusLbl.setText("Server inactive");
-                startStopBtn.setText("Launch");
-                ServerRunMe.unbindRMIRegistry();
-                started = false;
-                System.exit(0);
-            } else {
-                startStopBtn.setText("Stop");
-                serverStatusLbl.setText("Server running");
-                serverStatusLbl.setTextFill(Color.web("#42CF76"));
-                rmiThread = new Thread(() -> {
-                    try {
-
-                        ServerRunMe.createRMIRegistry(new Integer(portInput.getText()));
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        showErrorAlert(e.getMessage());
-                    }
-                });
-                rmiThread.setDaemon(true);
-                rmiThread.start();
-                started = true;
-            }
-        });
+        resetBtn.setOnAction(event -> reloadDatabase());
+        startStopBtn.setOnAction(event -> startStopServer());
         logger.addAppender(new UiAppender(this));
-
         logOutputTxt.textProperty().addListener((observable, oldValue, newValue) -> logOutputTxt.setScrollTop(Double.MAX_VALUE));
-
     }
 
     private void showErrorAlert(String text){
@@ -82,5 +59,57 @@ public class Dashboard implements Initializable, UiNotify<String> {
         logOutputTxt.appendText(data +"\n");
     }
 
+
+    private void startStopServer() {
+        if (started){
+            ServerRunMe.unbindRMIRegistry();
+            setServerInactiveLabel();
+            System.exit(0);
+        } else {
+            rmiThread = new Thread(() -> {
+                try {
+                    ServerRunMe.createRMIRegistry(new Integer(portInput.getText()));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    showErrorAlert(e.getMessage());
+                }
+            });
+            rmiThread.setDaemon(true);
+            rmiThread.start();
+            setServerActiveLabel();
+        }
+    }
+
+    private void setServerActiveLabel(){
+        startStopBtn.setText("Stop");
+        serverStatusLbl.setText("Server running");
+        serverStatusLbl.setTextFill(Color.web("#42CF76"));
+        started = true;
+    }
+
+    private void setServerInactiveLabel(){
+        startStopBtn.setText("Launch");
+        serverStatusLbl.setText("Server inactive");
+        serverStatusLbl.setTextFill(Color.web("#E01F40"));
+        started = false;
+    }
+
+    private void reloadDatabase(){
+        if(scriptInput.getText().isEmpty()){
+            return;
+        }
+        ConfigurationController configurationController = ServerRunMe.getConfigurationController();
+        if (configurationController == null){
+            showErrorAlert("Please launch the server first");
+            return;
+        }
+        boolean success = configurationController.reloadDatabase(scriptInput.getText());
+        if (success){
+            logger.info("Database was reloaded!");
+        } else {
+            logger.warn("Invalid database script given: " + scriptInput.getText());
+            showErrorAlert("Could not load given database script");
+        }
+    }
 
 }

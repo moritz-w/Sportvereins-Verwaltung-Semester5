@@ -21,7 +21,6 @@ public @Data class DepartmentDTO implements Serializable, IDTO {
     private String id;
 
     private String deptName;
-    @DBRef
     private PersonDTO deptLeader;
     @NotNull
     private List<SportDTO> sports;

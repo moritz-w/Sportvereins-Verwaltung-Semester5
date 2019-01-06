@@ -25,7 +25,8 @@ public @Data class TournamentDTO implements Serializable, IDTO {
 
     @Pattern(regexp = "^[-\\w\\s]+$", message = "A tournament may only contain word characters including whitespaces, dashes and underscores")
     private String name;
-    private String league;          // object id
+    private String league;
+    private String sport;
     private String leagueName;
     private String sportsName;
     private LocalDate date;

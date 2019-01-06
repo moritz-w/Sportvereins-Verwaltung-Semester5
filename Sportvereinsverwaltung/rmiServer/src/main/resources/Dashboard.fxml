@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
 <AnchorPane prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhv.sportsclub.starter.Dashboard">
    <children>
-      <VBox AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" spacing="10">
+      <VBox spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
          <children>
-            <HBox alignment="CENTER"  prefHeight="50.0" spacing="10">
+            <HBox alignment="CENTER" prefHeight="50.0" spacing="10">
                <children>
-                  <Label fx:id="serverStatusLbl" text="Server inactive" style="-fx-text-fill: #E01F40" />
+                  <Label fx:id="serverStatusLbl" style="-fx-text-fill: #E01F40" text="Server inactive" />
                   <Label fx:id="ipInfoLbl" alignment="CENTER_RIGHT" />
                </children>
             </HBox>
-            <HBox  alignment="CENTER"  spacing="10.0">
+            <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="Port number: "/>
+                  <Label text="Port number: " />
                   <TextField fx:id="portInput" alignment="BASELINE_CENTER" prefWidth="70.0" promptText="Port" text="1099" />
                   <Button fx:id="startStopBtn" mnemonicParsing="false" text="Launch" />
                </children>
@@ -31,9 +31,41 @@
             <Separator />
             <AnchorPane prefHeight="300">
                <children>
-                  <TextArea style="-fx-border-style: none; -fx-background-color: #2b2b2b" editable="false" fx:id="logOutputTxt" AnchorPane.rightAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10" AnchorPane.topAnchor="10">
-
-                  </TextArea>
+                  <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5" AnchorPane.leftAnchor="5" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="5">
+                    <tabs>
+                      <Tab text="Logs">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextArea fx:id="logOutputTxt" editable="false" style="-fx-border-style: none; -fx-background-color: #2b2b2b" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Database">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox alignment="CENTER" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+                                       <children>
+                                          <HBox alignment="CENTER" spacing="5">
+                                             <children>
+                                                <TextField fx:id="scriptInput" promptText="Script name" text="cleanstart.js"/>
+                                                <Button fx:id="resetBtn" alignment="CENTER" mnemonicParsing="false" text="Reset Database" textFill="#bf0d0d" />
+                                             </children>
+                                          </HBox>
+                                       </children></VBox>
+                                 </children>
+                          </AnchorPane>
+                        </content>
+                      </Tab>
+                       <Tab text="Monitoring">
+                          <content>
+                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                       </Tab>
+                    </tabs>
+                  </TabPane>
                </children>
             </AnchorPane>
          </children>

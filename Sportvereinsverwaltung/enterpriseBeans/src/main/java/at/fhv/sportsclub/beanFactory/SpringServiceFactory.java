@@ -4,6 +4,7 @@ import at.fhv.sportsclub.controller.impl.DepartmentController;
 import at.fhv.sportsclub.controller.impl.PersonController;
 import at.fhv.sportsclub.controller.impl.TeamController;
 import at.fhv.sportsclub.controller.impl.TournamentController;
+import at.fhv.sportsclub.controller.interfaces.IMessageController;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -45,5 +46,10 @@ public class SpringServiceFactory {
 
     public AuthenticationController createAuthenticationController() {
         return this.authenticationController;
+    }
+
+    @Lookup
+    public IMessageController createMessageController() {
+        return null;
     }
 }

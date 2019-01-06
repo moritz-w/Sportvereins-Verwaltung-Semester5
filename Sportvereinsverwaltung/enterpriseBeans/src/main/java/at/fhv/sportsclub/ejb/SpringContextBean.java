@@ -1,10 +1,7 @@
 package at.fhv.sportsclub.ejb;
 
 import at.fhv.sportsclub.beanFactory.SpringServiceFactory;
-import at.fhv.sportsclub.controller.interfaces.IDepartmentController;
-import at.fhv.sportsclub.controller.interfaces.IPersonController;
-import at.fhv.sportsclub.controller.interfaces.ITeamController;
-import at.fhv.sportsclub.controller.interfaces.ITournamentController;
+import at.fhv.sportsclub.controller.interfaces.*;
 import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -43,5 +40,9 @@ public class SpringContextBean {
 
     public IAuthenticationController getAuthenticationController() {
         return serviceFactory.createAuthenticationController();
+    }
+
+    public IMessageController getMessageController() {
+        return serviceFactory.createMessageController();
     }
 }

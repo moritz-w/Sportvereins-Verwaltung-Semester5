@@ -1,5 +1,6 @@
 package at.fhv.sportsclub.ejb.interfaces;
 
+import at.fhv.sportsclub.model.message.MessageDTO;
 import at.fhv.sportsclub.model.security.SessionDTO;
 
 import javax.ejb.Remote;
@@ -21,7 +22,7 @@ public interface IMessageController  {
     void sendMessagesToQueue(SessionDTO sessionDTO, Map<String, String> messages);
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username);
     void sendMessageToQueue(SessionDTO sessionDTO, String message, String username, String replyTo);
-    List<Message> browseMessagesForUser(SessionDTO sessionDTO, String username);
-    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, String replyMessage);
+    List<MessageDTO> browseMessagesForUser(SessionDTO sessionDTO, String username);
+    boolean removeMessageFromQueueAndArchive(SessionDTO sessionDTO, String correlationID, Boolean confirm);
 
 }

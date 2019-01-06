@@ -13,7 +13,7 @@
         <module>persist</module>
         <module>controller</module>
         <module>enterpriseBeans</module>
-<!--        <module>rmiServer</module>-->
+        <!--<module>rmiServer</module>-->
     </modules>
 
     <properties>

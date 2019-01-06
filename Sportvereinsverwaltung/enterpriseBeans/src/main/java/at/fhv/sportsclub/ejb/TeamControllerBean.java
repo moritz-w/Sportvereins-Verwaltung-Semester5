@@ -48,7 +48,7 @@ public class TeamControllerBean implements ITeamController {
     @Override
     public TeamDTO getById(SessionDTO session, String id) {
         try {
-            teamController.getById(session, id);
+            return teamController.getById(session, id);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

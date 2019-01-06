@@ -328,7 +328,7 @@ function executeScript() {
                 }*/
             ],
             league: leagueIdPool[getRandomNumber(0, leagueIdPool.length)],
-            type: "Intern"
+            type: "intern"
         };
     }
 
@@ -536,7 +536,7 @@ function executeScript() {
             _id: dreTeam,
             name: dreTeamName,
             members: personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1),//transformIdArrayToDbRef(personIdPool.slice(sliceIndex, sliceIndex + teamSize + 1), "Person"),
-            trainers: [ snoopId
+            trainers: [ billyId
                 /*{
                     "$ref": "Person",
                     "$id": snoopId

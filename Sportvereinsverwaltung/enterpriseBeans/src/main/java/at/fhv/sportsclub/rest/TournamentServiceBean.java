@@ -47,7 +47,7 @@ public class TournamentServiceBean {
         try {
             SessionDTO<String> session = new SessionDTO<>();
             session.setSessionId(sessionId);
-            tournamentController.getEntryDetails(session, id);
+            return tournamentController.getEntryDetails(session, id);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

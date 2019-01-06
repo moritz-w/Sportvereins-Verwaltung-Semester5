@@ -12,8 +12,8 @@
         <module>domain</module>
         <module>persist</module>
         <module>controller</module>
-        <module>enterpriseBeans</module>
-        <!--<module>rmiServer</module>-->
+        <!--<module>enterpriseBeans</module>-->
+        <module>rmiServer</module>
     </modules>
 
     <properties>

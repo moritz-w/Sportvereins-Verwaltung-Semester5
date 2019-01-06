@@ -42,7 +42,9 @@ public class AuthenticationServiceBean {
         }
         try {
             SessionDTO<String> session = authenticationController.authenticate(credentials.getUser(), credentials.getPassword().toCharArray());
-            return Response.ok().cookie(new NewCookie("sessionId", session.getSessionId())).build();
+            return Response.ok().cookie(
+                    new NewCookie("sessionId", session.getSessionId(), "/", null, 1, null, -1, null, false, false)
+            ).build();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -70,7 +72,9 @@ public class AuthenticationServiceBean {
     public Response anonymousLogin(){
         try {
             SessionDTO<String> session = authenticationController.authenticate("appUser", "appUser".toCharArray());
-            return Response.ok().cookie(new NewCookie("sessionId", session.getSessionId())).build();
+            return Response.ok().cookie(
+                    new NewCookie("sessionId", session.getSessionId(), "/", null, 1, null, -1, null, false, false)
+            ).build();
         } catch (RemoteException e) {
             e.printStackTrace();
         }

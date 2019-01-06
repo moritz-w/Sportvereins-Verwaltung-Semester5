@@ -66,7 +66,7 @@ public class TournamentControllerBean implements ITournamentController {
     @Override
     public TournamentDTO saveOrUpdateEntry(SessionDTO session, TournamentDTO tournament) {
         try {
-            tournamentController.saveOrUpdateEntry(session, tournament);
+            return tournamentController.saveOrUpdateEntry(session, tournament);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

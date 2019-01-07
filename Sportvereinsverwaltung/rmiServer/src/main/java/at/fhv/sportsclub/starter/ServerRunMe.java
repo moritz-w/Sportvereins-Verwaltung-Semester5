@@ -5,11 +5,6 @@ import at.fhv.sportsclub.security.authentication.IAuthenticationController;
 import at.fhv.sportsclub.factory.ControllerFactoryImpl;
 import at.fhv.sportsclub.factory.IControllerFactory;
 import at.fhv.sportsclub.security.authentication.AuthenticationController;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -20,13 +15,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.HashSet;
 
-/**
- * Created by Alex on 06.11.2018.
- */
 
-public class ServerRunMe extends Application {
+public class ServerRunMe {
 
     private static Logger rootLogger = Logger.getRootLogger();
     private static ConfigurationController configurationController;
@@ -65,14 +56,6 @@ public class ServerRunMe extends Application {
         }
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/Dashboard.fxml"));
-        primaryStage.setTitle("Sportsclub Server");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-    }
-
     public static void main(String[] args) throws RemoteException {
         Options options = argParse(args);
         if(options.isSet("u")){
@@ -82,7 +65,7 @@ public class ServerRunMe extends Application {
             }
             createRMIRegistry(port);
         } else {
-            launch(args);
+            createRMIRegistry(1090);
         }
     }
 
